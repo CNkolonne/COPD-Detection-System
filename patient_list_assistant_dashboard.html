@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Assistant Profile Management Dashboard</title>
+
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+
+<style type="text/tailwindcss">
+:root {
+    --primary: #135bec;
+    --sidebar-bg: #111722;
+    --content-bg: #f8fafc;
+    --card-bg: #ffffff;
+    --table-header: #eef2f7;
+    --table-hover: #f0f6ff;
+}
+body {
+    font-family: 'Inter', sans-serif;
+}
+.material-symbols-outlined {
+    font-variation-settings: 'FILL' 0,'wght' 400,'GRAD' 0,'opsz' 24;
+}
+</style>
+</head>
+
+<body class="bg-[var(--content-bg)] text-slate-900 antialiased">
+<div class="flex min-h-screen overflow-hidden">
+
+<!-- SIDEBAR (UNCHANGED) -->
+<aside class="w-64 bg-[var(--sidebar-bg)] flex flex-col shrink-0">
+<div class="p-6 flex items-center gap-3">
+<div class="bg-primary p-2 rounded-lg">
+<span class="material-symbols-outlined text-white text-2xl">pulmonology</span>
+</div>
+<div>
+<h1 class="text-white text-base font-bold leading-tight">COPD Detection</h1>
+<p class="text-[#92a4c9] text-[10px] uppercase tracking-wider font-semibold">Assistant Panel</p>
+</div>
+</div>
+<nav class="flex-1 px-4 py-4 space-y-1">
+<a class="flex items-center gap-3 px-3 py-2 text-[#92a4c9] hover:bg-white/5 hover:text-white rounded-lg transition-colors" href="home_page.html">
+<span class="material-symbols-outlined text-xl">home</span>
+<span class="text-sm font-medium">Home</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 text-[#92a4c9] hover:bg-white/5 hover:text-white rounded-lg transition-colors" href="assistant_dashboard.html">
+<span class="material-symbols-outlined text-xl">dashboard</span>
+<span class="text-sm font-medium">Dashboard</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 text-[#92a4c9] hover:bg-white/5 hover:text-white rounded-lg transition-colors" href="patient_registration.html">
+<span class="material-symbols-outlined text-xl">person_add</span>
+<span class="text-sm font-medium">Register Patient</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 text-[#92a4c9] hover:bg-white/5 hover:text-white rounded-lg transition-colors" href="patient_list_assistant_dashboard.html">
+<span class="material-symbols-outlined text-xl">group</span>
+<span class="text-sm font-medium">Patient List</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 bg-primary text-white rounded-lg transition-colors" href="assistant_appointment.html">
+<span class="material-symbols-outlined text-xl">event</span>
+<span class="text-sm font-medium">Appoinments</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 text-[#92a4c9] hover:bg-white/5 hover:text-white rounded-lg transition-colors" href="assistant_dashboard_samples.html">
+<span class="material-symbols-outlined text-xl">mic</span>
+<span class="text-sm font-medium">Samples</span>
+</a>
+</nav>
+<div class="p-4 mt-auto border-t border-slate-800">
+<div class="flex items-center gap-3 p-2">
+<div class="relative">
+</div>
+<a href="api/logout.php" class="mt-4 flex w-full items-center left gap-2 px-3 py-2 text-sm font-semibold text-[#92a4c9] hover:text-white transition-colors">
+    <span class="material-symbols-outlined text-lg">logout</span>
+    Logout
+</a>
+</div>
+</aside>
+
+<!-- MAIN -->
+<main class="flex-1 overflow-y-auto">
+
+<header class="h-16 bg-white border-b px-8 flex items-center justify-end">
+<div id="welcome-text" class="text-sm text-slate-500">Welcome</div>
+</header>
+
+<section class="px-8 pt-8 pb-4">
+<h1 class="text-3xl font-black">Patient Records</h1>
+</section>
+
+<!-- SEARCH BAR (LIGHT COLOR) -->
+<section class="px-8 py-4">
+<div class="max-w-7xl mx-auto bg-[var(--card-bg)] p-4 rounded-xl border border-[#dbe3f0] shadow-sm">
+<label class="relative block">
+<span class="absolute inset-y-0 left-0 flex items-center pl-3 text-slate-400">
+<span class="material-symbols-outlined">search</span>
+</span>
+<input
+type="text"
+placeholder="Search by Patient Name, ID, or NIC..."
+class="w-full bg-[#f1f5fb] border border-[#dbe3f0] rounded-lg py-3 pl-10 pr-3 text-sm placeholder:text-[#6b7da8] focus:ring-2 focus:ring-primary/40"
+/>
+</label>
+</div>
+</section>
+
+<!-- TABLE (LIGHT COLOR) -->
+<section class="px-8 pb-8">
+<div class="max-w-7xl mx-auto bg-[var(--card-bg)] rounded-xl border border-[#dbe3f0] shadow-sm overflow-hidden">
+
+<table class="w-full border-collapse">
+<thead>
+<tr class="bg-[var(--table-header)] border-b border-[#dbe3f0]">
+<th class="px-6 py-4 text-xs font-bold uppercase text-slate-500">Patient ID</th>
+<th class="px-6 py-4 text-xs font-bold uppercase text-slate-500">Name</th>
+<th class="px-6 py-4 text-xs font-bold uppercase text-slate-500">NIC</th>
+<th class="px-6 py-4 text-xs font-bold uppercase text-slate-500">Gender</th>
+<th class="px-6 py-4 text-xs font-bold uppercase text-slate-500">Phone Number</th>
+<th class="px-6 py-4 text-xs font-bold uppercase text-slate-500 text-right">Actions</th>
+</tr>
+</thead>
+
+<tbody id="patientTableBody" class="divide-y divide-[#dbe3f0]">
+
+<tr class="hover:bg-[var(--table-hover)]">
+<td class="px-6 py-4 font-mono text-primary">P-9012</td>
+<td class="px-6 py-4 font-semibold">John Doe</td>
+<td class="px-6 py-4 text-slate-600">198512345678</td>
+<td class="px-6 py-4">Male</td>
+<td class="px-6 py-4 text-slate-600">+1 555-0102</td>
+<td class="px-6 py-4 text-right space-x-2">
+<button class="px-3 py-1.5 text-xs bg-primary text-black rounded-lg hover:bg-blue-700">New Test</button>
+</td>
+</tr>
+
+<tr class="hover:bg-[var(--table-hover)]">
+<td class="px-6 py-4 font-mono text-primary">P-9015</td>
+<td class="px-6 py-4 font-semibold">Emily Davis</td>
+<td class="px-6 py-4 text-slate-600">199545678901</td>
+<td class="px-6 py-4">Female</td>
+<td class="px-6 py-4 text-slate-600">+1 555-0105</td>
+<td class="px-6 py-4 text-right space-x-2">
+<button class="px-3 py-1.5 text-xs bg-primary text-black rounded-lg hover:bg-blue-700">New Test</button>
+</td>
+</tr>
+
+</tbody>
+</table>
+
+</div>
+</section>
+
+</main>
+</div>
+<script>
+    let allPatients = []; // රෝගීන්ගේ දත්ත තබා ගැනීමට
+
+    // 1. පිටුව Load වන විට ක්‍රියාත්මක වන ප්‍රධාන කොටස
+    document.addEventListener('DOMContentLoaded', function() {
+        // Functions දෙකම එකවර ක්‍රියාත්මක කිරීම
+        fetchAssistantProfile(); 
+        fetchPatients();
+
+        // Search Bar එක හඳුනාගෙන එයට Event Listener එකක් එක් කිරීම
+        const searchInput = document.querySelector('input[placeholder*="Search"]');
+        if (searchInput) {
+            searchInput.addEventListener('input', function(e) {
+                const searchTerm = e.target.value.toLowerCase();
+                filterPatients(searchTerm);
+            });
+        }
+    });
+
+    // 2. සහායකයාගේ නම ලබා ගැනීම (Assistant Profile Fetch)
+    async function fetchAssistantProfile() {
+        try {
+            const response = await fetch('api/get_assistant_profile.php');
+            const result = await response.json();
+            
+            if (result.success) {
+                const welcomeElem = document.getElementById('welcome-text');
+                if (welcomeElem) {
+                    // JSON එකේ එන නම අනුව Update කිරීම
+                    welcomeElem.innerText = "Welcome, " + (result.data.Name || "Assistant");
+                }
+            }
+        } catch (error) {
+            console.error('Error fetching assistant profile:', error);
+        }
+    }
+
+    // 3. රෝගීන්ගේ ලැයිස්තුව Database එකෙන් ලබා ගැනීම
+    async function fetchPatients() {
+        try {
+            const response = await fetch('api/assistant_get_patients.php');
+            const patients = await response.json();
+            
+            allPatients = patients; // මුල් දත්ත Variable එකේ තබා ගැනීම
+            renderTable(allPatients); // Table එක ඇඳීම
+            
+        } catch (error) {
+            console.error('Error fetching patients:', error);
+            const tableBody = document.getElementById('patientTableBody');
+            if(tableBody) tableBody.innerHTML = '<tr><td colspan="6" class="text-center py-10 text-red-500">Failed to load data.</td></tr>';
+        }
+    }
+
+    // 4. දත්ත Table එකට පෙන්වන (Render) Function එක
+    function renderTable(data) {
+        const tableBody = document.getElementById('patientTableBody');
+        if (!tableBody) return;
+
+        tableBody.innerHTML = ''; 
+
+        if (data.length === 0) {
+            tableBody.innerHTML = `<tr><td colspan="6" class="px-6 py-10 text-center text-slate-500">No matching patients found.</td></tr>`;
+            return;
+        }
+
+        data.forEach(patient => {
+            const row = `
+                <tr class="hover:bg-[var(--table-hover)] border-b border-slate-100">
+                    <td class="px-6 py-4 font-mono text-primary font-bold">${patient.Patient_ID}</td>
+                    <td class="px-6 py-4 font-semibold text-slate-700">${patient.Name}</td>
+                    <td class="px-6 py-4 text-slate-600">${patient.NIC}</td>
+                    <td class="px-6 py-4 text-slate-600">${patient.Gender}</td>
+                    <td class="px-6 py-4 text-slate-600">${patient.Phone_number}</td>
+                    <td class="px-6 py-4 text-right">
+                        <button onclick="startNewTest('${patient.Patient_ID}')" 
+                                class="px-4 py-1.5 text-xs bg-primary text-white rounded-lg hover:bg-blue-700 transition-colors shadow-sm">
+                            New Test
+                        </button>
+                    </td>
+                </tr>
+            `;
+            tableBody.innerHTML += row;
+        });
+    }
+
+    // 5. Search කිරීමේදී දත්ත Filter කරන Function එක
+    function filterPatients(term) {
+        const filtered = allPatients.filter(patient => {
+            return (
+                patient.Name.toLowerCase().includes(term) ||
+                patient.Patient_ID.toLowerCase().includes(term) ||
+                patient.NIC.includes(term)
+            );
+        });
+        renderTable(filtered); 
+    }
+
+    // 6. New Test සඳහා Redirect කිරීම
+    function startNewTest(patientId) {
+        window.location.href = `voicerecord.html?patient_id=${patientId}`;
+    }
+</script>
+</body>
+</html>

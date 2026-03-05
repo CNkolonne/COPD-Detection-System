@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Patient Portal Login - PulmoScan COPD Detection</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@300;400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#135bec",
+                        "background-light": "#f6f6f8",
+                        "background-dark": "#101622",
+                    },
+                    fontFamily: {
+                        "display": ["Manrope", "sans-serif"]
+                    },
+                    borderRadius: {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                },
+            },
+        }
+    </script>
+<style>
+        body {
+            font-family: 'Manrope', sans-serif;
+        }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+    </style>
+</head>
+<body class="bg-background-light dark:bg-background-dark min-h-screen flex flex-col font-display">
+<!-- Top Navigation Bar -->
+<header class="h-16 border-b bg-white flex items-center justify-between px-6 sticky top-0 z-50 shadow-sm">
+     <div class="flex items-center gap-2">
+        <span class="material-symbols-outlined text-blue-600 text-3xl">pulmonology</span>
+        <h1 class="text-xl font-bold text-gray-900">COPD <span class="text-xl font-normal text-gray-900">Detection</span></h1>
+    </div>
+
+    <nav class="flex items-center gap-6">
+        <a href="home_page.html" class="text-sm font-semibold text-blue-600 hover:text-blue-800 transition-colors">Home</a>
+    </nav>
+</header>
+<main class="flex-1 flex items-center justify-center p-4 md:p-10">
+<!-- Main Login Card -->
+<div class="bg-white dark:bg-slate-900 w-full max-w-[1000px] min-h-[600px] flex flex-col md:flex-row rounded-xl shadow-2xl overflow-hidden border border-[#e7ebf3] dark:border-slate-800">
+<!-- Left Side: Visual/Image Panel -->
+<div class="hidden md:block md:w-1/2 relative bg-primary/5">
+<div class="absolute inset-0 bg-cover bg-center mix-blend-multiply opacity-90" data-alt="Doctor consulting with an elderly patient in a bright office" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuAgsgg9f29sHQCyiV1xJn8dO7Iq-0fcrO7r39z-Vfy4o6_mD7rBFZl9awL_Pwe8esVu29J3mP_o43C6uM4sM31TN-CiZ8BTOnM11SqcxJaP9OmCwy3CKFnKSghlDUY0q9P4CnZVacII_AK3c7r6y3oiwhQFQyC75S35jlJf972rHxAkCdDyhcXbD5amWVVM1bj4xw1WsjQh1iIp41gNvAl85wvgWdnCnJyJxi_V9d6KgYbXkxrN6JAMgartjNJbdu0s3QD-hoXJAaU");'>
+</div>
+<div class="absolute inset-0 bg-gradient-to-t from-primary/60 to-transparent"></div>
+<div class="absolute bottom-10 left-10 right-10 text-white">
+<h3 class="text-3xl font-bold mb-4">Your Health, Simplified.</h3>
+<p class="text-lg text-white/90 leading-relaxed">
+                        Access your advanced lung health diagnostics and spectrogram analysis with complete security and privacy.
+                    </p>
+</div>
+</div>
+<!-- Right Side: Login Form Panel -->
+<div class="w-full md:w-1/2 flex flex-col p-8 md:p-12">
+<div class="mb-8">
+<h2 class="text-[#0d121b] dark:text-white text-3xl font-extrabold leading-tight tracking-tight">Patient Portal Login</h2>
+<p class="text-[#4c669a] dark:text-slate-400 mt-2">Welcome back! Please enter your details.</p>
+</div>
+<div class="space-y-4">
+    <div class="flex flex-col w-full">
+        <p class="text-[#0d121b] dark:text-slate-200 text-sm font-semibold leading-normal pb-2">Email Address</p>
+        <div class="relative">
+            <input id="email" class="form-input flex w-full rounded-lg text-[#0d121b] dark:text-white focus:outline-0 focus:ring-2 focus:ring-primary/20 border border-[#cfd7e7] dark:border-slate-700 bg-[#f8f9fc] dark:bg-slate-800 focus:border-primary h-14 placeholder:text-[#4c669a] p-[15px] text-base font-normal leading-normal transition-all" placeholder="example@mail.com" type="email" />
+        </div>
+    </div>
+
+    <div class="flex flex-col w-full">
+        <p class="text-[#0d121b] dark:text-slate-200 text-sm font-semibold leading-normal pb-2">Password</p>
+        <div class="flex w-full items-stretch rounded-lg group">
+            <input id="password" class="form-input flex w-full min-w-0 flex-1 rounded-lg text-[#0d121b] dark:text-white focus:outline-0 focus:ring-2 focus:ring-primary/20 border border-[#cfd7e7] dark:border-slate-700 bg-[#f8f9fc] dark:bg-slate-800 focus:border-primary h-14 placeholder:text-[#4c669a] p-[15px] rounded-r-none border-r-0 pr-2 text-base font-normal leading-normal transition-all" placeholder="••••••••" type="password" />
+            <div id="togglePassword" class="text-[#4c669a] dark:text-slate-400 flex border border-[#cfd7e7] dark:border-slate-700 bg-[#f8f9fc] dark:bg-slate-800 items-center justify-center pr-[15px] rounded-r-lg border-l-0 cursor-pointer hover:text-primary transition-colors">
+                <span class="material-symbols-outlined">visibility</span>
+            </div>
+
+            
+        </div>
+        <div class="mt-2 text-right">
+<a class="text-primary text-sm font-medium hover:underline" href="forgot_password.html">Forgot password?</a>
+</div>
+<!-- Sign In Button -->
+<button id="loginBtn" class="w-full flex cursor-pointer items-center justify-center overflow-hidden rounded-lg h-14 px-5 bg-primary text-white text-base font-bold leading-normal tracking-[0.015em] hover:bg-blue-700 shadow-lg shadow-primary/20 transition-all mt-6 active:scale-[0.98]">
+<span class="truncate">Login </span>
+</button>
+</div>
+        </div>
+
+    </div>
+</div>
+
+
+
+
+</main>
+<!-- Footer Information -->
+<footer class="text-center py-8 text-slate-500 dark:text-slate-500 text-xs">
+        © 2026 COPD Detection Clinical Support. All rights reserved. Professional Use Only.
+    </footer>
+
+
+   <script>
+    // 1. පේජ් එක ලෝඩ් වෙද්දීම Registration Message එක පෙන්වන කොටස
+    document.addEventListener('DOMContentLoaded', function() {
+        const urlParams = new URLSearchParams(window.location.search);
+        if (urlParams.get('status') === 'registered') {
+            alert("Registration successful! You can now login with your Email.");
+        }
+    });
+
+    // 2. Login Logic
+    document.getElementById('loginBtn').addEventListener('click', async function() {
+        const email = document.getElementById('email').value;
+        const password = document.getElementById('password').value;
+
+        if (!email || !password) {
+            alert("Please enter both email and password.");
+            return;
+        }
+
+        const loginData = { email: email, password: password };
+
+        try {
+            const response = await fetch('api/login_patient.php', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(loginData)
+            });
+
+            const result = await response.json();
+            if (result.success) {
+                window.location.href = "patient_dashboard.html"; 
+            } else {
+                alert(result.message);
+            }
+        } catch (error) {
+            console.error("Error:", error);
+            alert("An error occurred. Check console.");
+        }
+    });
+
+    // 3. Password Toggle (Visibility)
+    document.getElementById('togglePassword').addEventListener('click', function() {
+        const pwdInput = document.getElementById('password');
+        const icon = this.querySelector('span');
+        if (pwdInput.type === 'password') {
+            pwdInput.type = 'text';
+            icon.innerText = 'visibility_off';
+        } else {
+            pwdInput.type = 'password';
+            icon.innerText = 'visibility';
+        }
+    });
+</script>
+</body></html>

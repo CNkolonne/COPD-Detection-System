@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Doctor Profile Management Dashboard - Minimalist View</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<style type="text/tailwindcss">
+        :root {
+            --primary: #135bec;
+            --sidebar-bg: #111722;
+            --content-bg: #f8fafc;
+        }
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+    </style>
+<script id="tailwind-config">
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#135bec",
+                        "sidebar": "#111722",
+                        "content": "#f8fafc",
+                    },
+                    borderRadius: {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                },
+            },
+        }
+    </script>
+</head>
+<body class="bg-[var(--content-bg)] text-slate-900 antialiased">
+<div class="flex min-h-screen overflow-hidden">
+<aside class="w-64 bg-[var(--sidebar-bg)] flex flex-col shrink-0">
+<div class="p-6 flex items-center gap-3">
+<div class="bg-primary p-2 rounded-lg">
+<span class="material-symbols-outlined text-white text-2xl">pulmonology</span>
+</div>
+<div>
+<h1 class="text-white text-base font-bold leading-tight">COPD Detection</h1>
+<p class="text-[#92a4c9] text-[10px] uppercase tracking-wider font-semibold">Doctor Panel</p>
+</div>
+</div>
+<nav class="flex-1 px-4 py-4 space-y-1">
+<a class="flex items-center gap-3 px-3 py-2 text-[#92a4c9] hover:bg-white/5 hover:text-white rounded-lg transition-colors" href="home_page.html">
+<span class="material-symbols-outlined text-xl">home</span>
+<span class="text-sm font-medium">Home</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 text-[#92a4c9] hover:bg-white/5 hover:text-white rounded-lg transition-colors" href="doctor_dashboard.html">
+<span class="material-symbols-outlined text-xl">dashboard</span>
+<span class="text-sm font-medium">Dashboard</span>
+</a>
+
+</nav>
+<div class="p-4 mt-auto border-t border-slate-800">
+<div class="flex items-center gap-3 p-2">
+<div class="relative">
+</div>
+<a href="api/logout.php" class="mt-4 flex w-full items-center left gap-2 px-3 py-2 text-sm font-semibold text-[#92a4c9] hover:text-white transition-colors">
+    <span class="material-symbols-outlined text-lg">logout</span>
+    Logout
+</a>
+</div>
+</aside>
+<main class="flex-1 overflow-y-auto">
+<header class="h-16 border-b border-slate-200 bg-white sticky top-0 z-10 px-8 flex items-center justify-between">
+<div class="flex items-center gap-2 text-sm">
+
+
+</div>
+<div class="flex items-center gap-4">
+
+<div class="text-sm text-slate-500 font-medium">Welcome, Doctor</div>
+</div>
+</header>
+
+
+<section class="px-8 pt-8 pb-4">
+<h1 class="text-3xl font-black">Patient Reports</h1>
+</section>
+
+
+<!-- SEARCH BAR (LIGHT COLOR) -->
+<section class="px-8 py-4">
+<div class="max-w-7xl mx-auto bg-[var(--card-bg)] p-4 rounded-xl border border-[#dbe3f0] shadow-sm">
+<label class="relative block">
+<span class="absolute inset-y-0 left-0 flex items-center pl-3 text-slate-400">
+<span class="material-symbols-outlined">search</span>
+</span>
+<input
+type="text"
+placeholder="Search by Test ID "
+class="w-full bg-[#f1f5fb] border border-[#dbe3f0] rounded-lg py-3 pl-10 pr-3 text-sm placeholder:text-[#6b7da8] focus:ring-2 focus:ring-primary/40"
+/>
+</label>
+</div>
+</section>
+
+<!-- TABLE (LIGHT COLOR) -->
+<section class="px-8 pb-8">
+<div class="max-w-7xl mx-auto bg-[var(--card-bg)] rounded-xl border border-[#dbe3f0] shadow-sm overflow-hidden">
+
+<table class="w-full border-collapse text-center">
+<thead>
+    <tr class="bg-[var(--table-header)] border-b border-[#dbe3f0]">
+        <th class="px-6 py-4 text-xs font-bold uppercase text-slate-500 text-center">Test ID</th> 
+        <th class="px-6 py-4 text-xs font-bold uppercase text-slate-500 text-center">Date</th>
+        <th class="px-6 py-4 text-xs font-bold uppercase text-slate-500 text-center">Status</th> </tr>
+</thead>
+
+<tbody id="patientTableBody">
+
+<tr onclick="alert('Open Report T-9012')" 
+class="cursor-pointer hover:bg-[var(--table-hover)] transition duration-200">
+<td class="px-6 py-4 font-mono text-primary font-semibold text-center">T-9012</td>
+<td class="px-6 py-4 text-slate-600 text-center">2024-12-01</td>
+</tr>
+
+<tr onclick="alert('Open Report T-9015')" 
+class="cursor-pointer hover:bg-[var(--table-hover)] transition duration-200">
+<td class="px-6 py-4 font-mono text-primary font-semibold text-center">T-9015</td>
+<td class="px-6 py-4 text-slate-600 text-center">2024-12-05</td>
+</tr>
+
+</tbody>
+</table>
+
+
+</div>
+</section>
+
+
+
+<div class="p-8 space-y-8 max-w-7xl mx-auto">
+
+
+</div>
+
+</main>
+
+</div>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    loadTestReports();
+
+
+    async function loadTestReports() {
+        try {
+            const urlParams = new URLSearchParams(window.location.search);
+const patientId = urlParams.get('patient_id');
+
+            const response = await fetch(`api/get_doctor_reports.php?patient_id=${patientId}`);
+            const data = await response.json();
+
+            const tableBody = document.getElementById('patientTableBody');
+            tableBody.innerHTML = ''; // පැරණි dummy දත්ත ඉවත් කරයි
+
+            if (data.success && data.reports.length > 0) {
+                data.reports.forEach(report => {
+                    // Status එක අනුව පාට වෙනස් කිරීම
+                    const isCompleted = report.Status === 'Completed';
+                    const statusClass = isCompleted 
+                        ? 'bg-emerald-100 text-emerald-700' 
+                        : 'bg-amber-100 text-amber-700';
+                    
+                    const row = document.createElement('tr');
+                    row.className = "cursor-pointer hover:bg-slate-50 transition duration-200 border-b border-slate-100";
+                    
+                    // පේළිය ක්ලික් කළ විට doctor_analysis.html වෙත ID දෙකම රැගෙන යයි
+                    row.onclick = () => {
+                        window.location.href = `doctor_analaysis.html?test_id=${report.Test_id}&patient_id=${report.Patient_ID}`;
+                    };
+
+                    // record_date එකෙන් දිනය පමණක් වෙන් කර ගැනීම (Time එක අයින් කරයි)
+                    const displayDate = report.record_date ? report.record_date.split(' ')[0] : 'N/A';
+
+                    row.innerHTML = `
+                        <td class="px-6 py-4 font-mono text-primary font-bold text-center">${report.Test_id}</td>
+                        <td class="px-6 py-4 text-slate-600 text-center">${displayDate}</td>
+                        <td class="px-6 py-4 text-center">
+                            <span class="text-[10px] uppercase tracking-wider font-bold px-3 py-1 rounded-full ${statusClass}">
+                                ${report.Status || 'Pending'}
+                            </span>
+                        </td>
+                    `;
+                    tableBody.appendChild(row);
+                });
+            } else {
+                tableBody.innerHTML = '<tr><td colspan="3" class="px-6 py-8 text-slate-400 text-center">No reports found for your patients.</td></tr>';
+            }
+        } catch (error) {
+            console.error('Error:', error);
+            document.getElementById('patientTableBody').innerHTML = '<tr><td colspan="3" class="px-6 py-8 text-red-400 text-center">Failed to connect to the server.</td></tr>';
+        }
+    }
+});
+</script>
+</body></html>
+

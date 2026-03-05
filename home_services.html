@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Refined COPD Solution Showcase - HIGHFLYERS</title>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&amp;family=Outfit:wght@500;700;800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script>
+      tailwind.config = {
+        lightMode: "class",
+        theme: {
+          extend: {
+            colors: {
+              // රූපයේ ඇති වර්ණ අනුව යාවත්කාලීන කරන ලදී
+              primary: "#1e40af", // Deep Blue
+              accent: "#06b6d4",  // Cyan/Teal
+              darkbg: "#0f172a",
+              softblue: "#e0f2fe", // Very Light Blue for sections
+            },
+            fontFamily: {
+              display: ["Outfit", "sans-serif"],
+              sans: ["Inter", "sans-serif"],
+            },
+            borderRadius: {
+              DEFAULT: "1rem",
+              "large": "2rem",
+            },
+          },
+        },
+      };
+    </script>
+<style type="text/tailwindcss">
+        @layer components {
+            .glass-morphism {
+                /* රූපයේ ඇති Glass effect එකට ගැලපෙන ලෙස සුදු සහ ලා නිල් මිශ්‍ර කර ඇත */
+                @apply bg-white/80 backdrop-blur-md border border-blue-50 shadow-xl shadow-blue-500/5;
+            }
+            .neon-glow-blue {
+                @apply shadow-[0_0_15px_rgba(30,64,175,0.1)];
+            }
+            .neon-glow-teal {
+                @apply shadow-[0_0_15px_rgba(6,182,212,0.1)];
+            }
+        }
+        .sound-wave-bg {
+            background-image: repeating-linear-gradient(90deg, transparent, transparent 40px, rgba(30, 64, 175, 0.03) 41px, rgba(30, 64, 175, 0.03) 42px);
+        }
+        .particle {
+            position: absolute;
+            background: linear-gradient(to bottom, #1e40af, #06b6d4);
+            border-radius: 2px;
+            opacity: 0.2;
+            pointer-events: none;
+        }
+    </style>
+</head>
+<body class="bg-[#f0f9ff] text-slate-800 font-sans transition-colors duration-300 min-h-screen flex flex-col">
+<nav class="sticky top-0 z-50 bg-white/90 backdrop-blur-md border-b border-blue-50 transition-colors duration-300">
+    <div class="max-w-7xl mx-auto px-6 h-20 flex items-center">
+         <div class="flex items-center gap-2">
+        <span class="material-symbols-outlined text-blue-600 text-3xl">pulmonology</span>
+        <h1 class="text-xl font-bold text-gray-900">COPD <span class="text-xl font-normal text-gray-900">Detection</span></h1>
+    </div>
+
+        <div class="flex-grow"></div>
+
+        <div class="flex items-center space-x-8">
+            <a class="text-slate-600 hover:text-primary transition-colors font-semibold text-sm" href="home_page.html">Home</a>
+            </div>
+    </div>
+</nav>
+<main class="flex-grow">
+<section class="relative min-h-[50vh] flex items-center justify-center overflow-hidden py-24 bg-gradient-to-b from-white to-[#e0f2fe] transition-colors duration-300">
+<div class="absolute inset-0 sound-wave-bg opacity-40"></div>
+<div class="absolute inset-0 pointer-events-none">
+<div class="particle w-12 h-1 top-1/4 left-1/4"></div>
+<div class="particle w-8 h-1 top-1/3 left-3/4"></div>
+<div class="particle w-16 h-1 top-2/3 left-1/5"></div>
+<div class="particle w-10 h-1 top-1/2 left-2/3"></div>
+<div class="particle w-6 h-1 top-3/4 left-1/2"></div>
+<div class="absolute top-1/4 right-1/4 w-64 h-64 bg-blue-500/5 rounded-full blur-[100px]"></div>
+<div class="absolute bottom-1/4 left-1/4 w-96 h-96 bg-cyan-500/5 rounded-full blur-[120px]"></div>
+</div>
+<div class="max-w-5xl mx-auto px-6 relative z-10 text-center">
+<h1 class="font-display text-5xl md:text-7xl font-extrabold text-[#1e3a8a] leading-tight mb-8">
+                The Science of Sound in <br/>
+<span class="bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">Respiratory Care</span>
+</h1>
+<p class="text-lg md:text-xl text-slate-600 max-w-2xl mx-auto leading-relaxed">
+                A streamlined medical assistive tool for early COPD detection. Harnessing the power of spectrograms and deep learning to revolutionize pulmonary health.
+            </p>
+</div>
+</section>
+<section class="py-20 px-6 bg-white transition-colors duration-300 relative">
+<div class="max-w-7xl mx-auto relative z-10">
+<div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+<div class="glass-morphism p-10 rounded-large border-t-primary/20 neon-glow-blue group transition-all duration-300 hover:-translate-y-2">
+<div class="w-16 h-16 bg-blue-50 text-primary rounded-xl flex items-center justify-center mb-8 border border-blue-100 group-hover:scale-110 transition-transform">
+<span class="material-symbols-outlined text-4xl">graphic_eq</span>
+</div>
+<h3 class="font-display text-2xl font-bold text-[#1e3a8a] mb-4">Adaptive Preprocessing</h3>
+<p class="text-slate-600 mb-8 leading-relaxed">
+                        Neural denoising filters isolate lung acoustics from ambient interference, ensuring high-fidelity signal input.
+                    </p>
+<div class="space-y-4">
+<div class="flex items-center text-sm text-slate-700 font-medium">
+<span class="w-2 h-2 rounded-full bg-primary mr-3"></span>
+                            Noise Suppression
+                        </div>
+<div class="flex items-center text-sm text-slate-700 font-medium">
+<span class="w-2 h-2 rounded-full bg-primary mr-3"></span>
+                            Signal Normalization
+                        </div>
+</div>
+</div>
+<div class="glass-morphism p-10 rounded-large border-t-accent/20 neon-glow-teal group transition-all duration-300 hover:-translate-y-2">
+<div class="w-16 h-16 bg-cyan-50 text-accent rounded-xl flex items-center justify-center mb-8 border border-cyan-100 group-hover:scale-110 transition-transform">
+<span class="material-symbols-outlined text-4xl">waves</span>
+</div>
+<h3 class="font-display text-2xl font-bold text-[#1e3a8a] mb-4">Mel-Spectrograms</h3>
+<p class="text-slate-600 mb-8 leading-relaxed">
+                        Audio data is transformed into detailed visual representations optimized for deep learning feature extraction.
+                    </p>
+<div class="space-y-4">
+<div class="flex items-center text-sm text-slate-700 font-medium">
+<span class="w-2 h-2 rounded-full bg-accent mr-3"></span>
+                            Frequency Analysis
+                        </div>
+<div class="flex items-center text-sm text-slate-700 font-medium">
+<span class="w-2 h-2 rounded-full bg-accent mr-3"></span>
+                            Feature Visualization
+                        </div>
+</div>
+</div>
+<div class="glass-morphism p-10 rounded-large border-t-primary/20 neon-glow-blue group transition-all duration-300 hover:-translate-y-2">
+<div class="w-16 h-16 bg-blue-50 text-primary rounded-xl flex items-center justify-center mb-8 border border-blue-100 group-hover:scale-110 transition-transform">
+<span class="material-symbols-outlined text-4xl">biotech</span>
+</div>
+<h3 class="font-display text-2xl font-bold text-[#1e3a8a] mb-4">Deep Learning Detection</h3>
+<p class="text-slate-600 mb-8 leading-relaxed">
+                        Advanced neural networks identify early markers of COPD with clinical-grade diagnostic precision.
+                    </p>
+<div class="space-y-4">
+<div class="flex items-center text-sm text-slate-700 font-medium">
+<span class="w-2 h-2 rounded-full bg-primary mr-3"></span>
+                            Automated Classification
+                        </div>
+<div class="flex items-center text-sm text-slate-700 font-medium">
+<span class="w-2 h-2 rounded-full bg-primary mr-3"></span>
+                            Instant Risk Assessment
+                        </div>
+</div>
+</div>
+</div>
+</div>
+</section>
+</main>
+<footer class="mt-12 text-center text-slate-500 text-sm pb-8">
+<p>© 2026 Collaborative COPD Detection. Clinical use only.</p>
+</footer>
+</body>
+</html>

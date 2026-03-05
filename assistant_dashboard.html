@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Assistant Profile Management Dashboard - Minimalist View</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<style type="text/tailwindcss">
+        :root {
+            --primary: #135bec;
+            --sidebar-bg: #111722;
+            --content-bg: #f8fafc;
+        }
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+    </style>
+<script id="tailwind-config">
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#135bec",
+                        "sidebar": "#111722",
+                        "content": "#f8fafc",
+                    },
+                    borderRadius: {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                },
+            },
+        }
+    </script>
+</head>
+<body class="bg-[var(--content-bg)] text-slate-900 antialiased">
+<div class="flex min-h-screen overflow-hidden">
+<aside class="w-64 bg-[var(--sidebar-bg)] flex flex-col shrink-0">
+<div class="p-6 flex items-center gap-3">
+<div class="bg-primary p-2 rounded-lg">
+<span class="material-symbols-outlined text-white text-2xl">pulmonology</span>
+</div>
+<div>
+<h1 class="text-white text-base font-bold leading-tight">COPD Detection</h1>
+<p class="text-[#92a4c9] text-[10px] uppercase tracking-wider font-semibold">Assistant Panel</p>
+</div>
+</div>
+<nav class="flex-1 px-4 py-4 space-y-1">
+<a class="flex items-center gap-3 px-3 py-2 text-[#92a4c9] hover:bg-white/5 hover:text-white rounded-lg transition-colors" href="home_page.html">
+<span class="material-symbols-outlined text-xl">home</span>
+<span class="text-sm font-medium">Home</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 text-[#92a4c9] hover:bg-white/5 hover:text-white rounded-lg transition-colors" href="assistant_dashboard.html">
+<span class="material-symbols-outlined text-xl">dashboard</span>
+<span class="text-sm font-medium">Dashboard</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 text-[#92a4c9] hover:bg-white/5 hover:text-white rounded-lg transition-colors" href="patient_registration.html">
+<span class="material-symbols-outlined text-xl">person_add</span>
+<span class="text-sm font-medium">Register Patient</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 text-[#92a4c9] hover:bg-white/5 hover:text-white rounded-lg transition-colors" href="patient_list_assistant_dashboard.html">
+<span class="material-symbols-outlined text-xl">group</span>
+<span class="text-sm font-medium">Patient List</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 text-[#92a4c9] hover:bg-white/5 hover:text-white rounded-lg transition-colors" href="assistant_appointment.html">
+<span class="material-symbols-outlined text-xl">event</span>
+<span class="text-sm font-medium">Appointments</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 text-[#92a4c9] hover:bg-white/5 hover:text-white rounded-lg transition-colors" href="assistant_dashboard_samples.html">
+<span class="material-symbols-outlined text-xl">mic</span>
+<span class="text-sm font-medium">Samples</span>
+</a>
+</nav>
+<div class="p-4 mt-auto border-t border-slate-800">
+<div class="flex items-center gap-3 p-2">
+<div class="relative">
+</div>
+<button class="mt-4 flex w-full items-center left gap-2 px-3 py-2 text-sm font-semibold text-[#92a4c9] hover:text-white transition-colors">
+<a href="api/logout.php" class="mt-4 flex w-full items-center left gap-2 px-3 py-2 text-sm font-semibold text-[#92a4c9] hover:text-white transition-colors">
+    <span class="material-symbols-outlined text-lg">logout</span>
+    Logout
+</a>
+</div>
+</aside>
+<main class="flex-1 overflow-y-auto">
+<header class="h-16 border-b border-slate-200 bg-white sticky top-0 z-10 px-8 flex items-center justify-between">
+<div class="flex items-center gap-2 text-sm">
+
+
+</div>
+<div class="flex items-center gap-4">
+
+<div id="assistantDisplayName" class="text-sm text-slate-500 font-medium">Welcome, Assistant</div>
+</div>
+</header>
+<div class="p-8 space-y-8 max-w-7xl mx-auto">
+
+<section class="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden">
+<div class="p-8">
+<div class="flex flex-col space-y-10">
+<div class="flex flex-col md:flex-row md:items-end justify-between gap-6">
+<div>
+<h2 id="profileName" class="text-4xl font-bold ...">Alex Johnson</h2>
+
+</div>
+<div class="flex gap-3">
+
+
+</div>
+</div>
+<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-y-10 gap-x-12">
+<div class="space-y-1.5">
+<p class="text-[11px] uppercase tracking-[0.15em] font-bold text-slate-400">Staff ID</p>
+<p id="profileStaffId" class="...">ADM-2023-089</p>
+</div>
+<div class="space-y-1.5">
+<p class="text-[11px] uppercase tracking-[0.15em] font-bold text-slate-400">Email Address</p>
+<p id="profileEmail" class="...">alex.johnson@hospital.com</p>
+</div>
+<div class="space-y-1.5">
+<p class="text-[11px] uppercase tracking-[0.15em] font-bold text-slate-400">Phone Number</p>
+<p id="profilePhone" class="...">+1 (555) 0123-4567</p>
+</div>
+<div class="space-y-1.5">
+<p class="text-[11px] uppercase tracking-[0.15em] font-bold text-slate-400">National ID (NIC)</p>
+<p id="profileNIC" class="...">984421104V</p>
+</div>
+<div class="space-y-1.5">
+<p class="text-[11px] uppercase tracking-[0.15em] font-bold text-slate-400">Place of Work</p>
+<p id="profileWorkPlace" class="...">Central General Hospital, Main Campus</p>
+</div>
+
+</div>
+</div>
+</div>
+</section>
+
+</div>
+
+</main>
+
+</div>
+   <!--welcome name eka update wenna-->
+<script>
+
+document.addEventListener('DOMContentLoaded', function() {
+    // 1. LocalStorage එකෙන් සේව් කරපු user_data ගන්නවා
+    const userData = localStorage.getItem('user_data');
+
+    if (userData) {
+        const user = JSON.parse(userData);
+
+        // --- Header එකේ නම Update කිරීම ---
+        const displayElement = document.getElementById('assistantDisplayName');
+        if (displayElement && user.name) {
+            displayElement.innerText = "Welcome, " + user.name;
+        }
+
+        // --- Profile Card එකේ විස්තර Update කිරීම ---
+        // මෙහි ඇති Key names (user.staff_id වැනි) ඔයාගේ Database එකේ ඇති අකුරු වලට සමාන විය යුතුයි.
+        
+        setElementText('profileName', user.name);
+        setElementText('profileStaffId', user.staff_id);
+        setElementText('profileEmail', user.email);
+        setElementText('profilePhone', user.phone_number);      // Database එකේ නම phone_number නම් එය දාන්න
+        setElementText('profileNIC', user.nic);          // Database එකේ නම NIC_number නම් එය දාන්න
+        setElementText('profileWorkPlace', user.place_of_work); // Database එකේ නම place_of_work නම් එය දාන්න
+        
+
+
+    }  
+    else {
+        // ලොග් වෙලා නැත්නම් ආපහු ලොගින් පේජ් එකට යවනවා
+        window.location.href = 'assistant_login.html';
+    }
+
+    // දත්ත පෙන්වීමට උදව් වන පොදු function එකක්
+    function setElementText(id, value) {
+        const element = document.getElementById(id);
+        if (element) {
+            element.innerText = value || 'Not Provided';
+        }
+    }
+});
+
+</script>
+</body></html>

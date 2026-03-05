@@ -1,0 +1,487 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Assistant Registration | COPD Detection</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- Google Material Symbols -->
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #f1f5f9;
+            margin: 0;
+            padding: 0;
+        }
+
+        /* HEADER */
+        header {
+            background: #ffffff;
+            padding: 15px 30px;
+            border-bottom: 1px solid #e5e7eb;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        header h1 {
+            margin: 0;
+            font-size: 22px;
+            color: #0f172a;
+            font-weight: bold;
+        }
+
+        header h1 span {
+            font-weight: 300;
+        }
+
+        header a {
+            color: #2563eb;
+            font-weight: bold;
+            text-decoration: none;
+        }
+
+        header a:hover {
+            text-decoration: underline;
+        }
+
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+
+        /* WRAPPER */
+        .wrapper {
+            max-width: 1200px;
+            margin: 40px auto;
+            display: flex;
+            background: #fff;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+        }
+
+        /* IMAGE SECTION */
+        .image-section {
+            width: 35%;
+            position: relative;
+        }
+
+        .image-section img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+        }
+
+        /* Improved Overlay */
+        .image-overlay {
+            position: absolute;
+            bottom: 20px;
+            left: 20px;
+            right: 20px;
+            background: linear-gradient(to top, rgba(15,23,42,0.85), rgba(15,23,42,0.2));
+            padding: 25px;
+            border-radius: 10px;
+            color: white;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .image-overlay h3 {
+            margin: 0;
+            font-size: 24px;
+            font-weight: 700;
+            line-height: 1.2;
+        }
+
+        .image-overlay p {
+            margin: 0;
+            font-size: 14px;
+            line-height: 1.5;
+            color: #e0e7ff;
+        }
+
+        .image-overlay p strong {
+            font-weight: 700;
+        }
+
+        /* FORM SECTION */
+        .form-section {
+            width: 65%;
+            padding: 30px;
+        }
+
+        .form-section h2 {
+            color: #0f172a;
+            margin-bottom: 8px;
+        }
+
+        .form-section p {
+            color: #64748b;
+            font-size: 14px;
+            margin-bottom: 25px;
+        }
+
+        .section-title {
+            font-size: 12px;
+            font-weight: bold;
+            color: #2563eb;
+            text-transform: uppercase;
+            margin-bottom: 15px;
+            border-bottom: 1px solid #e5e7eb;
+            padding-bottom: 5px;
+        }
+
+        .row {
+            display: flex;
+            gap: 20px;
+            margin-bottom: 15px;
+        }
+
+        .field {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+        }
+
+        label {
+            font-size: 11px;
+            font-weight: bold;
+            color: #475569;
+            margin-bottom: 5px;
+        }
+
+        input {
+            padding: 10px;
+            border-radius: 5px;
+            border: 1px solid #cbd5f5;
+            font-size: 14px;
+        }
+
+        input:focus {
+            outline: none;
+            border-color: #2563eb;
+        }
+
+        .checkbox {
+            display: flex;
+            gap: 10px;
+            font-size: 12px;
+            color: #475569;
+            margin-top: 15px;
+        }
+
+        button {
+            width: 100%;
+            margin-top: 25px;
+            padding: 14px;
+            background: #2563eb;
+            border: none;
+            color: white;
+            font-size: 14px;
+            font-weight: bold;
+            border-radius: 6px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background: #1d4ed8;
+        }
+
+        footer {
+            text-align: center;
+            font-size: 11px;
+            color: #94a3b8;
+            margin-top: 30px;
+            padding-bottom: 20px;
+        }
+
+        /* RESPONSIVE */
+        @media (max-width: 768px) {
+            .wrapper {
+                flex-direction: column;
+            }
+            .image-section {
+                width: 100%;
+                height: 220px;
+            }
+            .form-section {
+                width: 100%;
+            }
+        }
+ /* බොත්තම input box එක ඇතුළතට සහ ප්‍රමාණය කුඩා කිරීමට */
+.toggle-password {
+    position: absolute;
+    right: 10px;        /* දකුණු පස කෙළවරේ සිට දුර */
+    background: none;
+    border: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    color: #94a3b8;      /* මදක් ලා පැහැයක් (Gray) */
+    z-index: 10;
+    top: 50%;
+    transform: translateY(-50%);
+    outline: none;       /* ක්ලික් කරන විට කොටුවක් ඒම වැළැක්වීමට */
+    transition: color 0.2s;
+    width: 24px;         /* බොත්තමේ පළල */
+    height: 24px;        /* බොත්තමේ උස */
+}
+
+/* ක්ලික් කරන විට ඇතිවන නිල් පාට Outline එක ඉවත් කිරීමට */
+.toggle-password:focus {
+    outline: none;
+    border: none;
+}
+
+/* අයිකනයේ ප්‍රමාණය කුඩා කිරීම */
+.toggle-password .material-symbols-outlined {
+    font-size: 18px !important; /* අයිකනය කුඩා කිරීමට */
+    user-select: none;          /* අයිකනය select වීම වැළැක්වීමට */
+}
+
+.toggle-password:hover {
+    color: #2563eb;      /* මවුස් එක ගෙනියන විට නිල් පැහැය */
+}
+
+/* Password wrapper එකේ focus එක input එකට පමණක් සීමා කිරීමට */
+.password-wrapper {
+    position: relative;
+    width: 100%;
+}
+    </style>
+</head>
+<body>
+
+<!-- HEADER -->
+<header>
+    <div class="flex items-center gap-2">
+        <span class="material-symbols-outlined text-blue-600 text-3xl">pulmonology</span>
+        <h1 class="text-xl font-bold text-gray-900">COPD <span class="text-xl font-normal text-gray-900">Detection</span></h1>
+    </div>
+   <div class="nav-links" style="display: flex; gap: 18px;">
+    <a href="assistant_login.html">Login</a>
+    <a href="home_page.html">Home</a>
+</div>
+
+</header>
+
+<!-- WRAPPER -->
+<div class="wrapper">
+
+    <!-- IMAGE SECTION -->
+    <div class="image-section">
+        <img src="https://lh3.googleusercontent.com/aida-public/AB6AXuC-pcXrsYLWIpiyP08YCtGdMjKHcqjVceG12PkvEXIZGkPR-YEnu6gpk2qhZNGSzX5QMiYKx634kjkTUGRxN7wBmQG7KZavkIxh5Bb5LfAglhpFqyMoKousr7i3QG3O8l9rm_qDPfIVEOC5juqmJc2zs11o9eFuaYIeoJDxmLgXaMZ6UeY5xCnXVsPWmVb1GEjhFHlHu1AurL3_t2ljx0ks4ihkh1sW8sYXV0Dhr5zV2ebOPf1udlMlaF09FRazvuCkmlGlt3NutOw" alt="Assistant">
+
+        <div class="image-overlay">
+            <h3>Assistant Registration</h3>
+            <p>Be a part of our dedicated clinical support network, contributing to precise <strong>COPD detection</strong> through state-of-the-art deep learning and medical intelligence systems.</p>
+        </div>
+    </div>
+
+    <!-- FORM SECTION -->
+    <div class="form-section">
+        <h2>Assistant Registration</h2>
+        <p>Please provide your professional credentials to create your healthcare assistant account.</p>
+
+        <form id="registerForm" novalidate>
+            <div class="section-title">Professional Profile</div>
+            <div class="row">
+                <div class="field">
+                    <label for="staffid">Staff ID</label>
+                    <input type="text" id="staffid" name="staff_id" placeholder="S001" required>
+                </div>
+                <div class="field">
+                    <label for="fullname">Full Name</label>
+                    <input type="text" id="fullname" name="name" placeholder="U.W.Gurusinghe" required>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="field">
+                    <label for="nic">NIC</label>
+                    <input type="text" id="nic" name="nic" placeholder="Enter NIC Number" required>
+                </div>
+                <div class="field">
+                    <label for="workplace">Place of Work</label>
+                    <input type="text" id="workplace" name="place_of_work" placeholder="Clinic or Hospital Name" required>
+                </div>
+            </div>
+
+            <div class="section-title">Contact Information</div>
+            <div class="row">
+                <div class="field">
+                    <label for="email">Email Address</label>
+                    <input type="email" id="email" name="email" placeholder="Upul123@gmail.com" required>
+                </div>
+                <div class="field">
+                    <label for="phone">Phone Number</label>
+                    <input type="tel" id="phone" name="phone_number" placeholder="07XXXXXXXX" required>
+                </div>
+            </div>
+
+            <div class="section-title">Account Security</div>
+<div class="row">
+    <div class="field">
+        <label for="password">Create Password</label>
+        <div class="password-wrapper">
+            <input type="password" id="password" name="password" placeholder="••••••••••••" required>
+            <button type="button" class="toggle-password" onclick="togglePassword('password', 'icon1')">
+                <span id="icon1" class="material-symbols-outlined">visibility_off</span>
+            </button>
+        </div>
+    </div>
+    <div class="field">
+        <label for="confirm_password">Confirm Password</label>
+        <div class="password-wrapper">
+            <input type="password" id="confirm_password" name="confirm_password" placeholder="••••••••••••" required>
+            <button type="button" class="toggle-password" onclick="togglePassword('confirm_password', 'icon2')">
+                <span id="icon2" class="material-symbols-outlined">visibility_off</span>
+            </button>
+        </div>
+    </div>
+</div>
+
+            <div class="checkbox">
+                <input type="checkbox" id="agreement" name="agreement" required>
+                <label for="agreement">I confirm that all provided information is accurate and I agree to the policies.</label>
+            </div>
+
+            <button type="submit" id="submitBtn">REGISTER NOW</button>
+        </form>
+
+        <script>
+           (function() {
+    const form = document.getElementById('registerForm');
+    const submitBtn = document.getElementById('submitBtn');
+
+    // 1. Standard Email Format Validation (Regex)
+    function isValidEmail(email) {
+        const re = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+        return re.test(email);
+    }
+
+    // 2. Exact 10 Digit Phone Validation
+    function isValidPhone(phone) {
+        const re = /^\d{10}$/;
+        return re.test(phone);
+    }
+
+    // 3. Strong Password Validation
+    // (අවම 8ක්, ලොකු අකුරක්, කුඩා අකුරක්, ඉලක්කමක් සහ විශේෂ ලකුණක්)
+    function isStrongPassword(pw) {
+        return pw.length >= 8 &&
+            /[A-Z]/.test(pw) &&
+            /[a-z]/.test(pw) &&
+            /[0-9]/.test(pw) &&
+            /[^A-Za-z0-9]/.test(pw);
+    }
+// 4. NIC Validation (ඉලක්කම් 10ක් - පැරණි ක්‍රමය හෝ ඉලක්කම් 12ක් - නව ක්‍රමය)
+function isValidNIC(nic) {
+    // පැරණි ක්‍රමය: ඉලක්කම් 9යි අගට V හෝ X අකුර (සමස්තය අක්ෂර 10යි)
+    const oldNIC = /^[0-9]{9}[vVxX]$/;
+    // නව ක්‍රමය: හරියටම ඉලක්කම් 12යි
+    const newNIC = /^[0-9]{12}$/;
+    
+    return oldNIC.test(nic) || newNIC.test(nic);
+}
+    form.addEventListener('submit', async (e) => {
+        e.preventDefault();
+
+        const nic = document.getElementById('nic').value.trim();
+        const email = document.getElementById('email').value.trim();
+        const phone = document.getElementById('phone').value.trim();
+        const password = document.getElementById('password').value;
+        const confirmPassword = document.getElementById('confirm_password').value;
+        const agreement = document.getElementById('agreement').checked;
+
+        let errorMessage = "";
+
+        // මාරුවෙන් මාරුවට පරීක්ෂා කර වැරදි හඳුනා ගැනීම
+        if (!isValidEmail(email)) {
+            errorMessage = "Registration Failed: Invalid Email format. Please enter a valid email (e.g., name@example.com).";
+        } else if (!isValidPhone(phone)) {
+            errorMessage = "Registration Failed: Phone number must contain exactly 10 digits.";
+        } else if (!isStrongPassword(password)) {
+            errorMessage = "Registration Failed: Password is too weak. It must be at least 8 characters long and include an uppercase letter, a lowercase letter, a number, and a special character.";
+        } else if (password !== confirmPassword) {
+            errorMessage = "Registration Failed: Passwords do not match.";
+        } else if (!agreement) {
+            errorMessage = "Registration Failed: You must agree to the policies.";
+        }else if (!isValidNIC(nic)) { // NIC පරීක්ෂාව මෙතැනට
+        errorMessage = "Registration Failed: Invalid NIC Number. It should be 10 characters (e.g., 123456789V) or 12 digits.";
+    }
+
+        // ඉදිරියට යාමට පෙර වැරදි තිබේ දැයි බැලීම
+        if (errorMessage !== "") {
+            alert(errorMessage); // මෙතැනදී වැරැද්ද කුමක්දැයි කෙලින්ම කියයි
+            return; // මෙතැනින් වැඩේ නතර වේ (Submit නොවේ)
+        }
+
+        // සියල්ල නිවැරදි නම් API එකට දත්ත යැවීම
+        submitBtn.disabled = true;
+        submitBtn.textContent = 'Processing...';
+
+        const payload = {
+            staff_id: document.getElementById('staffid').value.trim(),
+            name: document.getElementById('fullname').value.trim(),
+            nic: document.getElementById('nic').value.trim(),
+            place_of_work: document.getElementById('workplace').value.trim(),
+            email: email,
+            phone_number: phone,
+            password: password,
+            confirm_password: confirmPassword
+        };
+
+        try {
+            const res = await fetch('api/assistant_registration.php', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(payload)
+            });
+
+            const data = await res.json();
+
+            if (res.ok && data.status === 'success') {
+                alert("Success: " + (data.message || 'Registration successful!'));
+                window.location.href = 'assistant_login.html';
+            } else {
+                alert("Registration Failed: " + (data.message || 'Server error occurred.'));
+            }
+        } catch (err) {
+            alert('Registration Failed: Network error. Please try again later.');
+        } finally {
+            submitBtn.disabled = false;
+            submitBtn.textContent = 'REGISTER NOW';
+        }
+    });
+})();
+function togglePassword(inputId, iconId) {
+    const passwordInput = document.getElementById(inputId);
+    const iconSpan = document.getElementById(iconId);
+
+    if (passwordInput.type === "password") {
+        passwordInput.type = "text";
+        iconSpan.textContent = "visibility"; // ඇස විවෘත අයිකනය
+    } else {
+        passwordInput.type = "password";
+        iconSpan.textContent = "visibility_off"; // ඇස වැසුණු අයිකනය
+    }
+}
+        </script>
+    </div>
+</div>
+
+<!-- FOOTER -->
+<footer>
+    © 2024 COPD Detection System – Authorized clinical personnel access only
+</footer>
+
+</body>
+</html>

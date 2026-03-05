@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Assistant Profile Management Dashboard - Minimalist View</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<style type="text/tailwindcss">
+        :root {
+            --primary: #135bec;
+            --sidebar-bg: #111722;
+            --content-bg: #f8fafc;
+        }
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+    </style>
+<script id="tailwind-config">
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#135bec",
+                        "sidebar": "#111722",
+                        "content": "#f8fafc",
+                    },
+                    borderRadius: {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                },
+            },
+        }
+    </script>
+</head>
+<body class="bg-[var(--content-bg)] text-slate-900 antialiased">
+<div class="flex min-h-screen overflow-hidden">
+<aside class="w-64 bg-[var(--sidebar-bg)] flex flex-col shrink-0">
+<div class="p-6 flex items-center gap-3">
+<div class="bg-primary p-2 rounded-lg">
+<span class="material-symbols-outlined text-white text-2xl">pulmonology</span>
+</div>
+<div>
+<h1 class="text-white text-base font-bold leading-tight">COPD Detection</h1>
+<p class="text-[#92a4c9] text-[10px] uppercase tracking-wider font-semibold">Doctor Panel</p>
+</div>
+</div>
+<nav class="flex-1 px-4 py-4 space-y-1">
+<a class="flex items-center gap-3 px-3 py-2 text-[#92a4c9] hover:bg-white/5 hover:text-white rounded-lg transition-colors" href="home_page.html">
+<span class="material-symbols-outlined text-xl">home</span>
+<span class="text-sm font-medium">Home</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 text-[#92a4c9] hover:bg-white/5 hover:text-white rounded-lg transition-colors" href="doctor_dashboard.html">
+<span class="material-symbols-outlined text-xl">dashboard</span>
+<span class="text-sm font-medium">Dashboard</span>
+</a>
+
+<a class="flex items-center gap-3 px-3 py-2 text-[#92a4c9] hover:bg-white/5 hover:text-white rounded-lg transition-colors" href="doctor_patient_list.html">
+<span class="material-symbols-outlined text-xl">group</span>
+<span class="text-sm font-medium">Patient List</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 text-[#92a4c9] hover:bg-white/5 hover:text-white rounded-lg transition-colors" href="doctor_show_appointment.html">
+<span class="material-symbols-outlined text-xl">event</span>
+<span class="text-sm font-medium">Appointments</span>
+</a>
+
+</nav>
+<div class="p-4 mt-auto border-t border-slate-800">
+<div class="flex items-center gap-3 p-2">
+<div class="relative">
+</div>
+<a href="api/logout.php" class="mt-4 flex w-full items-center left gap-2 px-3 py-2 text-sm font-semibold text-[#92a4c9] hover:text-white transition-colors">
+    <span class="material-symbols-outlined text-lg">logout</span>
+    Logout
+</a>
+</div>
+</aside>
+<main class="flex-1 overflow-y-auto">
+<header class="h-16 border-b border-slate-200 bg-white sticky top-0 z-10 px-8 flex items-center justify-between">
+<div class="flex items-center gap-2 text-sm">
+
+
+</div>
+<div class="flex items-center gap-4">
+
+<div id="welcome-text" class="text-sm text-slate-500 font-medium">Welcome, Dr. </div>
+</div>
+</header>
+<div class="p-8 space-y-8 max-w-7xl mx-auto">
+<section class="grid grid-cols-1 md:grid-cols-3 gap-6">
+<div class="bg-white p-6 rounded-xl shadow-sm border border-slate-200">
+<p id="stat-total-patients" class="text-3xl font-bold text-primary mb-1">18</p>
+<p class="text-sm font-medium text-slate-500">Total Patients</p>
+</div>
+<div class="bg-white p-6 rounded-xl shadow-sm border border-slate-200">
+<p id="total-appointments" class="text-3xl font-bold text-primary mb-1">14</p>
+<p class="text-sm font-medium text-slate-500">Today's Appointments</p>
+</div>
+<div class="bg-white p-6 rounded-xl shadow-sm border border-slate-200">
+<p id="stat-recent" class="text-3xl font-bold text-primary mb-1">0</p>
+<p class="text-sm font-medium text-slate-500">Recent Analyses</p>
+</div>
+</section>
+<section class="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden">
+<div class="p-8">
+<div class="flex flex-col space-y-10">
+<div class="flex flex-col md:flex-row md:items-end justify-between gap-6">
+<div>
+<h2 id="doc-name" class="text-4xl font-bold text-slate-900 tracking-tight">Alex Johnson</h2>
+
+</div>
+<div class="flex gap-3">
+
+
+</div>
+</div>
+<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-y-10 gap-x-12">
+<div class="space-y-1.5">
+<p class="text-[11px] uppercase tracking-[0.15em] font-bold text-slate-400">MC Number</p>
+<p id="display-mc" class="text-slate-800 font-semibold text-lg">ADM-2023-089</p>
+</div>
+<div class="space-y-1.5">
+<p class="text-[11px] uppercase tracking-[0.15em] font-bold text-slate-400">Email Address</p>
+<p id="display-email" class="text-slate-800 font-semibold text-lg">alex.johnson@hospital.com</p>
+</div>
+<div class="space-y-1.5">
+<p class="text-[11px] uppercase tracking-[0.15em] font-bold text-slate-400">Phone Number</p>
+<p id="display-phone" class="text-slate-800 font-semibold text-lg">+1 (555) 0123-4567</p>
+</div>
+<div class="space-y-1.5">
+<p class="text-[11px] uppercase tracking-[0.15em] font-bold text-slate-400">National ID (NIC)</p>
+<p id="display-nic" class="text-slate-800 font-semibold text-lg">984421104V</p>
+</div>
+<div class="space-y-1.5">
+<p class="text-[11px] uppercase tracking-[0.15em] font-bold text-slate-400">Place of Work</p>
+<p id="display-work" class="text-slate-800 font-semibold text-lg">Central General Hospital, Main Campus</p>
+</div>
+
+</div>
+</div>
+</div>
+</section>
+
+</div>
+
+</main>
+
+</div>
+<script>
+document.addEventListener('DOMContentLoaded', async function() {
+    try {
+        const response = await fetch('api/get_doctor_profile.php');
+        
+        if (!response.ok) {
+            throw new Error('Network response was not ok');
+        }
+
+        const result = await response.json();
+        console.log("Dashboard Loaded Data:", result);
+
+        if (result.success) {
+            const d = result.data;
+            
+            // Stats Cards Update කිරීම
+            const totalPatientsElem = document.getElementById('stat-total-patients');
+            if(totalPatientsElem) {
+                // දත්ත නොමැති නම් '0' පෙන්වන්න
+                totalPatientsElem.innerText = d.total_patients_count || '0';
+            }
+
+            const statsElem = document.getElementById('total-appointments');
+            if(statsElem) {
+                // PHP එකෙන් එන නම හරියටම පරීක්ෂා කරන්න
+                statsElem.innerText = d.today_appointments_count || '0';
+            }
+
+            const recentElem = document.getElementById('stat-recent');
+            if(recentElem) {
+                recentElem.innerText = d.recent_analyses_count || '0';
+            }
+
+            // Header සහ Profile Section
+            if(document.getElementById('welcome-text')) 
+                document.getElementById('welcome-text').innerText = "Welcome, Dr.  " + (d.Name || "Doctor");
+            
+            if(document.getElementById('doc-name')) 
+                document.getElementById('doc-name').innerText = "Dr. " + (d.Name || "Doctor");
+
+            // Profile Information
+            if(document.getElementById('display-mc')) document.getElementById('display-mc').innerText = d.MC_number || '-';
+            if(document.getElementById('display-email')) document.getElementById('display-email').innerText = d.Email || '-';
+            if(document.getElementById('display-phone')) document.getElementById('display-phone').innerText = d.Contact_number || '-';
+            if(document.getElementById('display-nic')) document.getElementById('display-nic').innerText = d.NIC_no || '-';
+            if(document.getElementById('display-work')) document.getElementById('display-work').innerText = d.Place_of_work || '-';
+            
+        } else {
+            console.error("Backend Error:", result.message);
+            if(result.message === "Unauthorized access.") {
+                window.location.href = "doctor_login.html";
+            }
+        }
+    } catch (error) {
+        console.error("Fetch Error:", error);
+    }
+}); // අවසාන වරහන අත්‍යවශ්‍යයි
+</script>
+</body></html>

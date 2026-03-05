@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Doctor Appointment Dashboard</title>
+
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+
+<style type="text/tailwindcss">
+:root{
+    --primary:#135bec;
+    --sidebar-bg:#111722;
+    --content-bg:#f8fafc;
+    --card-bg:#ffffff;
+    --table-header:#eef2f7;
+    --table-hover:#f3f7ff;
+}
+body{font-family:'Inter',sans-serif;}
+.material-symbols-outlined{
+    font-variation-settings:'FILL' 0,'wght' 400,'GRAD' 0,'opsz' 24;
+}
+</style>
+</head>
+
+<body class="bg-[var(--content-bg)] text-slate-900">
+<div class="flex min-h-screen">
+
+<!-- SIDEBAR (UNCHANGED) -->
+<aside class="w-64 bg-[var(--sidebar-bg)] flex flex-col shrink-0">
+<div class="p-6 flex items-center gap-3">
+<div class="bg-primary p-2 rounded-lg">
+<span class="material-symbols-outlined text-white text-2xl">pulmonology</span>
+</div>
+<div>
+<h1 class="text-white text-base font-bold leading-tight">COPD Detection</h1>
+<p class="text-[#92a4c9] text-[10px] uppercase tracking-wider font-semibold">Doctor Panel</p>
+</div>
+</div>
+<nav class="flex-1 px-4 py-4 space-y-1">
+<a class="flex items-center gap-3 px-3 py-2 text-[#92a4c9] hover:bg-white/5 hover:text-white rounded-lg transition-colors" href="home_page.html">
+<span class="material-symbols-outlined text-xl">home</span>
+<span class="text-sm font-medium">Home</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 text-[#92a4c9] hover:bg-white/5 hover:text-white rounded-lg transition-colors" href="doctor_dashboard.html">
+<span class="material-symbols-outlined text-xl">dashboard</span>
+<span class="text-sm font-medium">Dashboard</span>
+</a>
+
+<a class="flex items-center gap-3 px-3 py-2 text-[#92a4c9] hover:bg-white/5 hover:text-white rounded-lg transition-colors" href="doctor_patient_list.html">
+<span class="material-symbols-outlined text-xl">group</span>
+<span class="text-sm font-medium">Patient List</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 text-[#92a4c9] hover:bg-white/5 hover:text-white rounded-lg transition-colors" href="doctor_show_appointment.html">
+<span class="material-symbols-outlined text-xl">event</span>
+<span class="text-sm font-medium">Appointments</span>
+</a>
+
+</nav>
+<div class="p-4 mt-auto border-t border-slate-800">
+<div class="flex items-center gap-3 p-2">
+<div class="relative">
+</div>
+<a href="api/logout.php" class="mt-4 flex w-full items-center left gap-2 px-3 py-2 text-sm font-semibold text-[#92a4c9] hover:text-white transition-colors">
+    <span class="material-symbols-outlined text-lg">logout</span>
+    Logout
+</a>
+</div>
+</aside>
+
+<!-- MAIN -->
+<main class="flex-1 overflow-y-auto">
+
+<header class="h-16 bg-white border-b px-8 flex items-center justify-end">
+<span id="welcome-text" class="text-slate-500 text-sm">Welcome, Doctor</span>
+</header>
+
+<div class="p-8 max-w-7xl mx-auto space-y-8">
+
+<!-- HEADER -->
+
+
+
+<div>
+<h1 class="text-3xl font-black">Appointment Schedule</h1>
+<p class="text-slate-500 mt-1">Manage daily queue and patient readiness</p>
+</div>
+
+<!-- TABLE CARD -->
+<div class="bg-[var(--card-bg)] rounded-xl border border-slate-200 shadow-sm overflow-hidden">
+
+<table class="w-full">
+<thead>
+<tr class="bg-[var(--table-header)] border-b">
+<th class="px-6 py-4 text-xs font-bold uppercase text-slate-500">Patient ID</th>
+<th class="px-6 py-4 text-xs font-bold uppercase text-slate-500">Full Name</th>
+<th class="px-6 py-4 text-xs font-bold uppercase text-slate-500">Appt No</th>
+<th class="px-6 py-4 text-xs font-bold uppercase text-slate-500">Date</th>
+<th class="px-6 py-4 text-xs font-bold uppercase text-slate-500 text-center">Ready?</th>
+</tr>
+</thead>
+
+<tbody id="appointmentBody" class="divide-y">
+<tr class="hover:bg-[var(--table-hover)]">
+<td class="px-6 py-5 font-bold text-primary">#P-1002</td>
+<td class="px-6 py-5 font-semibold">Johnathan Doe</td>
+<td class="px-6 py-5"><span class="bg-slate-100 px-3 py-1 rounded font-mono text-sm">#APT-4421</span></td>
+<td class="px-6 py-5 text-slate-600">24 Oct, 09:30 AM</td>
+<td class="px-6 py-5 text-center">
+<button class="border px-4 py-1.5 rounded text-xs font-bold ml-2">Yes</button>
+<button class="border px-4 py-1.5 rounded text-xs font-bold ml-2">No</button>
+</td>
+</tr>
+
+<tr class="hover:bg-[var(--table-hover)]">
+<td class="px-6 py-5 font-bold text-primary">#P-1005</td>
+<td class="px-6 py-5 font-semibold">Sarah Smith</td>
+<td class="px-6 py-5"><span class="bg-slate-100 px-3 py-1 rounded font-mono text-sm">#APT-4425</span></td>
+<td class="px-6 py-5 text-slate-600">24 Oct, 10:15 AM</td>
+<td class="px-6 py-5 text-center">
+<button class="border px-4 py-1.5 rounded text-xs font-bold ml-2">Yes</button>
+<button class="border px-4 py-1.5 rounded text-xs font-bold ml-2">No</button>
+</td>
+</tr>
+</tbody>
+</table>
+
+
+
+</div>
+
+<!-- STATS -->
+<div class="grid grid-cols-4 gap-6">
+<div class="bg-[var(--card-bg)] p-5 rounded-xl border shadow-sm">
+<p class="text-xs uppercase text-slate-500 font-bold">Today's Total</p>
+<p id="stat-total" class="text-2xl font-black">42</p>
+</div>
+<div class="bg-[var(--card-bg)] p-5 rounded-xl border shadow-sm">
+<p class="text-xs uppercase text-slate-500 font-bold">Confirmed</p>
+<p id="stat-confirmed" class="text-2xl font-black">38</p>
+</div>
+<div class="bg-[var(--card-bg)] p-5 rounded-xl border shadow-sm">
+<p class="text-xs uppercase text-slate-500 font-bold">Pending</p>
+<p id="stat-pending" class="text-2xl font-black">12</p>
+</div>
+
+</div>
+
+</div>
+</main>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    loadAppointments();
+    loadDoctorProfile();
+
+    async function loadAppointments() {
+        try {
+            const response = await fetch('api/get_doctor_appointments.php');
+            const res = await response.json();
+
+            if (res.success) {
+                // 1. Stats Update කිරීම
+                // මචං, මෙතන IDs ඔයාගේ HTML එකේ තියෙන ඒවාට සමාන විය යුතුයි
+                if(document.getElementById('stat-total')) document.getElementById('stat-total').innerText = res.stats.total;
+                if(document.getElementById('stat-confirmed')) document.getElementById('stat-confirmed').innerText = res.stats.confirmed;
+                if(document.getElementById('stat-pending')) document.getElementById('stat-pending').innerText = res.stats.pending;
+
+                // 2. Table එක පිරවීම
+                let rows = '';
+                if (res.appointments.length === 0) {
+                    rows = '<tr><td colspan="5" class="px-6 py-10 text-center text-slate-500">No appointments found for today.</td></tr>';
+                } else {
+                    res.appointments.forEach(app => {
+                        // DB එකේ තියෙන අගය (Yes/No) අනුව බටන් වල පාට තීරණය කිරීම
+                        const status = app.COPD_Test_recommend;
+                        
+                        rows += `
+                        <tr class="hover:bg-[var(--table-hover)] transition-colors">
+                            <td class="px-6 py-5 font-bold text-primary">#${app.Patient_ID}</td>
+                            <td class="px-6 py-5 font-semibold text-slate-700">${app.PatientName}</td>
+                            <td class="px-6 py-5">
+                                <span class="bg-slate-100 px-3 py-1 rounded font-mono text-sm text-slate-600">#APT-${app.Appoinment_no}</span>
+                            </td>
+                            <td class="px-6 py-5 text-slate-600">
+                                ${new Date(app.Appoinment_date).toLocaleDateString('en-GB', { day:'numeric', month:'short', hour:'2-digit', minute:'2-digit' })}
+                            </td>
+                            <td class="px-6 py-5 text-center">
+                                <div class="flex items-center justify-center gap-2">
+                                    <button onclick="updateStatus(${app.Appoinment_no}, 'Yes')" 
+                                        class="px-4 py-1.5 rounded text-xs font-bold border transition-all ${status === 'Yes' ? 'bg-green-600 text-white border-green-600 shadow-md' : 'bg-white text-slate-600 border-slate-200 hover:bg-green-50'}">
+                                        Yes
+                                    </button>
+                                    <button onclick="updateStatus(${app.Appoinment_no}, 'No')" 
+                                        class="px-4 py-1.5 rounded text-xs font-bold border transition-all ${status === 'No' ? 'bg-red-600 text-white border-red-600 shadow-md' : 'bg-white text-slate-600 border-slate-200 hover:bg-red-50'}">
+                                        No
+                                    </button>
+                                </div>
+                            </td>
+                        </tr>`;
+                    });
+                }
+                const tableBody = document.getElementById('appointmentBody');
+                if(tableBody) tableBody.innerHTML = rows;
+            } else {
+                console.error("Failed to load appointments:", res.message);
+            }
+        } catch (error) {
+            console.error("Fetch Error:", error);
+        }
+    }
+    // වෛද්‍යවරයාගේ නම Header එකට ලබා ගැනීම
+async function loadDoctorProfile() {
+    try {
+        const response = await fetch('api/get_doctor_profile.php');
+        const result = await response.json();
+        if (result.success) {
+            const d = result.data;
+            if(document.getElementById('welcome-text')) {
+                document.getElementById('welcome-text').innerText = "Dr. " + (d.Name || "Doctor");
+            }
+        }
+    } catch (error) {
+        console.error("Profile Fetch Error:", error);
+    }
+}
+
+// පිටුව load වන විට මෙම function එකත් ක්‍රියාත්මක කරන්න
+loadDoctorProfile();
+    
+
+    // Status Update කරන Function එක
+    window.updateStatus = async function(apptNo, statusValue) {
+        try {
+            const response = await fetch('api/doctor_update_appointment_status.php', {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify({ appt_no: apptNo, status: statusValue })
+            });
+            const res = await response.json();
+            
+            if (res.success) {
+                // සේව් වුණාට පස්සේ table එක refresh කරනවා stats එක්කම
+                loadAppointments(); 
+            } else {
+                alert("Error updating status: " + res.message);
+            }
+        } catch (error) {
+            console.error("Update Error:", error);
+        }
+    };
+});
+</script>
+</body>
+</html>

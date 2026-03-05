@@ -1,0 +1,482 @@
+<!DOCTYPE html>
+<html class="light h-full" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Patient Diagnostic Detail - COPD Detection </title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#1392ec",
+                        "sidebar-navy": "#0f172a",
+                        "background-light": "#f8fafc",
+                        "background-dark": "#0f172a",
+                        "clinical-blue": "#1e293b",
+                    },
+                    fontFamily: {
+                        "display": ["Inter", "sans-serif"]
+                    },
+                    borderRadius: { "DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "2xl": "1rem" },
+                },
+            },
+        }
+    </script>
+<style type="text/tailwindcss">
+        @layer base {
+            body { @apply font-display text-slate-900 bg-background-light; }
+        }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .nav-item-active {
+            @apply bg-primary text-white;
+        }
+        .nav-item-active .material-symbols-outlined {
+            font-variation-settings: 'FILL' 1;
+        }.gauge-svg {
+            transform: rotate(-90deg);
+        }
+        .gauge-bg {
+            stroke: #e2e8f0;
+        }
+        .gauge-val {
+            stroke: #ef4444;stroke-dasharray: 251.2;
+            stroke-dashoffset: calc(251.2 - (251.2 * 78) / 100);
+            stroke-linecap: round;
+        }.waveform-bar {
+            @apply w-1 rounded-full;
+        }.spectrogram-inferno {
+            background: linear-gradient(to bottom, #fcffa4, #fac228, #f57d15, #ae305c, #51127c, #000004);
+            position: relative;
+        }
+        .spectrogram-overlay {
+            background-image: 
+                radial-gradient(circle at 20% 80%, rgba(252, 255, 164, 0.8) 0%, transparent 40%),
+                radial-gradient(circle at 50% 40%, rgba(245, 125, 21, 0.6) 0%, transparent 50%),
+                radial-gradient(circle at 80% 90%, rgba(250, 194, 40, 0.7) 0%, transparent 45%),
+                linear-gradient(90deg, rgba(0,0,0,0.4) 0%, transparent 20%, transparent 80%, rgba(0,0,0,0.4) 100%);
+            mix-blend-mode: screen;
+        }::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            @apply bg-slate-100;
+        }
+        ::-webkit-scrollbar-thumb {
+            @apply bg-slate-300 rounded-full hover:bg-slate-400;
+        }
+    </style>
+</head>
+<body class="h-screen flex overflow-hidden">
+<aside class="w-64 bg-sidebar-navy flex flex-col flex-shrink-0 h-full fixed left-0 top-0 z-50">
+
+  <div class="p-6">
+    <div class="flex items-center gap-3">
+      <div class="bg-primary p-2 rounded-lg">
+        <span class="material-symbols-outlined text-white text-2xl">pulmonology</span>
+      </div>
+      <div>
+        <h1 class="text-white text-base font-bold leading-tight">COPD Detection</h1>
+        <p class="text-[#92a4c9] text-[10px] uppercase tracking-wider font-semibold">Doctor Panel</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Navigation -->
+  <nav class="flex-1 px-4 py-4 space-y-1">
+    <a class="flex items-center gap-3 px-3 py-2 text-[#92a4c9] hover:bg-white/5 hover:text-white rounded-lg" href="home_page.html">
+      <span class="material-symbols-outlined text-xl">home</span>
+      <span class="text-sm font-medium">Home</span>
+    </a>
+
+    <a class="flex items-center gap-3 px-3 py-2 text-[#92a4c9] hover:bg-white/5 hover:text-white rounded-lg" href="doctor_dashboard.html">
+      <span class="material-symbols-outlined text-xl">dashboard</span>
+      <span class="text-sm font-medium">Dashboard</span>
+    </a>
+
+    <a class="flex items-center gap-3 px-3 py-2 text-[#92a4c9] hover:bg-white/5 hover:text-white rounded-lg" href="doctor_patient_list.html">
+      <span class="material-symbols-outlined text-xl">group</span>
+      <span class="text-sm font-medium">Patient List</span>
+    </a>
+
+    <a class="flex items-center gap-3 px-3 py-2 text-[#92a4c9] hover:bg-white/5 hover:text-white rounded-lg" href="doctor_view_report.html">
+      <span class="material-symbols-outlined text-xl">book</span>
+      <span class="text-sm font-medium">Patient Report</span>
+    </a>
+
+    
+  </nav>
+
+  <!-- 🔴 Logout at Bottom -->
+  <div class="p-4 border-t border-slate-800 mt-auto">
+ <a class="flex items-center gap-3 px-3 py-2 text-[#92a4c9] hover:bg-white/5 hover:text-white rounded-lg" href="api/logout.php">
+      <span class="material-symbols-outlined text-xl">logout</span>
+      <span class="text-sm font-medium">Logout</span>
+    </a>
+  </div>
+
+</aside>
+<main class="flex-1 ml-64 h-full overflow-y-auto scroll-smooth">
+<div class="max-w-6xl mx-auto p-8 space-y-8">
+<div class="flex flex-col lg:flex-row gap-6">
+<div class="flex-grow bg-white rounded-2xl p-6 shadow-sm border border-slate-200">
+<div class="flex items-start justify-between">
+<div class="flex gap-5">
+<div class="size-16 rounded-full bg-slate-100 flex items-center justify-center text-slate-400 border border-slate-200">
+<span class="material-symbols-outlined text-4xl">person</span>
+</div>
+<div>
+<div class="inline-block px-2 py-0.5 rounded bg-blue-50 text-blue-600 text-[10px] font-bold uppercase tracking-wider mb-1">Patient Record</div>
+<h1 class="text-2xl font-black text-slate-900 leading-tight">Johnathan Doe</h1>
+<div class="flex flex-wrap items-center gap-x-4 gap-y-1 mt-2">
+<div class="flex flex-wrap items-center gap-x-4 gap-y-1 mt-2">
+    <div class="flex items-center gap-1.5 text-sm text-slate-500 font-medium" data-id="patient-id">
+        <span class="text-slate-400 text-xs">ID:</span> --
+    </div>
+    <div class="flex items-center gap-1.5 text-sm text-slate-500 font-medium border-l border-slate-200 pl-4" data-id="patient-age">
+        <span class="text-slate-400 text-xs">Age:</span> --
+    </div>
+    <div class="flex items-center gap-1.5 text-sm text-slate-500 font-medium border-l border-slate-200 pl-4" data-id="patient-nic">
+        <span class="text-slate-400 text-xs">NIC:</span> --
+    </div>
+</div>
+</div>
+</div>
+</div>
+<div class="flex flex-col gap-2">
+
+<button onclick="downloadReport()" 
+class="flex items-center justify-center gap-2 px-4 py-2 bg-primary/10 hover:bg-primary/20 text-primary text-xs font-bold uppercase tracking-wider rounded-lg transition-colors">
+    <span class="material-symbols-outlined text-sm">download</span>
+    Download Report
+</button>
+</div>
+</div>
+</div>
+<div class="w-full lg:w-[400px] bg-white rounded-2xl p-6 shadow-sm border border-slate-200 flex items-center gap-6">
+<div class="relative size-24 flex-shrink-0">
+<svg class="gauge-svg size-24" viewBox="0 0 100 100">
+<circle class="gauge-bg" cx="50" cy="50" fill="transparent" r="40" stroke-width="10"></circle>
+<circle class="gauge-val" cx="50" cy="50" fill="transparent" r="40" stroke-width="10"></circle>
+</svg>
+<div class="absolute inset-0 flex items-center justify-center flex-col">
+<span class="text-xl font-black text-slate-900">78%</span>
+</div>
+</div>
+<div class="flex-1">
+<h3 class="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-1">COPD Diagnostic Summary</h3>
+<div class="text-red-600 font-black text-lg leading-tight mb-3">POSITIVE<br/><span class="text-sm font-bold opacity-80">(High Risk)</span></div>
+<div class="space-y-2">
+<div class="flex items-center gap-2">
+<span class="text-[9px] font-bold text-slate-400 w-8">POS</span>
+<div class="flex-1 h-1.5 bg-slate-100 rounded-full overflow-hidden">
+<div class="h-full bg-red-500" style="width: 78%"></div>
+</div>
+<span class="text-[10px] font-bold text-slate-700">78%</span>
+</div>
+<div class="flex items-center gap-2">
+<span class="text-[9px] font-bold text-slate-400 w-8">NEG</span>
+<div class="flex-1 h-1.5 bg-slate-100 rounded-full overflow-hidden">
+<div class="h-full bg-slate-400" style="width: 22%"></div>
+</div>
+<span class="text-[10px] font-bold text-slate-700">22%</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+<section>
+<section>
+    <div class="flex items-center gap-3 mb-4">
+        <span class="material-symbols-outlined text-slate-400">mic</span>
+        <h2 class="text-xs font-bold text-slate-500 uppercase tracking-widest">Raw Cough Samples</h2>
+        <div class="h-px bg-slate-200 flex-1"></div>
+    </div>
+    <div id="raw-samples-container" class="grid grid-cols-1 md:grid-cols-3 gap-6">
+        </div>
+</section>
+
+</section>
+<section>
+    <div class="flex items-center gap-3 mb-4">
+        <span class="material-symbols-outlined text-slate-400">filter_list</span>
+        <h2 class="text-xs font-bold text-slate-500 uppercase tracking-widest">Preprocessed Samples</h2>
+        <div class="h-px bg-slate-200 flex-1"></div>
+    </div>
+    <div id="preprocessed-container" class="grid grid-cols-1 md:grid-cols-3 gap-6">
+        </div>
+</section>
+
+
+</section>
+<section>
+    <div class="flex items-center gap-3 mb-4">
+        <span class="material-symbols-outlined text-slate-400">analytics</span>
+        <h2 class="text-xs font-bold text-slate-500 uppercase tracking-widest">Generated Mel-Spectrograms</h2>
+        <div class="h-px bg-slate-200 flex-1"></div>
+    </div>
+    <div id="spectrograms-container" class="grid grid-cols-1 md:grid-cols-3 gap-8">
+        </div>
+</section>
+<section>
+<div>
+<div class="absolute inset-0 opacity-10 pointer-events-none border-l-2 border-b-2 border-white/40 ml-10 mb-6 mr-4 mt-2 grid grid-cols-4 grid-rows-4">
+<div class="border-r border-t border-white"></div><div class="border-r border-t border-white"></div><div class="border-r border-t border-white"></div><div class="border-t border-white"></div>
+<div class="border-r border-t border-white"></div><div class="border-r border-t border-white"></div><div class="border-r border-t border-white"></div><div class="border-t border-white"></div>
+<div class="border-r border-t border-white"></div><div class="border-r border-t border-white"></div><div class="border-r border-t border-white"></div><div class="border-t border-white"></div>
+<div class="border-r border-t border-white"></div><div class="border-r border-t border-white"></div><div class="border-r border-t border-white"></div><div class="border-t border-white"></div>
+</div>
+</div>
+
+</section>
+<section class="pb-12">
+<div class="bg-white rounded-2xl p-8 border border-slate-200 shadow-sm">
+<div class="flex items-center gap-3 mb-6">
+<span class="material-symbols-outlined text-primary">notes</span>
+<h2 class="text-xs font-bold text-slate-500 uppercase tracking-widest">Clinical Comments</h2>
+</div>
+<textarea class="w-full h-40 p-6 rounded-xl bg-slate-50 border-slate-200 text-slate-800 placeholder-slate-400 focus:ring-primary focus:border-primary transition-all resize-none mb-6" placeholder="Type your clinical findings or observation notes here..."></textarea>
+<div class="flex items-center justify-between">
+<p class="text-[11px] text-slate-400 italic flex items-center gap-1">
+<span class="material-symbols-outlined text-xs">info</span>
+                            Notes are encrypted and stored in patient history.
+                        </p>
+<button class="px-10 py-3 bg-primary text-white font-black text-xs uppercase tracking-widest rounded-xl hover:bg-primary/90 shadow-lg shadow-primary/20 transition-all active:scale-95">
+                            Save Diagnostic Note
+                        </button>
+</div>
+</div>
+</section>
+</div>
+</main>
+<script src="https://unpkg.com/wavesurfer.js"></script>
+
+<script>
+document.addEventListener('DOMContentLoaded', async function () {
+
+    const urlParams = new URLSearchParams(window.location.search);
+    const testId = urlParams.get('test_id');
+
+    if (!testId) {
+        alert("Test ID missing");
+        return;
+    }
+
+    try {
+
+        const response = await fetch(`api/get_test_full_report.php?test_id=${testId}`);
+        const data = await response.json();
+
+        console.log("API DATA:", data);
+
+        if (!data.success) {
+            alert("Failed to load report");
+            return;
+        }
+        const samples = data.samples;
+       
+
+        // ================= PATIENT INFO =================
+        document.querySelector('h1.text-2xl').innerText = data.patient.Name;
+
+        document.querySelector('[data-id="patient-id"]').innerHTML =
+            `<span class="text-slate-400 text-xs">ID:</span> ${data.patient.Patient_ID}`;
+
+        document.querySelector('[data-id="patient-age"]').innerHTML =
+            `<span class="text-slate-400 text-xs">Age:</span> ${data.patient.Age}`;
+
+        document.querySelector('[data-id="patient-nic"]').innerHTML =
+            `<span class="text-slate-400 text-xs">NIC:</span> ${data.patient.NIC}`;
+
+
+       
+
+
+        // ================= SUMMARY =================
+        
+         let posAvg = parseFloat(data.average_positive || 0) * 100;
+         let negAvg = parseFloat(data.average_negative || 0) * 100;
+
+         posAvg = posAvg.toFixed(1);
+         negAvg = negAvg.toFixed(1);
+        const gaugeCircle = document.querySelector('.gauge-val');
+        gaugeCircle.style.strokeDashoffset = 251.2 - (251.2 * posAvg) / 100;
+
+        // ===== Update POS bar =====
+document.querySelectorAll('.bg-red-500')[0].style.width = posAvg + "%";
+document.querySelectorAll('.bg-red-500')[0]
+    .closest('.flex')
+    .querySelector('.text-slate-700').innerText = posAvg + "%";
+
+// ===== Update NEG bar =====
+document.querySelectorAll('.bg-slate-400')[0].style.width = negAvg + "%";
+document.querySelectorAll('.bg-slate-400')[0]
+    .closest('.flex')
+    .querySelector('.text-slate-700').innerText = negAvg + "%";
+
+
+        const resultText = document.querySelector('.text-red-600');
+        resultText.innerHTML =
+            posAvg > 50
+                ? `POSITIVE<br><span class="text-sm font-bold opacity-80">(High Risk)</span>`
+                : `NEGATIVE<br><span class="text-sm font-bold opacity-80">(Low Risk)</span>`;
+
+
+        // ================= CONTAINERS =================
+        const rawContainer = document.getElementById('raw-samples-container');
+        const preContainer = document.getElementById('preprocessed-container');
+        const specContainer = document.getElementById('spectrograms-container');
+
+        rawContainer.innerHTML = '';
+        preContainer.innerHTML = '';
+        specContainer.innerHTML = '';
+
+
+        // ================= BASE URL =================
+const BASE = "http://localhost/HighflyersFinal/";
+
+samples.forEach((sample, index) => {
+
+    const num = index + 1;
+    const waveformId = `waveform-${index}`;
+
+    // ===== PATH FIX =====
+   const cleanPath = (path) => {
+    if (!path) return null;
+
+    path = path.replace(/\\/g, "/");
+
+    const genIndex = path.indexOf("generated/");
+    if (genIndex !== -1) {
+        path = path.substring(genIndex);
+    }
+
+    const upIndex = path.indexOf("uploads/");
+    if (upIndex !== -1) {
+        path = path.substring(upIndex);
+    }
+
+    return BASE + path;
+};
+
+const rawUrl = cleanPath(sample.Audio_URL);
+const preprocessUrl = cleanPath(sample.Preprocess_URL);
+const specUrl = cleanPath(sample.Spectrogram_URL);
+
+    // ========= RAW AUDIO =========
+    rawContainer.insertAdjacentHTML('beforeend', `
+        <div class="bg-white p-5 rounded-2xl border shadow-sm">
+            <div class="text-[10px] font-bold text-slate-400 mb-3">Sample 0${num}</div>
+            <div id="${waveformId}" class="mb-4 bg-slate-50 rounded-xl p-2"></div>
+            <button id="btn-${waveformId}" class="size-10 rounded-full bg-slate-900 text-white flex items-center justify-center">
+                <span class="material-symbols-outlined">play_arrow</span>
+            </button>
+        </div>
+    `);
+
+    const wavesurfer = WaveSurfer.create({
+        container: `#${waveformId}`,
+        waveColor: '#cbd5e1',
+        progressColor: '#1392ec',
+        height: 60
+    });
+
+    wavesurfer.load(rawUrl);
+
+    document.getElementById(`btn-${waveformId}`).onclick = () => {
+        wavesurfer.playPause();
+    };
+
+
+    // ========= PREPROCESSED AUDIO =========
+    preContainer.insertAdjacentHTML('beforeend', `
+        <div class="bg-white p-5 rounded-2xl border shadow-sm">
+            <div class="text-[10px] font-bold text-primary mb-3">Filtered 0${num}</div>
+
+            ${
+                preprocessUrl
+                ? `<audio controls class="w-full">
+                        <source src="${preprocessUrl}" type="audio/wav">
+                   </audio>`
+                : `<div class="text-slate-400 text-sm">No Preprocessed Audio</div>`
+            }
+        </div>
+    `);
+
+
+    // ========= SPECTROGRAM =========
+    specContainer.insertAdjacentHTML('beforeend', `
+        <div class="bg-white rounded-2xl overflow-hidden border shadow-md">
+            ${
+                specUrl
+                ? `<img src="${specUrl}" class="w-full h-56 object-cover"/>`
+                : `<div class="flex items-center justify-center h-56 text-slate-400">No Image</div>`
+            }
+            <div class="p-3 bg-slate-900 text-white text-xs font-bold">
+                Segment 0${num} Analysis
+            </div>
+        </div>
+    `);
+
+});
+
+    } catch (err) {
+        console.error(err);
+        alert("Error loading report");
+    }
+
+});
+
+
+
+document.querySelector('.bg-primary.text-white').addEventListener('click', async () => {
+
+    const comment = document.querySelector('textarea').value;
+
+    const urlParams = new URLSearchParams(window.location.search);
+    const testId = urlParams.get('test_id');
+
+    if (!comment) {
+        alert("Please enter a comment");
+        return;
+    }
+
+    const response = await fetch('api/save_clinical_comment.php', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+            test_id: testId,
+            comment: comment
+        })
+    });
+
+    const result = await response.json();
+
+    if (result.success) {
+        alert("Comment saved successfully ✅");
+    } else {
+        alert("Error: " + result.message);
+    }
+
+});
+
+ // ===== DOWNLOAD REPORT FUNCTION =====
+function downloadReport() {
+
+    const urlParams = new URLSearchParams(window.location.search);
+    const testId = urlParams.get('test_id');
+
+    if (!testId) {
+        alert("Test ID missing");
+        return;
+    }
+
+    window.open(`api/generate_report_pdf.php?test_id=${testId}`, '_blank');
+}
+</script>
+</body></html>

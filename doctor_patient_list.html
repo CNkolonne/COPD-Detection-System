@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Assistant Profile Management Dashboard - Minimalist View</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<style type="text/tailwindcss">
+        :root {
+            --primary: #135bec;
+            --sidebar-bg: #111722;
+            --content-bg: #f8fafc;
+        }
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+    </style>
+<script id="tailwind-config">
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#135bec",
+                        "sidebar": "#111722",
+                        "content": "#f8fafc",
+                    },
+                    borderRadius: {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                },
+            },
+        }
+    </script>
+</head>
+<body class="bg-[var(--content-bg)] text-slate-900 antialiased">
+<div class="flex min-h-screen overflow-hidden">
+<aside class="w-64 bg-[var(--sidebar-bg)] flex flex-col shrink-0">
+<div class="p-6 flex items-center gap-3">
+<div class="bg-primary p-2 rounded-lg">
+<span class="material-symbols-outlined text-white text-2xl">pulmonology</span>
+</div>
+<div>
+<h1 class="text-white text-base font-bold leading-tight">COPD Detection</h1>
+<p class="text-[#92a4c9] text-[10px] uppercase tracking-wider font-semibold">Doctor Panel</p>
+</div>
+</div>
+<nav class="flex-1 px-4 py-4 space-y-1">
+<a class="flex items-center gap-3 px-3 py-2 text-[#92a4c9] hover:bg-white/5 hover:text-white rounded-lg transition-colors" href="home_page.html">
+<span class="material-symbols-outlined text-xl">home</span>
+<span class="text-sm font-medium">Home</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 text-[#92a4c9] hover:bg-white/5 hover:text-white rounded-lg transition-colors" href="doctor_dashboard.html">
+<span class="material-symbols-outlined text-xl">dashboard</span>
+<span class="text-sm font-medium">Dashboard</span>
+</a>
+
+<a class="flex items-center gap-3 px-3 py-2 text-[#92a4c9] hover:bg-white/5 hover:text-white rounded-lg transition-colors" href="doctor_patient_list.html">
+<span class="material-symbols-outlined text-xl">group</span>
+<span class="text-sm font-medium">Patient List</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 text-[#92a4c9] hover:bg-white/5 hover:text-white rounded-lg transition-colors" href="doctor_show_appointment.html">
+<span class="material-symbols-outlined text-xl">event</span>
+<span class="text-sm font-medium">Appointments</span>
+</a>
+
+</nav>
+<div class="p-4 mt-auto border-t border-slate-800">
+<div class="flex items-center gap-3 p-2">
+<div class="relative">
+</div>
+<a href="api/logout.php" class="mt-4 flex w-full items-center left gap-2 px-3 py-2 text-sm font-semibold text-[#92a4c9] hover:text-white transition-colors">
+    <span class="material-symbols-outlined text-lg">logout</span>
+    Logout
+</a>
+</div>
+</aside>
+<main class="flex-1 overflow-y-auto">
+<header class="h-16 border-b border-slate-200 bg-white sticky top-0 z-10 px-8 flex items-center justify-between">
+<div class="flex items-center gap-2 text-sm">
+
+
+</div>
+<div class="flex items-center gap-4">
+
+<div id="welcome-text" class="text-sm text-slate-500 font-medium">Welcome, Doctor</div>
+</div>
+</header>
+
+
+<section class="px-8 pt-8 pb-4">
+<h1 class="text-3xl font-black">Patient Records</h1>
+</section>
+
+<!-- SEARCH BAR (LIGHT COLOR) -->
+<section class="px-8 py-4">
+<div class="max-w-7xl mx-auto bg-[var(--card-bg)] p-4 rounded-xl border border-[#dbe3f0] shadow-sm">
+<label class="relative block">
+<span class="absolute inset-y-0 left-0 flex items-center pl-3 text-slate-400">
+<span class="material-symbols-outlined">search</span>
+</span>
+<input
+type="text"
+placeholder="Search by Patient Name, ID, or NIC..."
+class="w-full bg-[#f1f5fb] border border-[#dbe3f0] rounded-lg py-3 pl-10 pr-3 text-sm placeholder:text-[#6b7da8] focus:ring-2 focus:ring-primary/40"
+/>
+</label>
+</div>
+</section>
+
+<!-- TABLE (LIGHT COLOR) -->
+<section class="px-8 pb-8">
+<div class="max-w-7xl mx-auto bg-[var(--card-bg)] rounded-xl border border-[#dbe3f0] shadow-sm overflow-hidden">
+
+<table class="w-full border-collapse">
+<thead>
+<tr class="bg-[var(--table-header)] border-b border-[#dbe3f0]">
+<th class="px-6 py-4 text-xs font-bold uppercase text-slate-500">Patient ID</th>
+<th class="px-6 py-4 text-xs font-bold uppercase text-slate-500">Name</th>
+<th class="px-6 py-4 text-xs font-bold uppercase text-slate-500">NIC</th>
+<th class="px-6 py-4 text-xs font-bold uppercase text-slate-500">Gender</th>
+<th class="px-6 py-4 text-xs font-bold uppercase text-slate-500">Phone Number</th>
+<th class="px-6 py-4 text-xs font-bold uppercase text-slate-500 text-right">Other Diagnosis Details</th>
+<th class="px-6 py-4 text-xs font-bold uppercase text-slate-500 text-center">Report</th>
+</tr>
+</thead>
+
+<tbody id="patientTableBody" class="w-full border-collapse">
+
+<tr class="hover:bg-[var(--table-hover)]">
+<td class="px-6 py-4 font-mono text-primary">P-9012</td>
+<td class="px-6 py-4 text-slate-600">John Doe</td>
+<td class="px-6 py-4 text-slate-600">198512345678</td>
+<td class="px-6 py-4 text-slate-600">Male</td>
+<td class="px-6 py-4 text-slate-600">+1 555-0102</td>
+<td class="px-6 py-4 text-slate-600">Asthma</td>
+
+</tr>
+
+<tr class="hover:bg-[var(--table-hover)]">
+<td class="px-6 py-4 font-mono text-primary">P-9015</td>
+<td class="px-6 py-4 text-slate-600">Emily Davis</td>
+<td class="px-6 py-4 text-slate-600">199545678901</td>
+<td class="px-6 py-4 text-slate-600">Female</td>
+<td class="px-6 py-4 text-slate-600">+1 555-0105</td>
+<td class="px-6 py-4 text-slate-600">No</td>
+</tr>
+
+</tbody>
+</table>
+
+</div>
+</section>
+
+
+
+<div class="p-8 space-y-8 max-w-7xl mx-auto">
+
+
+</div>
+
+</main>
+
+</div>
+<script>
+
+document.addEventListener('DOMContentLoaded', async function() {
+
+    
+    const tableBody = document.getElementById('patientTableBody');
+    const searchInput = document.querySelector('input[placeholder*="Search"]');
+    let allPatients = []; // Variable to store the full list for searching
+
+    tableBody.innerHTML = '<tr><td colspan="7" class="text-center py-10 text-blue-500">Connecting to Database...</td></tr>';
+
+    // Function to render the table rows
+    function renderTable(patients) {
+        if (patients.length === 0) {
+            tableBody.innerHTML = `<tr><td colspan="7" class="text-center py-10 text-slate-500">No matching patients found.</td></tr>`;
+            return;
+        }
+
+        tableBody.innerHTML = patients.map(patient => `
+            <tr class="hover:bg-slate-50 border-b border-slate-100">
+                <td class="px-6 py-4 font-mono text-primary font-bold">${patient.Patient_ID}</td>
+                <td class="px-6 py-4 text-slate-700 font-medium">${patient.Name}</td>
+                <td class="px-6 py-4 text-slate-600">${patient.NIC}</td>
+                <td class="px-6 py-4 text-slate-600 capitalize">${patient.Gender}</td>
+                <td class="px-6 py-4 text-slate-600">${patient.Phone_number}</td>
+                <td class="px-6 py-4 text-slate-600 text-right italic">${patient.Other_diagnosis_details || 'None'}</td>
+            <td class="px-6 py-4 text-center">
+                <button
+    onclick="viewReport('${patient.Patient_ID}')"
+    class="bg-primary hover:bg-blue-700 text-white text-xs font-bold py-2 px-4 rounded-lg flex items-center gap-1"
+>
+    <span class="material-symbols-outlined text-sm">visibility</span>
+    View
+</button>
+                </td>
+                </tr>
+        `).join('');
+    }
+
+    // 1. Fetch data from Database
+    try {
+        const response = await fetch('api/get_doctor_patients.php');
+        const result = await response.json();
+        
+
+        if (result.success) {
+            allPatients = result.patients; // Store globally for search
+            renderTable(allPatients); // Initial display
+        } else {
+            tableBody.innerHTML = `<tr><td colspan="7" class="text-center py-10 text-red-500">Error: ${result.message}</td></tr>`;
+        }
+    } catch (error) {
+        tableBody.innerHTML = '<tr><td colspan="7" class="text-center py-10 text-red-500">Failed to fetch data.</td></tr>';
+    }
+     // වෛද්‍යවරයාගේ පැතිකඩ දත්ත ලබා ගැනීම (Profile data fetch)
+try {
+    const profileResponse = await fetch('api/get_doctor_profile.php');
+    const profileResult = await profileResponse.json();
+
+    if (profileResult.success) {
+        const d = profileResult.data;
+        // Header එකේ නම යාවත්කාලීන කිරීම
+        if(document.getElementById('welcome-text')) {
+            document.getElementById('welcome-text').innerText = " Dr. " + (d.Name || "Doctor");
+        }
+    }
+} catch (error) {
+    console.error("Profile Fetch Error:", error);
+}
+
+    // 2. Search Logic (Event Listener)
+    searchInput.addEventListener('input', function(e) {
+        const searchTerm = e.target.value.toLowerCase();
+        
+        const filtered = allPatients.filter(patient => {
+            return (
+                patient.Name.toLowerCase().includes(searchTerm) ||
+                patient.Patient_ID.toLowerCase().includes(searchTerm) ||
+                patient.NIC.includes(searchTerm)
+            );
+        });
+
+        renderTable(filtered);
+    });
+});
+function viewReport(patientId) {
+    // Redirects to a report page or opens a modal
+    // This supports Function 20: Diagnosis History Viewing
+    window.location.href = `doctor_view_report.html?patient_id=${patientId}`;
+}
+
+function viewReport(patientId) {
+    window.location.href = `doctor_view_report.html?patient_id=${patientId}`;
+}
+</script> 
+</body></html>

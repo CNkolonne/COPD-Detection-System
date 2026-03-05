@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>COPD Detection - Patient History</title>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,typography,container-queries"></script>
+<script>
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        primary: "#2563eb",
+                        "background-light": "#f8fafc",
+                        "background-dark": "#0f172a",
+                    },
+                    fontFamily: {
+                        display: ["Inter", "sans-serif"],
+                    },
+                    borderRadius: {
+                        DEFAULT: "0.75rem",
+                    },
+                },
+            },
+        };
+    </script>
+<style type="text/tailwindcss">
+        body { font-family: 'Inter', sans-serif; }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+    </style>
+</head>
+<body class="bg-background-light dark:bg-background-dark min-h-screen flex flex-col">
+<header class="bg-white dark:bg-slate-900 border-b border-gray-100 dark:border-slate-800 px-8 py-4 sticky top-0 z-40">
+<div class="max-w-7xl mx-auto flex justify-between items-center w-full">
+<div class="flex items-center gap-8">
+<div class="flex items-center gap-3 border-r border-gray-100 dark:border-slate-800 pr-8">
+<span class="material-symbols-outlined text-primary text-3xl">pulmonology</span>
+<h1 class="text-xl font-bold tracking-tight text-slate-800 dark:text-white">COPD <span class="text-primary font-medium">Detection</span></h1>
+</div>
+<div class="flex items-center gap-4">
+<div class="h-10 w-10 rounded-full bg-primary/10 flex items-center justify-center">
+<span class="material-symbols-outlined text-primary">person</span>
+</div>
+<div>
+<h2 class="text-lg font-bold text-slate-800 dark:text-white">John Doe</h2>
+<p class="text-xs text-gray-500 font-medium">Patient ID: PT-99420</p>
+</div>
+</div>
+</div>
+<div class="flex items-center gap-6">
+<nav class="hidden md:flex items-center gap-1">
+<a class="px-3 py-2 text-sm font-medium text-gray-500 hover:text-primary dark:text-gray-400" href="home_page.html">Home</a>
+<a class="px-3 py-2 text-sm font-medium text-gray-500 hover:text-primary dark:text-gray-400" href="patient_dashboard.html">Dashboard</a>
+<a class="px-3 py-2 text-sm font-medium text-primary border-b-2 border-primary" href="patient_history.html">History</a>
+<a class="px-3 py-2 text-sm font-medium text-gray-500 hover:text-primary dark:text-gray-400" href="patient_appointment.html">Appointments</a>
+<a class="px-3 py-2 text-sm font-medium text-gray-500 hover:text-primary dark:text-gray-400" href="api/logout.php">Logout</a>
+</nav>
+
+
+
+</div>
+</div>
+</header>
+<main class="flex-1 w-full max-w-7xl mx-auto p-8 space-y-8">
+<div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+
+
+
+</div>
+
+
+</div>
+<div class="bg-white dark:bg-slate-900 rounded-2xl border border-gray-100 dark:border-slate-800 shadow-sm overflow-hidden">
+<div class="p-6 border-b border-gray-100 dark:border-slate-800 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+<div>
+<h3 class="text-lg font-bold text-slate-800 dark:text-white">Diagnostic History</h3>
+
+</div>
+
+</div>
+<div class="overflow-x-auto">
+<table class="w-full text-left">
+<thead>
+<tr class="bg-gray-50 dark:bg-slate-800/50">
+<th class="px-6 py-4 text-xs font-semibold text-gray-500 uppercase tracking-wider">Test ID</th>
+<th class="px-6 py-4 text-xs font-semibold text-gray-500 uppercase tracking-wider">Date</th>
+<th class="px-6 py-4 text-xs font-semibold text-gray-500 uppercase tracking-wider">Result </th>
+<th class="px-6 py-4 text-xs font-semibold text-gray-500 uppercase tracking-wider">Positive Probability</th>
+
+</tr>
+</thead>
+<tbody class="divide-y divide-gray-100 dark:divide-slate-800">
+<tr class="hover:bg-gray-50 dark:hover:bg-slate-800/40 transition-colors">
+<td class="px-6 py-4 text-sm font-medium text-slate-700 dark:text-gray-200">#SMP-1092</td>
+<td class="px-6 py-4 text-sm text-gray-500 dark:text-gray-400">12 Oct 2023</td>
+
+<td class="px-6 py-4">
+<span class="px-2.5 py-1 text-xs font-semibold bg-emerald-100 text-emerald-700 dark:bg-emerald-500/10 dark:text-emerald-400 rounded-full">Normal</span>
+</td>
+<td class="px-6 py-4">
+<div class="flex items-center gap-3">
+<div class="flex-1 w-24 bg-gray-100 dark:bg-slate-700 rounded-full h-1.5">
+<div class="bg-emerald-500 h-1.5 rounded-full" style="width: 98%"></div>
+</div>
+<span class="text-sm font-bold text-emerald-600 dark:text-emerald-400">98.2%</span>
+</div>
+</td>
+
+</tr>
+<tr class="hover:bg-gray-50 dark:hover:bg-slate-800/40 transition-colors">
+<td class="px-6 py-4 text-sm font-medium text-slate-700 dark:text-gray-200">#SMP-1045</td>
+<td class="px-6 py-4 text-sm text-gray-500 dark:text-gray-400">28 Sep 2023</td>
+<td class="px-6 py-4">
+<span class="px-2.5 py-1 text-xs font-semibold bg-orange-100 text-orange-700 dark:bg-orange-500/10 dark:text-orange-400 rounded-full">Mild COPD</span>
+</td>
+<td class="px-6 py-4">
+<div class="flex items-center gap-3">
+<div class="flex-1 w-24 bg-gray-100 dark:bg-slate-700 rounded-full h-1.5">
+<div class="bg-orange-500 h-1.5 rounded-full" style="width: 72%"></div>
+</div>
+<span class="text-sm font-bold text-orange-600 dark:text-orange-400">72.4%</span>
+</div>
+</td>
+
+</tr>
+<tr class="hover:bg-gray-50 dark:hover:bg-slate-800/40 transition-colors">
+<td class="px-6 py-4 text-sm font-medium text-slate-700 dark:text-gray-200">#SMP-0988</td>
+<td class="px-6 py-4 text-sm text-gray-500 dark:text-gray-400">14 Aug 2023</td>
+
+<td class="px-6 py-4">
+<span class="px-2.5 py-1 text-xs font-semibold bg-emerald-100 text-emerald-700 dark:bg-emerald-500/10 dark:text-emerald-400 rounded-full">Normal</span>
+</td>
+<td class="px-6 py-4">
+<div class="flex items-center gap-3">
+<div class="flex-1 w-24 bg-gray-100 dark:bg-slate-700 rounded-full h-1.5">
+<div class="bg-emerald-500 h-1.5 rounded-full" style="width: 95%"></div>
+</div>
+<span class="text-sm font-bold text-emerald-600 dark:text-emerald-400">95.1%</span>
+</div>
+</td>
+
+</tr>
+<tr class="hover:bg-gray-50 dark:hover:bg-slate-800/40 transition-colors">
+<td class="px-6 py-4 text-sm font-medium text-slate-700 dark:text-gray-200">#SMP-0812</td>
+<td class="px-6 py-4 text-sm text-gray-500 dark:text-gray-400">03 Jul 2023</td>
+<td class="px-6 py-4">
+<span class="px-2.5 py-1 text-xs font-semibold bg-red-100 text-red-700 dark:bg-red-500/10 dark:text-red-400 rounded-full">Severe COPD</span>
+</td>
+<td class="px-6 py-4">
+<div class="flex items-center gap-3">
+<div class="flex-1 w-24 bg-gray-100 dark:bg-slate-700 rounded-full h-1.5">
+<div class="bg-red-500 h-1.5 rounded-full" style="width: 88%"></div>
+</div>
+<span class="text-sm font-bold text-red-600 dark:text-red-400">88.7%</span>
+</div>
+</td>
+
+</tr>
+</tbody>
+</table>
+</div>
+
+</div>
+</div>
+</div>
+</main>
+<footer class="mt-12 text-center text-slate-500 dark:text-slate-400 text-sm pb-8">
+</div>
+<p>© 2026 Collaborative COPD Detection. Clinical use only.</p>
+
+</div>
+</footer>
+<script>document.addEventListener('DOMContentLoaded', function() {
+    loadHistoryData();
+});
+
+async function loadHistoryData() {
+    try {
+        const response = await fetch('api/get_patient_history.php');
+        const data = await response.json();
+
+        if (data.success) {
+            // 1. Header එකේ නම සහ ID එක Update කිරීම
+            document.querySelector('h2.text-lg').innerText = data.patient_name;
+            document.querySelector('p.text-xs').innerText = `Patient ID: ${data.patient_id}`;
+
+            // 2. Table එක පිරවීම
+            const tableBody = document.querySelector('tbody');
+            tableBody.innerHTML = ''; // පැරණි dummy data ඉවත් කරයි
+
+            if (data.history.length === 0) {
+                tableBody.innerHTML = '<tr><td colspan="4" class="px-6 py-8 text-center text-gray-500">No diagnostic history found.</td></tr>';
+                return;
+            }
+
+            data.history.forEach(record => {
+                // Probability එක ප්‍රතිශතයක් ලෙස (0.85 -> 85.0%)
+                const probValue = parseFloat(record.Average_positive_probability);
+                const percentage = (probValue * 100).toFixed(1);
+                
+                let resultText = "";
+                let colorClass = "";
+                let barColor = "";
+
+                // Result එක තීරණය කිරීමේ Logic එක
+                if (probValue < 0.3) {
+                    resultText = "Normal";
+                    colorClass = "bg-emerald-100 text-emerald-700 dark:bg-emerald-500/10 dark:text-emerald-400";
+                    barColor = "bg-emerald-500";
+                } else if (probValue < 0.7) {
+                    resultText = "Mild COPD";
+                    colorClass = "bg-orange-100 text-orange-700 dark:bg-orange-500/10 dark:text-orange-400";
+                    barColor = "bg-orange-500";
+                } else {
+                    resultText = "Severe COPD";
+                    colorClass = "bg-red-100 text-red-700 dark:bg-red-500/10 dark:text-red-400";
+                    barColor = "bg-red-500";
+                }
+
+                const rowHTML = `
+                    <tr class="hover:bg-gray-50 dark:hover:bg-slate-800/40 transition-colors">
+                        <td class="px-6 py-4 text-sm font-medium text-slate-700 dark:text-gray-200">#${record.Test_id}</td>
+                        <td class="px-6 py-4 text-sm text-gray-500 dark:text-gray-400">${record.record_date}</td>
+                        <td class="px-6 py-4">
+                            <span class="px-2.5 py-1 text-xs font-semibold ${colorClass} rounded-full">
+                                ${resultText}
+                            </span>
+                        </td>
+                        <td class="px-6 py-4">
+                            <div class="flex items-center gap-3">
+                                <div class="flex-1 w-24 bg-gray-100 dark:bg-slate-700 rounded-full h-1.5">
+                                    <div class="${barColor} h-1.5 rounded-full" style="width: ${percentage}%"></div>
+                                </div>
+                                <span class="text-sm font-bold text-slate-700 dark:text-gray-300">${percentage}%</span>
+                            </div>
+                        </td>
+                    </tr>
+                `;
+                tableBody.insertAdjacentHTML('beforeend', rowHTML);
+            });
+        }
+    } catch (error) {
+        console.error("Error loading history:", error);
+    }
+}</script>
+</body></html>

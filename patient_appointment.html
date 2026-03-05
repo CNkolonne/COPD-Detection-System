@@ -1,0 +1,358 @@
+<!DOCTYPE html>
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Patient Appointment Management - COPD Detection</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,typography,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script>
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        primary: "#2563eb",
+                        "background-light": "#f8fafc",
+                        "background-dark": "#0f172a",
+                    },
+                    fontFamily: {
+                        display: ["Inter", "sans-serif"],
+                    },
+                    borderRadius: {
+                        DEFAULT: "0.5rem",
+                    },
+                },
+            },
+        };
+        function toggleDarkMode() {
+            document.documentElement.classList.toggle('dark');
+        }
+    </script>
+<style type="text/tailwindcss">
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+    </style>
+</head>
+<body class="bg-background-light dark:bg-background-dark text-slate-900 dark:text-slate-100 min-h-screen">
+<nav class="bg-white dark:bg-slate-900 border-b border-slate-200 dark:border-slate-800 sticky top-0 z-50">
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+<div class="flex justify-between h-16 items-center">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-primary text-3xl">pulmonology</span>
+<h1 class="font-bold text-xl tracking-tight text-slate-800 dark:text-white">COPD <span class="text-primary">Detection</span></h1>
+</div>
+<div class="flex items-center gap-6">
+<div class="hidden md:flex items-center gap-4 mr-4">
+<a class="text-sm font-medium text-slate-600 dark:text-slate-300 hover:text-primary transition-colors" href="home_page.html">Home</a>
+<a class="text-sm font-medium text-slate-600 dark:text-slate-300 hover:text-primary transition-colors" href="patient_dashboard.html">Dashboard</a>
+<a class="px-3 py-2 text-sm font-medium text-primary border-b-2 border-primary" href="patient_appointment.html">Appointments</a>
+<a class="text-sm font-medium text-slate-600 dark:text-slate-300 hover:text-primary transition-colors" href="patient_history.html">History</a>
+<a class="text-sm font-medium text-slate-600 dark:text-slate-300 hover:text-primary transition-colors" href="api/logout.php">Logout</a>
+
+</div>
+
+</div>
+</div>
+</nav>
+<main class="max-w-7xl mx-auto p-4 sm:p-6 lg:p-8">
+<header class="mb-10 flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+<div>
+<h2 class="text-3xl font-bold text-slate-900 dark:text-white">Appointment Management</h2>
+<p class="text-slate-500 dark:text-slate-400 mt-1">Manage your consultations and schedule new sessions</p>
+</div>
+
+
+</div>
+</header>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-10">
+<div class="bg-white dark:bg-slate-800 p-6 rounded-2xl border border-slate-200 dark:border-slate-700 shadow-sm flex items-center justify-between">
+<div>
+<p class="text-sm font-medium text-slate-500 dark:text-slate-400 mb-1">Next Appointment</p>
+<h3 id="nextAppDate" class="text-3xl font-bold text-slate-900 dark:text-white">Oct 28, 2023</h3>
+</div>
+<div class="w-14 h-14 rounded-xl bg-blue-50 dark:bg-blue-900/20 flex items-center justify-center text-primary">
+<span class="material-symbols-outlined text-3xl">event_upcoming</span>
+</div>
+</div>
+<div class="bg-white dark:bg-slate-800 p-6 rounded-2xl border border-slate-200 dark:border-slate-700 shadow-sm flex items-center justify-between">
+<div>
+<p class="text-sm font-medium text-slate-500 dark:text-slate-400 mb-1">Pending Appointments</p>
+<h3 id="pendingCount" class="text-3xl font-bold text-primary">01</h3>
+</div>
+<div class="w-14 h-14 rounded-xl bg-amber-50 dark:bg-amber-900/20 flex items-center justify-center text-amber-600">
+<span class="material-symbols-outlined text-3xl">pending_actions</span>
+</div>
+</div>
+</div>
+<div class="bg-white dark:bg-slate-800 rounded-2xl border border-slate-200 dark:border-slate-700 shadow-sm overflow-hidden mb-10">
+<div class="p-6 border-b border-slate-100 dark:border-slate-700 flex items-center gap-4 bg-slate-50/50 dark:bg-slate-800/50">
+<div class="w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center text-primary">
+<span class="material-symbols-outlined">calendar_add_on</span>
+</div>
+<div>
+<h3 class="text-xl font-bold text-slate-900 dark:text-white">Schedule New Appointment</h3>
+<p class="text-sm text-slate-500 dark:text-slate-400">Select your preferred medical specialist and time slot</p>
+</div>
+</div>
+<div class="p-8">
+<form class="grid grid-cols-1 md:grid-cols-3 gap-8">
+
+    
+<div class="space-y-2">
+<label class="block text-sm font-semibold text-slate-700 dark:text-slate-300">Select Doctor / Specialist</label>
+<select id="doctorSelect" class="w-full rounded-lg border-slate-200 dark:border-slate-700 dark:bg-slate-900 text-slate-800 dark:text-slate-200 focus:ring-primary focus:border-primary py-2.5">
+<option>Dr. Sarah Johnson (Pulmonologist)</option>
+<option>Dr. Michael Chen (General Physician)</option>
+<option>Dr. Emily Davis (Respiratory Therapist)</option>
+</select>
+</div>
+
+
+<div class="space-y-2">
+<label class="block text-sm font-semibold text-slate-700 dark:text-slate-300">Preferred Date</label>
+<input type="date" id="appDate" class="w-full rounded-lg border-slate-200 dark:border-slate-700 dark:bg-slate-900 text-slate-800 dark:text-slate-200 focus:ring-primary focus:border-primary py-2.5" type="date"/>
+</div>
+
+
+<div class="space-y-2">
+<label class="block text-sm font-semibold text-slate-700 dark:text-slate-300">Select Assistant</label>
+<select id="assistantSelect" class="w-full rounded-lg border-slate-200 dark:border-slate-700 dark:bg-slate-900 text-slate-800 dark:text-slate-200 focus:ring-primary focus:border-primary py-2.5">
+<option>Mr. Sarah Johnson (Pulmonologist)</option>
+<option>Mr. Michael Chen (General Physician)</option>
+<option>Mr. Emily Davis (Respiratory Therapist)</option>
+</select>
+</div>
+
+
+<div class="md:col-span-3 flex justify-center pt-4">
+<button id="confirmBtn" class="bg-primary hover:bg-blue-700 text-white font-bold py-3 px-12 rounded-xl transition-all shadow-lg shadow-blue-500/25 active:scale-[0.98]" type="button">
+                            Confirm Appointment Booking
+                        </button>
+</div>
+</form>
+</div>
+</div>
+<div class="bg-white dark:bg-slate-800 rounded-2xl border border-slate-200 dark:border-slate-700 shadow-sm overflow-hidden">
+<div class="p-6 border-b border-slate-100 dark:border-slate-700 flex justify-between items-center">
+<h3 class="text-xl font-bold text-slate-900 dark:text-white">Upcoming &amp; Recent Appointments</h3>
+<div class="flex gap-2">
+<button class="p-2 text-slate-400 hover:text-slate-600 dark:hover:text-slate-200">
+<span class="material-symbols-outlined">filter_list</span>
+</button>
+<button class="p-2 text-slate-400 hover:text-slate-600 dark:hover:text-slate-200">
+<span class="material-symbols-outlined">search</span>
+</button>
+</div>
+</div>
+<div class="overflow-x-auto">
+<table class="w-full text-left">
+<thead>
+<tr class="bg-slate-50 dark:bg-slate-900/50 text-slate-500 dark:text-slate-400 text-xs uppercase tracking-widest">
+<th class="px-8 py-4 font-bold">Appointment ID</th>
+<th class="px-8 py-4 font-bold">Date </th>
+<th class="px-8 py-4 font-bold">Specialist</th>
+<th class="px-8 py-4 font-bold text-center">Status</th>
+<th class="px-8 py-4 font-bold text-right">Actions</th>
+</tr>
+</thead>
+<tbody id="appointmentTableBody" class="divide-y divide-slate-100 dark:divide-slate-700">
+<tr class="hover:bg-slate-50/50 dark:hover:bg-slate-700/20 transition-colors">
+<td class="px-8 py-5 text-sm font-semibold text-slate-900 dark:text-white">APT-10024</td>
+<td class="px-8 py-5 text-sm text-slate-600 dark:text-slate-300">28 Oct, 2023 </td>
+<td class="px-8 py-5">
+<div class="flex items-center gap-3">
+<div class="w-8 h-8 rounded-full bg-slate-100 dark:bg-slate-700 flex items-center justify-center text-slate-500">
+<span class="material-symbols-outlined text-sm">person</span>
+</div>
+<div class="flex flex-col">
+<span class="text-sm font-semibold text-slate-900 dark:text-white">Dr. Sarah Johnson</span>
+<span class="text-xs text-slate-500">MC-92348</span>
+</div>
+</div>
+</td>
+<td class="px-8 py-5 text-center">
+<span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-bold bg-blue-100 text-blue-700 dark:bg-blue-900/40 dark:text-blue-300">
+                                    Scheduled
+                                </span>
+</td>
+<td class="px-8 py-5 text-right">
+<button class="p-2 text-slate-400 hover:text-red-500 transition-colors rounded-lg hover:bg-red-50 dark:hover:bg-red-900/20">
+<span class="material-symbols-outlined">cancel</span>
+</button>
+</td>
+</tr>
+<tr class="hover:bg-slate-50/50 dark:hover:bg-slate-700/20 transition-colors">
+<td class="px-8 py-5 text-sm font-semibold text-slate-900 dark:text-white">APT-10019</td>
+<td class="px-8 py-5 text-sm text-slate-600 dark:text-slate-300">12 Oct, 2023 </td>
+<td class="px-8 py-5">
+<div class="flex items-center gap-3">
+<div class="w-8 h-8 rounded-full bg-slate-100 dark:bg-slate-700 flex items-center justify-center text-slate-500">
+<span class="material-symbols-outlined text-sm">person</span>
+</div>
+<div class="flex flex-col">
+<span class="text-sm font-semibold text-slate-900 dark:text-white">Dr. Michael Chen</span>
+<span class="text-xs text-slate-500">MC-88120</span>
+</div>
+</div>
+</td>
+<td class="px-8 py-5 text-center">
+<span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-bold bg-green-100 text-green-700 dark:bg-green-900/40 dark:text-green-300">
+                                    Completed
+                                </span>
+</td>
+<td class="px-8 py-5 text-right">
+<button class="text-primary hover:underline text-sm font-bold">
+                                    View Report
+                                </button>
+</td>
+</tr>
+<tr class="hover:bg-slate-50/50 dark:hover:bg-slate-700/20 transition-colors">
+<td class="px-8 py-5 text-sm font-semibold text-slate-900 dark:text-white">APT-09982</td>
+<td class="px-8 py-5 text-sm text-slate-600 dark:text-slate-300">15 Sep, 2023 </td>
+<td class="px-8 py-5">
+<div class="flex items-center gap-3">
+<div class="w-8 h-8 rounded-full bg-slate-100 dark:bg-slate-700 flex items-center justify-center text-slate-500">
+<span class="material-symbols-outlined text-sm">person</span>
+</div>
+<div class="flex flex-col">
+<span class="text-sm font-semibold text-slate-900 dark:text-white">Dr. Sarah Johnson</span>
+<span class="text-xs text-slate-500">MC-92348</span>
+</div>
+</div>
+</td>
+<td class="px-8 py-5 text-center">
+<span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-bold bg-green-100 text-green-700 dark:bg-green-900/40 dark:text-green-300">
+                                    Completed
+                                </span>
+</td>
+<td class="px-8 py-5 text-right">
+<button class="text-primary hover:underline text-sm font-bold">
+                                    View Report
+                                </button>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="p-6 bg-slate-50/50 dark:bg-slate-900/50 border-t border-slate-100 dark:border-slate-700 text-center">
+<button class="text-sm font-bold text-primary hover:text-blue-700 flex items-center justify-center gap-2 mx-auto">
+                    View Full Appointment History
+                    <span class="material-symbols-outlined text-lg">arrow_forward</span>
+</button>
+</div>
+</div>
+<footer class="mt-12 text-center text-slate-500 dark:text-slate-400 text-sm pb-8">
+</div>
+<p>© 2026 Collaborative COPD Detection. Clinical use only.</p>
+
+</div>
+</footer>
+</main>
+
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    loadAppointmentPageData();
+
+    async function loadAppointmentPageData() {
+        try {
+            // අපි නම වෙනස් කරපු අලුත් API එකට කතා කරනවා
+            const response = await fetch('api/patient_get_appointment_data.php');
+            const res = await response.json();
+
+            if (res.success) {
+                // 1. Doctors Dropdown පිරවීම
+                let docOptions = '<option value="">Select Doctor / Specialist</option>';
+                res.doctors.forEach(doc => {
+                    docOptions += `<option value="${doc.MC_number}">${doc.Name}</option>`;
+                });
+                document.getElementById('doctorSelect').innerHTML = docOptions;
+
+                // 2. Assistants Dropdown පිරවීම
+                let staffOptions = '<option value="">Select Assistant</option>';
+                res.assistants.forEach(staff => {
+                    staffOptions += `<option value="${staff.staff_id}">${staff.name}</option>`;
+                });
+                document.getElementById('assistantSelect').innerHTML = staffOptions;
+
+                // 3. Table එක සහ Stats පිරවීම
+                let tableRows = '';
+                let pending = 0;
+                let nextDate = "No Upcoming";
+
+                res.appointments.forEach((app, index) => {
+                    // Prescription එකක් නැත්නම් ඒක Scheduled/Pending ලෙස සලකමු
+                    let isCompleted = app.Doctor_prescription !== null && app.Doctor_prescription !== "";
+                    let statusText = isCompleted ? 'Completed' : 'Scheduled';
+                    let statusClass = isCompleted ? 'bg-green-100 text-green-700' : 'bg-blue-100 text-blue-700';
+
+                    if(!isCompleted) {
+                        pending++;
+                        // අන්තිමට දාපු Scheduled appointment එක Next date එක ලෙස පෙන්වමු
+                        nextDate = new Date(app.Appoinment_date).toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' });
+                    }
+
+                    tableRows += `
+                    <tr class="hover:bg-slate-50 transition-colors">
+                        <td class="px-8 py-5 text-sm font-semibold text-slate-900">APT-${app.Appoinment_no}</td>
+                        <td class="px-8 py-5 text-sm text-slate-600">${app.Appoinment_date}</td>
+                        <td class="px-8 py-5">
+                            <div class="flex flex-col">
+                                <span class="text-sm font-semibold">${app.DoctorName || 'Not Assigned'}</span>
+                                <span class="text-xs text-slate-500">${app.MC_number || ''}</span>
+                            </div>
+                        </td>
+                        <td class="px-8 py-5 text-center">
+                            <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-bold ${statusClass}">
+                                ${statusText}
+                            </span>
+                        </td>
+                        <td class="px-8 py-5 text-right">
+                            ${isCompleted ? 
+                                `<a href="patient_history.html?id=${app.Appoinment_no}" class="text-primary hover:underline text-sm font-bold">View Report</a>` : 
+                                `<button class="p-2 text-slate-400 hover:text-red-500"><span class="material-symbols-outlined">cancel</span></button>`}
+                        </td>
+                    </tr>`;
+                });
+
+                document.getElementById('appointmentTableBody').innerHTML = tableRows;
+                document.getElementById('pendingCount').innerText = pending.toString().padStart(2, '0');
+                document.getElementById('nextAppDate').innerText = nextDate;
+            }
+        } catch (error) {
+            console.error("Error loading data:", error);
+        }
+    }
+
+    // Appointment එක Save කිරීමේ කොටස (Confirm Button)
+    document.getElementById('confirmBtn').addEventListener('click', async function() {
+        const mc = document.getElementById('doctorSelect').value;
+        const staff = document.getElementById('assistantSelect').value;
+        const date = document.getElementById('appDate').value;
+
+        if(!mc || !date) { alert("Please select Doctor and Date"); return; }
+
+        const bookingData = { mc_number: mc, staff_id: staff, app_date: date };
+
+        const response = await fetch('api/book_appointment.php', {
+            method: 'POST',
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify(bookingData)
+        });
+
+        const result = await response.json();
+        if(result.success) {
+            alert("Success: " + result.message);
+            loadAppointmentPageData(); // Refresh Data
+        } else {
+            alert("Error: " + result.message);
+        }
+    });
+});
+</script>
+</body></html>

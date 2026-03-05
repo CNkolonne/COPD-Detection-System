@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Assistant Profile Management Dashboard</title>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet"/>
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+    <style type="text/tailwindcss">
+        :root { --primary: #135bec; --sidebar-bg: #111722; --content-bg: #f8fafc; --table-header: #eef2f7; --table-hover: #f0f6ff; }
+        body { font-family: 'Inter', sans-serif; }
+    </style>
+</head>
+<body class="bg-[var(--content-bg)] text-slate-900 antialiased">
+    <div class="flex min-h-screen overflow-hidden">
+        <aside class="w-64 bg-[var(--sidebar-bg)] flex flex-col shrink-0">
+<div class="p-6 flex items-center gap-3">
+<div class="bg-primary p-2 rounded-lg">
+<span class="material-symbols-outlined text-white text-2xl">pulmonology</span>
+</div>
+<div>
+<h1 class="text-white text-base font-bold leading-tight">COPD Detection</h1>
+<p class="text-[#92a4c9] text-[10px] uppercase tracking-wider font-semibold">Assistant Panel</p>
+</div>
+</div>
+<nav class="flex-1 px-4 py-4 space-y-1">
+<a class="flex items-center gap-3 px-3 py-2 text-[#92a4c9] hover:bg-white/5 hover:text-white rounded-lg transition-colors" href="home_page.html">
+<span class="material-symbols-outlined text-xl">home</span>
+<span class="text-sm font-medium">Home</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 text-[#92a4c9] hover:bg-white/5 hover:text-white rounded-lg transition-colors" href="assistant_dashboard.html">
+<span class="material-symbols-outlined text-xl">dashboard</span>
+<span class="text-sm font-medium">Dashboard</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 text-[#92a4c9] hover:bg-white/5 hover:text-white rounded-lg transition-colors" href="patient_registration.html">
+<span class="material-symbols-outlined text-xl">person_add</span>
+<span class="text-sm font-medium">Register Patient</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 text-[#92a4c9] hover:bg-white/5 hover:text-white rounded-lg transition-colors" href="patient_list_assistant_dashboard.html">
+<span class="material-symbols-outlined text-xl">group</span>
+<span class="text-sm font-medium">Patient List</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 text-[#92a4c9] hover:bg-white/5 hover:text-white rounded-lg transition-colors" href="assistant_appointment.html">
+<span class="material-symbols-outlined text-xl">event</span>
+<span class="text-sm font-medium">Appointments</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 text-[#92a4c9] hover:bg-white/5 hover:text-white rounded-lg transition-colors" href="assistant_dashboard_samples.html">
+<span class="material-symbols-outlined text-xl">mic</span>
+<span class="text-sm font-medium">Samples</span>
+</a>
+</nav>
+<div class="p-4 mt-auto border-t border-slate-800">
+<div class="flex items-center gap-3 p-2">
+<div class="relative">
+</div>
+<button class="mt-4 flex w-full items-center left gap-2 px-3 py-2 text-sm font-semibold text-[#92a4c9] hover:text-white transition-colors">
+<a href="api/logout.php" class="mt-4 flex w-full items-center left gap-2 px-3 py-2 text-sm font-semibold text-[#92a4c9] hover:text-white transition-colors">
+    <span class="material-symbols-outlined text-lg">logout</span>
+    Logout
+</a>
+</div>
+</aside>
+
+        <main class="flex-1 overflow-y-auto">
+           
+            <section class="px-8 pt-8 pb-4"><h1 class="text-3xl font-black">Appointments List</h1></section>
+            
+            <section class="px-8 py-4">
+                <div class="bg-white p-4 rounded-xl border border-[#dbe3f0] shadow-sm">
+                    <input id="searchInput" type="text" placeholder="Search by Patient ID, MC Number or Staff ID..." class="w-full bg-[#f1f5fb] border border-[#dbe3f0] rounded-lg py-3 px-4 text-sm focus:ring-2 focus:ring-primary/40" />
+                </div>
+            </section>
+
+            <section class="px-8 pb-8">
+                <div class="bg-white rounded-xl border border-[#dbe3f0] shadow-sm overflow-hidden">
+                    <table class="w-full text-sm">
+                        <thead class="bg-[var(--table-header)]">
+                            <tr class="border-b border-[#dbe3f0]">
+                                <th class="px-6 py-4 text-left font-bold uppercase text-slate-500">Patient ID</th>
+                                <th class="px-6 py-4 text-center font-bold uppercase text-slate-500">Appointment No</th>
+                                <th class="px-6 py-4 text-center font-bold uppercase text-slate-500">Date</th>
+                                <th class="px-6 py-4 text-center font-bold uppercase text-slate-500">MC Number</th>
+                                <th class="px-6 py-4 text-center font-bold uppercase text-slate-500">Staff ID</th>
+                                <th class="px-6 py-4 text-right font-bold uppercase text-slate-500">Recommendation</th>
+                            </tr>
+                        </thead>
+                        <tbody id="appointmentTableBody" class="divide-y divide-[#dbe3f0]">
+                            </tbody>
+                    </table>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            fetchAppointments();
+
+            // සෙවුම් පහසුකම (Search Functionality)
+            document.getElementById('searchInput').addEventListener('input', function(e) {
+                const term = e.target.value.toLowerCase();
+                const rows = document.querySelectorAll('#appointmentTableBody tr');
+                rows.forEach(row => {
+                    row.style.display = row.innerText.toLowerCase().includes(term) ? '' : 'none';
+                });
+            });
+
+            async function fetchAppointments() {
+                try {
+                    // නිවැරදි කළ URL එක (appointments - t අකුර ඇතුළුව)
+                    const response = await fetch('api/assistant_get_appointments.php');
+                    
+                    if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+                    
+                    const data = await response.json();
+                    const tableBody = document.getElementById('appointmentTableBody');
+                    tableBody.innerHTML = ''; 
+
+                    if (data.error) {
+                        console.error('Backend Error:', data.error);
+                        tableBody.innerHTML = `<tr><td colspan="6" class="px-6 py-4 text-center text-red-500">${data.error}</td></tr>`;
+                        return;
+                    }
+
+                    if (data && data.length > 0) {
+                        data.forEach(row => {
+                            const recoValue = (row.COPD_Test_recommend || '').toLowerCase();
+                            const recoColor = recoValue === 'yes' ? 'text-green-600' : 'text-red-600';
+                            
+                            const tr = document.createElement('tr');
+                            tr.className = 'hover:bg-[var(--table-hover)]';
+                            tr.innerHTML = `
+                                <td class="px-6 py-4 text-left font-mono text-primary">${row.Patient_ID || '-'}</td>
+                                <td class="px-6 py-4 text-center font-semibold">${row.Appoinment_no || '-'}</td>
+                                <td class="px-6 py-4 text-center text-slate-600">${row.Appoinment_date || '-'}</td>
+                                <td class="px-6 py-4 text-center font-semibold">${row.MC_number || '-'}</td>
+                                <td class="px-6 py-4 text-center text-slate-600">${row.staff_id || '-'}</td>
+                                <td class="px-6 py-4 text-right font-semibold ${recoColor}">${row.COPD_Test_recommend || 'N/A'}</td>
+                            `;
+                            tableBody.appendChild(tr);
+                        });
+                    } else {
+                        tableBody.innerHTML = '<tr><td colspan="6" class="px-6 py-4 text-center">No appointments found.</td></tr>';
+                    }
+                } catch (error) {
+                    console.error('Fetch Error:', error);
+                    document.getElementById('appointmentTableBody').innerHTML = 
+                        '<tr><td colspan="6" class="px-6 py-4 text-center text-red-500">Failed to load data. Check console for details.</td></tr>';
+                }
+            }
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Cough Recording Guidelines for Assistants</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,typography,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&amp;family=Lexend:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script>
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        primary: "#2563eb",
+                        "background-light": "#f8fafc",
+                        "background-dark": "#0f172a",
+                        "sidebar-dark": "#0b1222",
+                    },
+                    fontFamily: {
+                        sans: ["Inter", "sans-serif"],
+                        display: ["Lexend", "sans-serif"],
+                    },
+                    borderRadius: {
+                        DEFAULT: "0.75rem",
+                    },
+                },
+            },
+        };
+    </script>
+<style type="text/tailwindcss">
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 48;
+        }
+        .step-gradient {
+            background: linear-gradient(135deg, #2563eb 0%, #1e40af 100%);
+        }
+    </style>
+</head>
+<body class="bg-background-light dark:bg-background-dark font-sans text-slate-900 dark:text-slate-100 min-h-screen flex items-stretch">
+<aside class="w-64 bg-sidebar-dark text-white flex flex-col flex-shrink-0 sticky top-0 h-screen overflow-y-auto">
+<div class="p-6 flex-1">
+<div class="flex items-center gap-3 mb-8">
+<div class="bg-primary p-2 rounded-lg">
+<span class="material-symbols-outlined text-white">pulmonology</span>
+</div>
+<div>
+<h1 class="font-display font-bold text-lg leading-none">COPD Detection</h1>
+<span class="text-[10px] uppercase tracking-widest text-slate-400">Assistant Panel</span>
+</div>
+</div>
+<nav class="space-y-1">
+
+<a class="flex items-center gap-3 px-4 py-3 rounded-lg text-slate-400 hover:bg-white/5 hover:text-white transition-all group" href="assistant_dashboard.html">
+<span class="material-symbols-outlined text-xl">dashboard</span>
+<span class="font-medium">Dashboard</span>
+</a>
+ <a class="flex items-center gap-3 px-3 py-2 text-[#92a4c9] hover:bg-white/5 hover:text-white rounded-lg transition-colors" href="voicerecord.html">
+                <span class="material-symbols-outlined text-xl">mic_external_on</span>
+                <span class="text-sm font-medium">Recording</span>
+            </a>
+
+<a class="flex items-center gap-3 px-4 py-3 rounded-lg text-slate-400 hover:bg-white/5 hover:text-white transition-all group" href="help.html">
+<span class="material-symbols-outlined text-xl">help</span>
+<span class="font-medium">Help</span>
+</a>
+</nav>
+</div>
+<div class="p-6 border-t border-white/10 mt-auto">
+<a href="api/logout.php" class="mt-4 flex w-full items-center left gap-2 px-3 py-2 text-sm font-semibold text-[#92a4c9] hover:text-white transition-colors">
+    <span class="material-symbols-outlined text-lg">logout</span>
+    Logout
+</a>
+</div>
+</aside>
+<main class="flex-1 p-8 lg:p-12 overflow-y-auto">
+
+</div>
+</div>
+<div class="bg-white dark:bg-slate-900 rounded-3xl shadow-xl shadow-slate-200/50 dark:shadow-none border border-slate-100 dark:border-slate-800 overflow-hidden">
+<div class="p-8 lg:p-12">
+<header class="mb-10">
+<h2 class="text-3xl lg:text-4xl font-display font-bold text-slate-900 dark:text-white mb-4">Cough Recording Guidelines for Assistants</h2>
+
+</header>
+<div class="grid lg:grid-cols-3 gap-8">
+<div class="lg:col-span-2 space-y-4">
+
+<div class="flex items-start gap-5 p-6 rounded-2xl bg-slate-50 dark:bg-slate-800/40 border border-slate-100 dark:border-slate-800 transition-all hover:border-primary/30">
+<div class="w-12 h-12 rounded-xl bg-blue-100 dark:bg-blue-900/30 text-blue-600 flex items-center justify-center flex-shrink-0 font-display font-bold text-xl">1</div>
+<div>
+<h4 class="font-bold text-slate-900 dark:text-white text-lg">Minimize Background Noise</h4>
+<p class="text-slate-600 dark:text-slate-400">Ensure the room is quiet before starting.</p>
+</div>
+</div>
+<div class="flex items-start gap-5 p-6 rounded-2xl bg-slate-50 dark:bg-slate-800/40 border border-slate-100 dark:border-slate-800 transition-all hover:border-primary/30">
+<div class="w-12 h-12 rounded-xl bg-blue-100 dark:bg-blue-900/30 text-blue-600 flex items-center justify-center flex-shrink-0 font-display font-bold text-xl">2</div>
+<div class="flex-1">
+<h4 class="font-bold text-slate-900 dark:text-white text-lg">Watch the Wave Pattern (the moving line) on the screen. </h4>
+<p class="text-slate-600 dark:text-slate-400 mb-4">Only start the recording when the line is flat and steady, showing no interference from background noise.</p>
+<div class="bg-white/80 dark:bg-slate-900/80 rounded-lg p-3 border border-blue-100 dark:border-blue-800/50">
+<div class="flex items-center justify-between mb-1">
+<span class="text-[9px] font-bold text-primary tracking-widest">WAVE MONITOR</span>
+<div class="flex items-center gap-1">
+<div class="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></div>
+<span class="text-[9px] font-bold text-emerald-600 uppercase">Steady</span>
+</div>
+</div>
+<svg class="w-full h-8" preserveAspectRatio="none" viewBox="0 0 400 40">
+<path d="M 0 20 Q 50 20, 100 20 T 200 20 T 300 20 T 400 20" fill="none" stroke="#10b981" stroke-width="2"></path>
+</svg>
+</div>
+</div>
+</div>
+<div class="flex items-start gap-5 p-6 rounded-2xl bg-slate-50 dark:bg-slate-800/40 border border-slate-100 dark:border-slate-800 transition-all hover:border-primary/30">
+<div class="w-12 h-12 rounded-xl bg-blue-100 dark:bg-blue-900/30 text-blue-600 flex items-center justify-center flex-shrink-0 font-display font-bold text-xl">3</div>
+<div>
+<h4 class="font-bold text-slate-900 dark:text-white text-lg">Maintain Correct Distance</h4>
+<p class="text-slate-600 dark:text-slate-400">Keep a distance of 6-10 inches between the patient and the recording device (computer/microphone).</p>
+</div>
+</div>
+<div class="flex items-start gap-5 p-6 rounded-2xl bg-slate-50 dark:bg-slate-800/40 border border-slate-100 dark:border-slate-800 transition-all hover:border-primary/30">
+<div class="w-12 h-12 rounded-xl bg-blue-100 dark:bg-blue-900/30 text-blue-600 flex items-center justify-center flex-shrink-0 font-display font-bold text-xl">4</div>
+<div>
+<h4 class="font-bold text-slate-900 dark:text-white text-lg">Capture Multiple Samples</h4>
+<p class="text-slate-600 dark:text-slate-400">Record exactly 3 separate cough samples from each patient.This ensures you have enough data to compare and verify the sound characteristics.</p>
+</div>
+</div>
+<div class="flex items-start gap-5 p-6 rounded-2xl bg-slate-50 dark:bg-slate-800/40 border border-slate-100 dark:border-slate-800 transition-all hover:border-primary/30">
+<div class="w-12 h-12 rounded-xl bg-blue-100 dark:bg-blue-900/30 text-blue-600 flex items-center justify-center flex-shrink-0 font-display font-bold text-xl">5</div>
+<div>
+<h4 class="font-bold text-slate-900 dark:text-white text-lg">Monitor Patient Position</h4>
+<p class="text-slate-600 dark:text-slate-400">Ensure the patient is sitting upright or in a comfortable, stable position. An incorrect posture can restrict the airway and lead to an unnatural or "bad" sample
+</p>
+</div>
+</div>
+</div>
+<div class="space-y-6">
+<div class="bg-slate-50 dark:bg-slate-800/60 p-6 lg:p-8 rounded-3xl border border-slate-100 dark:border-slate-800 flex flex-col h-full">
+<h4 class="font-bold text-slate-900 dark:text-white mb-6 flex items-center gap-3 text-lg">
+<span class="material-symbols-outlined text-primary">tips_and_updates</span>
+                                Quick Tips for Success
+                            </h4>
+<div class="space-y-4 flex-1">
+<div class="p-5 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 shadow-sm">
+<div class="flex items-center gap-3 mb-2 text-emerald-600 dark:text-emerald-400">
+<span class="material-symbols-outlined text-xl">settings_voice</span>
+<h5 class="font-bold">Check the Mic</h5>
+</div>
+<p class="text-sm text-slate-600 dark:text-slate-400 leading-relaxed">Before the real recording, do a quick "mic check" to make sure the computer is picking up sound clearly.</p>
+</div>
+<div class="p-5 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 shadow-sm">
+<div class="flex items-center gap-3 mb-2 text-primary">
+<span class="material-symbols-outlined text-xl">record_voice_over</span>
+<h5 class="font-bold">Instruction</h5>
+</div>
+<p class="text-sm text-slate-600 dark:text-slate-400 leading-relaxed italic border-l-4 border-slate-100 dark:border-slate-800 pl-3">
+                                       Briefly tell the patient, "Please cough naturally into the space in front of the device," so they don't feel nervous.
+                                    </p>
+</div>
+</div>
+
+</div>
+</div>
+</div>
+</div>
+</div>
+<footer class="mt-12 pb-8 text-center text-slate-400 dark:text-slate-500 text-sm">
+<p class="mb-2 font-medium">© COPD Detection • CLINICAL SYSTEMS</p>
+
+</footer>
+</div>
+</main>
+
+</body></html>

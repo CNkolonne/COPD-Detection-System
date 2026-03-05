@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>COPD Detection System</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#3b82f6",
+                        "secondary": "#1d4ed8",
+                        "accent-cyan": "#13ecec",
+                        "navy-dark": "#1e3a8a",
+                        "background-light": "#ffffff",
+                    },
+                    fontFamily: {
+                        "sans": ["Inter", "sans-serif"]
+                    }
+                },
+            },
+        }
+    </script>
+<style type="text/tailwindcss">
+        @layer base {
+            body {
+                @apply text-slate-900;
+            }
+        }
+       /* .hero-gradient {
+            background: linear-gradient(rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.4)), url('https://images.medindia.net/health-images/1200_1000/copd.jpg');
+            background-size: cover;
+            background-position: center;
+        }*/
+
+        .hero-gradient {
+    background: linear-gradient(
+        135deg,
+        #dbeafe,
+        #bfdbfe
+    );
+}
+
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+    </style>
+</head>
+<body class="bg-white min-h-screen flex flex-col">
+<header class="sticky top-0 z-50 bg-white border-b border-gray-100 px-6 lg:px-40 py-4">
+<div class="max-w-[1200px] mx-auto flex items-center justify-between">
+ <div class="flex items-center gap-2">
+        <span class="material-symbols-outlined text-blue-600 text-3xl">pulmonology</span>
+        <h1 class="text-xl font-bold text-gray-900">COPD <span class="text-xl font-normal text-gray-900">Detection</span></h1>
+    </div>
+<nav class="hidden lg:flex items-center gap-10">
+<a class="text-sm font-semibold text-gray-600 hover:text-primary transition-colors" href="home_services.html">Services</a>
+<a class="text-sm font-semibold text-gray-600 hover:text-primary transition-colors" href="home_about.html">About</a>
+
+
+</div>
+</nav>
+</div>
+</header>
+<main class="flex-grow">
+<section class="relative h-[600px] w-full overflow-hidden">
+<div class="absolute inset-0 hero-gradient"></div>
+<div class="relative z-10 max-w-[1200px] mx-auto px-6 lg:px-0 h-full flex flex-col justify-center">
+<div class="max-w-2xl bg-white/20 backdrop-blur-md p-8 lg:p-12 rounded-3xl border border-white/30 shadow-2xl">
+
+<h2 class="text-4xl lg:text-6xl font-black text-navy-dark leading-tight mb-6">
+                        COPD Detection <br/><span class="text-primary">System</span>
+</h2>
+<p class="text-lg text-slate-800 font-medium mb-10 leading-relaxed">
+                        A unified ecosystem where Doctors, Assistants, and Patients interact with deep learning spectrograms for earlier COPD detection.
+                    </p>
+<div class="flex flex-col sm:flex-row gap-4 items-center">
+
+<div class="flex flex-col">
+</div>
+</div>
+<div class="hidden sm:block h-12 w-[2px] bg-navy-dark/10"></div>
+<div class="flex -space-x-3">
+
+</div>
+</div>
+</div>
+</div>
+</div>
+
+</div>
+<div class="h-32 bg-navy-dark border border-white/10 rounded-lg mb-4 flex items-end gap-1 p-3 overflow-hidden">
+<div class="flex-1 bg-accent-cyan/60 h-[40%]"></div>
+<div class="flex-1 bg-accent-cyan/80 h-[60%]"></div>
+<div class="flex-1 bg-accent-cyan h-[85%]"></div>
+<div class="flex-1 bg-accent-cyan/40 h-[30%]"></div>
+<div class="flex-1 bg-accent-cyan/90 h-[70%]"></div>
+<div class="flex-1 bg-accent-cyan/70 h-[50%]"></div>
+<div class="flex-1 bg-accent-cyan/80 h-[90%]"></div>
+<div class="flex-1 bg-accent-cyan/50 h-[45%]"></div>
+</div>
+<p class="text-[10px] text-gray-400 font-mono">DL-MODEL-V4.2 | SIG-PROC: ACTIVE</p>
+</div>
+</section>
+<section class="w-full">
+<div class="grid grid-cols-1 md:grid-cols-3 min-h-[350px]">
+<div class="bg-blue-500 hover:bg-blue-600 transition-colors p-12 flex flex-col text-white group cursor-pointer border-r border-white/10 last:border-r-0">
+<div class="mb-8">
+<span class="material-symbols-outlined text-6xl">stethoscope</span>
+</div>
+<h3 class="text-2xl font-bold mb-3 uppercase tracking-wide">Doctor </h3>
+<div class="w-12 h-1 bg-white/30 mb-8 group-hover:w-24 transition-all"></div>
+<p class="text-blue-100 text-base leading-relaxed mb-10">Access advanced diagnostic tools and patient history review panels.</p>
+<a href="doctor_login.html" class="mt-auto flex items-center gap-2 text-sm font-bold bg-white text-blue-600 px-6 py-3 rounded-xl w-fit shadow-lg">
+                    Login <span class="material-symbols-outlined text-sm">arrow_forward</span>
+</a>
+</div>
+<div class="bg-blue-400 hover:bg-blue-500 transition-colors p-12 flex flex-col text-white group cursor-pointer border-r border-white/10 last:border-r-0">
+<div class="mb-8">
+<span class="material-symbols-outlined text-6xl">clinical_notes</span>
+</div>
+<h3 class="text-2xl font-bold mb-3 uppercase tracking-wide">Assistant </h3>
+<div class="w-12 h-1 bg-white/30 mb-8 group-hover:w-24 transition-all"></div>
+<p class="text-blue-50 text-base leading-relaxed mb-10">Manage patient data intake and audio sample preprocessing workflows.</p>
+<a href="assistant_login.html" class="mt-auto flex items-center gap-2 text-sm font-bold bg-white text-blue-400 px-6 py-3 rounded-xl w-fit shadow-lg">
+                         Login <span class="material-symbols-outlined text-sm">arrow_forward</span>
+</a>
+</div>
+<div class="bg-cyan-500 hover:bg-cyan-600 transition-colors p-12 flex flex-col text-white group cursor-pointer">
+<div class="mb-8">
+<span class="material-symbols-outlined text-6xl">person</span>
+</div>
+<h3 class="text-2xl font-bold mb-3 uppercase tracking-wide">Patient</h3>
+<div class="w-12 h-1 bg-white/30 mb-8 group-hover:w-24 transition-all"></div>
+<p class="text-cyan-50 text-base leading-relaxed mb-10">View your screening results and educational resources for lung health.</p>
+<a href="patient_login.html" class="mt-auto flex items-center gap-2 text-sm font-bold bg-white text-cyan-500 px-6 py-3 rounded-xl w-fit shadow-lg">
+                         Login <span class="material-symbols-outlined text-sm">arrow_forward</span>
+</a>
+</div>
+</div>
+</section>
+</main>
+<div class="bg-gray-50 px-6 lg:px-40 py-8 border-t border-gray-100">
+<div class="max-w-[1200px] mx-auto flex flex-col md:row justify-between items-center gap-4 text-xs text-gray-400 font-medium">
+<div class="flex items-center gap-2 opacity-60 grayscale">
+<span class="material-symbols-outlined text-primary text-xl font-bold">pulmonology</span>
+<span class="text-navy-dark font-black tracking-tight">COPD Detect</span>
+</div>
+<p>© 2026 Collaborative COPD Detection. Clinical use only.</p>
+
+</div>
+</div>
+
+</body></html>

@@ -1,0 +1,312 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Assistant Profile Management Dashboard - Minimalist View</title>
+
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<style type="text/tailwindcss">
+        :root {
+            --primary: #135bec;
+            --sidebar-bg: #111722;
+            --content-bg: #f8fafc;
+        }
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+    </style>
+<script id="tailwind-config">
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#135bec",
+                        "sidebar": "#111722",
+                        "content": "#f8fafc",
+                    },
+                    borderRadius: {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                },
+            },
+        }
+    </script>
+</head>
+<body class="bg-[var(--content-bg)] text-slate-900 antialiased">
+<div class="flex min-h-screen overflow-hidden">
+<aside class="w-64 bg-[var(--sidebar-bg)] flex flex-col shrink-0">
+<div class="p-6 flex items-center gap-3">
+<div class="bg-primary p-2 rounded-lg">
+<span class="material-symbols-outlined text-white text-2xl">pulmonology</span>
+</div>
+<div>
+<h1 class="text-white text-base font-bold leading-tight">COPD Detection</h1>
+<p class="text-[#92a4c9] text-[10px] uppercase tracking-wider font-semibold">Assistant Panel</p>
+</div>
+</div>
+<nav class="flex-1 px-4 py-4 space-y-1">
+<a class="flex items-center gap-3 px-3 py-2 text-[#92a4c9] hover:bg-white/5 hover:text-white rounded-lg transition-colors" href="home_page.html">
+<span class="material-symbols-outlined text-xl">home</span>
+<span class="text-sm font-medium">Home</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 text-[#92a4c9] hover:bg-white/5 hover:text-white rounded-lg transition-colors" href="assistant_dashboard.html">
+<span class="material-symbols-outlined text-xl">dashboard</span>
+<span class="text-sm font-medium">Dashboard</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 text-[#92a4c9] hover:bg-white/5 hover:text-white rounded-lg transition-colors" href="patient_registration.html">
+<span class="material-symbols-outlined text-xl">person_add</span>
+<span class="text-sm font-medium">Register Patient</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 text-[#92a4c9] hover:bg-white/5 hover:text-white rounded-lg transition-colors" href="patient_list_assistant_dashboard.html">
+<span class="material-symbols-outlined text-xl">group</span>
+<span class="text-sm font-medium">Patient List</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 text-[#92a4c9] hover:bg-white/5 hover:text-white rounded-lg transition-colors" href="assistant_appointment.html">
+<span class="material-symbols-outlined text-xl">event</span>
+<span class="text-sm font-medium">Appoinments</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 text-[#92a4c9] hover:bg-white/5 hover:text-white rounded-lg transition-colors" href="assistant_dashboard_samples.html">
+<span class="material-symbols-outlined text-xl">mic</span>
+<span class="text-sm font-medium">Samples</span>
+</a>
+</nav>
+<div class="p-4 mt-auto border-t border-slate-800">
+<div class="flex items-center gap-3 p-2">
+<div class="relative">
+</div>
+<a href="api/logout.php" class="mt-4 flex w-full items-center left gap-2 px-3 py-2 text-sm font-semibold text-[#92a4c9] hover:text-white transition-colors">
+    <span class="material-symbols-outlined text-lg">logout</span>
+    Logout
+</a>
+</div>
+</aside>
+<main class="flex-1 overflow-y-auto">
+<header class="h-16 border-b border-slate-200 bg-white sticky top-0 z-10 px-8 flex items-center justify-between">
+<div class="flex items-center gap-2 text-sm">
+
+
+</div>
+<div class="flex items-center gap-4">
+
+<div class="text-sm text-slate-500 font-medium"></div>
+</div>
+</header>
+
+</section>
+<!-- RECORDED SAMPLES TABLE -->
+ <!-- TITLE -->
+<div class="px-8 pt-8 pb-4">
+    <div class="flex items-center gap-3">
+        <span class="material-symbols-outlined text-primary text-3xl">mic</span>
+        <h2 class="text-3xl font-bold text-slate-900 tracking-tight">
+            Recorded Samples
+        </h2>
+    </div>
+</div>
+<div class="px-8 pb-4">
+    <input 
+        type="text" 
+        id="sampleSearch"
+        placeholder="Search by Patient ID, Test ID, Sample ID"
+        class="w-full md:w-96 px-4 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary"
+        onkeyup="searchSamples()"
+    />
+</div>
+
+<section class="p-8">
+<div class="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden">
+<table class="w-full text-left border-collapse">
+<thead class="bg-slate-50 border-b">
+<tr>
+<th class="px-6 py-4 text-xs font-bold uppercase">Patient ID</th>
+<th class="px-6 py-4 text-xs font-bold uppercase">Test ID</th>
+<th class="px-6 py-4 text-xs font-bold uppercase">Sample ID</th>
+<th class="px-6 py-4 text-xs font-bold uppercase">Recording Date</th>
+<th class="px-6 py-4 text-xs font-bold uppercase">Time</th>
+
+<th class="px-6 py-4 text-xs font-bold uppercase">action</th>
+</tr>
+</thead>
+<tbody id="samplesTableBody" class="divide-y">
+<tr class="hover:bg-slate-50">
+<td class="px-6 py-4 font-semibold">P-88291</td>
+<td class="px-6 py-4">T-102</td>
+<td class="px-6 py-4">S-401</td>
+<td class="px-6 py-4">Oct 24, 2023</td>
+<td class="px-6 py-4">09:12:05</td>
+<td class="px-6 py-4">09:12:20</td>
+<td class="px-6 py-4">
+<span class="px-2 py-1 rounded-full bg-green-100 text-green-800 text-xs font-bold">Normal</span>
+</td>
+</tr>
+<tr class="hover:bg-slate-50">
+<td class="px-6 py-4 font-semibold">P-88292</td>
+<td class="px-6 py-4">T-105</td>
+<td class="px-6 py-4">S-402</td>
+<td class="px-6 py-4">Oct 24, 2023</td>
+<td class="px-6 py-4">10:30:11</td>
+<td class="px-6 py-4">10:30:31</td>
+<td class="px-6 py-4">
+<span class="px-2 py-1 rounded-full bg-yellow-100 text-yellow-800 text-xs font-bold">
+COPD Detected
+</span>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+
+</div>
+</div>
+</div>
+</section>
+
+</div>
+
+</main>
+
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        fetchSamples();
+    });
+
+    async function fetchSamples() {
+    try {
+        const response = await fetch('api/assistant_get_samples.php');
+        const samples = await response.json();
+
+        const tableBody = document.getElementById('samplesTableBody');
+        tableBody.innerHTML = '';
+
+        samples.forEach(sample => {
+
+            let actionButton = "";
+
+            if (sample.process_status === "Completed") {
+
+                actionButton = `
+                    <button class="bg-green-600 text-white px-4 py-2 rounded-lg text-xs font-bold cursor-not-allowed">
+                        ✅ Completed
+                    </button>
+                `;
+
+            } else {
+
+                actionButton = `
+                    <button onclick="startProcessing('${sample.Sample_ID}')" 
+                            class="bg-primary text-white px-4 py-2 rounded-lg text-xs font-bold hover:bg-blue-700 transition"
+                            id="btn-${sample.Sample_ID}">
+                        Start Process
+                    </button>
+                `;
+            }
+
+            const row = `
+                <tr class="hover:bg-slate-50">
+                    <td class="px-6 py-4 font-semibold">${sample.Patient_ID}</td>
+                    <td class="px-6 py-4">${sample.Test_id}</td>
+                    <td class="px-6 py-4">${sample.Sample_ID}</td>
+                    <td class="px-6 py-4">${sample.Sample_date}</td>
+                    <td class="px-6 py-4">${sample.Sample_time}</td>
+                    <td class="px-6 py-4">
+                        ${actionButton}
+                    </td>
+                </tr>
+            `;
+
+            tableBody.innerHTML += row;
+        });
+
+    } catch (error) {
+        console.error('Error fetching samples:', error);
+    }
+}
+
+    async function startProcessing(sampleId) {
+    const btn = document.getElementById(`btn-${sampleId}`);
+    const stages = ['preprocess', 'spectrogram', 'classify'];
+    
+    btn.disabled = true; // බටන් එක නැවත එබීම වැළැක්වීමට
+
+    for (let i = 0; i < stages.length; i++) {
+        let currentStage = stages[i];
+        
+        // Progress එක පෙන්වීමට (උදා: 33%, 66%, 100%)
+        let progress = Math.round(((i + 1) / stages.length) * 100);
+        btn.innerHTML = `<span class="animate-spin inline-block mr-2">⏳</span> ${currentStage.toUpperCase()} (${progress}%)`;
+        btn.className = "bg-amber-500 text-white px-4 py-2 rounded-lg text-xs font-bold";
+
+        try {
+            const response = await fetch('api/assistant_process_sample.php', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ sample_id: sampleId, action: currentStage })
+            });
+
+            const result = await response.json();
+
+            if (!result.success) {
+                alert("Error at " + currentStage + ": " + result.message);
+                btn.innerHTML = "Retry";
+                btn.disabled = false;
+                return;
+            }
+        } catch (error) {
+            console.error("Process failed", error);
+            return;
+        }
+    }
+
+    // සියල්ල අවසානයේ
+    btn.innerHTML = "✅ Success";
+    btn.className = "bg-green-600 text-white px-4 py-2 rounded-lg text-xs font-bold";
+    
+    // අවශ්‍ය නම් විනාඩි 2කට පසු Page එක refresh කරන්න හෝ table එක update කරන්න
+    setTimeout(() => fetchSamples(), 2000);
+}
+
+
+function searchSamples() {
+    // 1. සර්ච් බොක්ස් එකේ ටයිප් කරපු අකුරු ගන්නවා (සිම්පල් අකුරට හරවලා)
+    let input = document.getElementById("sampleSearch").value.toLowerCase();
+    
+    // 2. ටේබල් එකේ තියෙන පේළි (Rows) ඔක්කොම ගන්නවා
+    let tableBody = document.getElementById("samplesTableBody");
+    let rows = tableBody.getElementsByTagName("tr");
+
+    // 3. හැම පේළියක්ම පීරලා බලනවා (Loop)
+    for (let i = 0; i < rows.length; i++) {
+        // අපි සර්ච් කරන columns (Patient ID = 0, Test ID = 1, Sample ID = 2)
+        let patientID = rows[i].getElementsByTagName("td")[0];
+        let testID = rows[i].getElementsByTagName("td")[1];
+        let sampleID = rows[i].getElementsByTagName("td")[2];
+
+        if (patientID && testID && sampleID) {
+            // මේ තුනේම තියෙන දත්ත එකතු කරගන්නවා
+            let textValue = patientID.textContent + " " + testID.textContent + " " + sampleID.textContent;
+            
+            // අපි හොයන වචනය මේක ඇතුළේ තියෙනවාද බලනවා
+            if (textValue.toLowerCase().indexOf(input) > -1) {
+                rows[i].style.display = ""; // තියෙනවා නම් පෙන්වනවා
+            } else {
+                rows[i].style.display = "none"; // නැත්නම් හංගනවා
+            }
+        }
+    }
+}
+
+</script>
+
+
+</body></html>
