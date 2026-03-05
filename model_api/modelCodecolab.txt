@@ -1,0 +1,1190 @@
+# --- TASK 1: Setup ---
+from google.colab import drive
+import os
+import librosa
+import librosa.display
+import numpy as np
+import matplotlib.pyplot as plt
+import tensorflow as tf
+from sklearn.model_selection import train_test_split
+from sklearn.metrics import classification_report, confusion_matrix
+import seaborn as sns
+
+# 1. Mount Google Drive
+drive.mount('/content/drive')
+
+# 2. Set Constants
+SAMPLE_RATE = 22050   # Resampling (Nyquist Theorem)
+DURATION = 5          # Padding(5s)
+SAMPLES_PER_TRACK = SAMPLE_RATE * DURATION
+
+print("TASK 1 COMPLETED: Setup Done!")
+
+Mounted at /content/drive
+TASK 1 COMPLETED: Setup Done!
+
+Collecting scikeras
+  Downloading scikeras-0.13.0-py3-none-any.whl.metadata (3.1 kB)
+Requirement already satisfied: keras>=3.2.0 in /usr/local/lib/python3.12/dist-packages (from scikeras) (3.10.0)
+Requirement already satisfied: scikit-learn>=1.4.2 in /usr/local/lib/python3.12/dist-packages (from scikeras) (1.6.1)
+Requirement already satisfied: absl-py in /usr/local/lib/python3.12/dist-packages (from keras>=3.2.0->scikeras) (1.4.0)
+Requirement already satisfied: numpy in /usr/local/lib/python3.12/dist-packages (from keras>=3.2.0->scikeras) (2.0.2)
+Requirement already satisfied: rich in /usr/local/lib/python3.12/dist-packages (from keras>=3.2.0->scikeras) (13.9.4)
+Requirement already satisfied: namex in /usr/local/lib/python3.12/dist-packages (from keras>=3.2.0->scikeras) (0.1.0)
+Requirement already satisfied: h5py in /usr/local/lib/python3.12/dist-packages (from keras>=3.2.0->scikeras) (3.15.1)
+Requirement already satisfied: optree in /usr/local/lib/python3.12/dist-packages (from keras>=3.2.0->scikeras) (0.19.0)
+Requirement already satisfied: ml-dtypes in /usr/local/lib/python3.12/dist-packages (from keras>=3.2.0->scikeras) (0.5.4)
+Requirement already satisfied: packaging in /usr/local/lib/python3.12/dist-packages (from keras>=3.2.0->scikeras) (26.0)
+Requirement already satisfied: scipy>=1.6.0 in /usr/local/lib/python3.12/dist-packages (from scikit-learn>=1.4.2->scikeras) (1.16.3)
+Requirement already satisfied: joblib>=1.2.0 in /usr/local/lib/python3.12/dist-packages (from scikit-learn>=1.4.2->scikeras) (1.5.3)
+Requirement already satisfied: threadpoolctl>=3.1.0 in /usr/local/lib/python3.12/dist-packages (from scikit-learn>=1.4.2->scikeras) (3.6.0)
+Requirement already satisfied: typing-extensions>=4.6.0 in /usr/local/lib/python3.12/dist-packages (from optree->keras>=3.2.0->scikeras) (4.15.0)
+Requirement already satisfied: markdown-it-py>=2.2.0 in /usr/local/lib/python3.12/dist-packages (from rich->keras>=3.2.0->scikeras) (4.0.0)
+Requirement already satisfied: pygments<3.0.0,>=2.13.0 in /usr/local/lib/python3.12/dist-packages (from rich->keras>=3.2.0->scikeras) (2.19.2)
+Requirement already satisfied: mdurl~=0.1 in /usr/local/lib/python3.12/dist-packages (from markdown-it-py>=2.2.0->rich->keras>=3.2.0->scikeras) (0.1.2)
+Downloading scikeras-0.13.0-py3-none-any.whl (26 kB)
+Installing collected packages: scikeras
+Successfully installed scikeras-0.13.0
+
+# --- DEBUGGING STEP ---
+import os
+
+base_path = '/content/drive/MyDrive/Highflyers_COPD_Colab/cough_dataset'
+
+print(f"Checking path: {base_path}")
+
+try:
+    contents = os.listdir(base_path)
+    print("\nFiles/Folders found inside:")
+    print(contents)
+except FileNotFoundError:
+    print("\nERROR: The main 'cough_dataset' folder path itself is wrong!")
+    print("Please check if 'Highflyers_COPD_Colab' exists in your Drive.")
+
+
+Checking path: /content/drive/MyDrive/Highflyers_COPD_Colab/cough_dataset
+
+Files/Folders found inside:
+['non-copd', 'copd']
+
+
+# --- Define the sample_file variable ---
+
+# ⚠️ IMPORTANT: Change 'your_audio_file.wav' to a real file name from your Drive!
+sample_file = '/content/drive/MyDrive/Highflyers_COPD_Colab/cough_dataset/copd/0001.wav'
+
+print(f"Sample file successfully loaded: {sample_file}")
+
+Sample file successfully loaded: /content/drive/MyDrive/Highflyers_COPD_Colab/cough_dataset/copd/0001.wav
+
+# --- STEP 1: Resampling ---
+
+# We use the 'sample_file' variable defined in the previous step.
+# If 'sample_file' is not defined, please run the previous Data Loading cell first.
+
+print(f"Processing File: {sample_file}")
+
+# 1. Load and Resample
+# librosa.load automatically resamples the audio to the specific 'sr' we provide.
+# We use 22050 Hz based on the Nyquist Theorem for cough analysis.
+y_resampled, sr = librosa.load(sample_file, sr=SAMPLE_RATE)
+
+# 2. Visualization (Waveform)
+plt.figure(figsize=(10, 4))
+librosa.display.waveshow(y_resampled, sr=sr, color='blue')
+plt.title(f"Step 1: Resampled Waveform (SR = {sr} Hz)")
+plt.xlabel("Time (seconds)")
+plt.ylabel("Amplitude")
+plt.grid(True, alpha=0.3)
+plt.tight_layout()
+plt.show()
+
+# 3. Print Technical Details
+duration = len(y_resampled) / sr
+print("\n--- Resampling Details ---")
+print(f"Original Path: {sample_file}")
+print(f"Target Sample Rate: {SAMPLE_RATE} Hz")
+print(f"Actual Loaded SR: {sr} Hz")
+print(f"Array Shape (Total Samples): {y_resampled.shape}")
+print(f"Audio Duration: {duration:.2f} seconds")
+
+Processing File: /content/drive/MyDrive/Highflyers_COPD_Colab/cough_dataset/copd/0001.wav
+
+
+--- Resampling Details ---
+Original Path: /content/drive/MyDrive/Highflyers_COPD_Colab/cough_dataset/copd/0001.wav
+Target Sample Rate: 22050 Hz
+Actual Loaded SR: 22050 Hz
+Array Shape (Total Samples): (7718,)
+Audio Duration: 0.35 seconds
+
+# --- STEP 1: Listen to the Difference ---
+import IPython.display as ipd
+
+# 1. Load the Original Audio (Raw Quality)
+# sr=None means load with the original sample rate (e.g., 44100Hz or 48000Hz)
+y_original, sr_original = librosa.load(sample_file, sr=None)
+
+print(f"--- Audio Playback Test ---")
+print(f"Original Sample Rate: {sr_original} Hz")
+print(f"Resampled Rate: {SAMPLE_RATE} Hz")
+
+# 2. Play Original Audio
+print("\n1. Original Raw Audio:")
+# We display the player widget
+ipd.display(ipd.Audio(y_original, rate=sr_original))
+
+# 3. Play Resampled Audio (Step 1 Result)
+print(f"\n2. Resampled Audio ({SAMPLE_RATE} Hz):")
+# We use the 'y_resampled' variable you created in the previous step
+ipd.display(ipd.Audio(y_resampled, rate=SAMPLE_RATE))
+
+--- Audio Playback Test ---
+Original Sample Rate: 44100 Hz
+Resampled Rate: 22050 Hz
+
+1. Original Raw Audio:
+
+2. Resampled Audio (22050 Hz):
+
+# --- STEP 2: Normalization ---
+
+# We use the 'y_resampled' variable from Step 1.
+
+# 1. Apply Min-Max Normalization
+# This scales the entire array so the maximum absolute value is 1.0.
+y_normalized = librosa.util.normalize(y_resampled)
+
+# 2. Visualization (Comparison)
+plt.figure(figsize=(12, 6))
+
+# Plot 1: Before Normalization (Resampled)
+plt.subplot(2, 1, 1)
+librosa.display.waveshow(y_resampled, sr=SAMPLE_RATE, alpha=0.6)
+plt.title(f"Before Normalization (Min: {np.min(y_resampled):.3f}, Max: {np.max(y_resampled):.3f})")
+plt.ylabel("Amplitude")
+plt.ylim(-1.1, 1.1) # Fixed limits to show potential low volume
+
+# Plot 2: After Normalization
+plt.subplot(2, 1, 2)
+librosa.display.waveshow(y_normalized, sr=SAMPLE_RATE, color='green', alpha=0.6)
+plt.title(f"After Normalization (Min: {np.min(y_normalized):.1f}, Max: {np.max(y_normalized):.1f})")
+plt.ylabel("Amplitude")
+plt.ylim(-1.1, 1.1) # Fixed limits
+
+plt.tight_layout()
+plt.show()
+
+# 3. Print Technical Details
+print("\n--- Normalization Stats ---")
+print(f"Original Range: [{np.min(y_resampled):.4f}, {np.max(y_resampled):.4f}]")
+print(f"Normalized Range: [{np.min(y_normalized):.4f}, {np.max(y_normalized):.4f}]")
+
+
+--- Normalization Stats ---
+Original Range: [-0.8272, 1.0001]
+Normalized Range: [-0.8271, 1.0000]
+
+# --- STEP 2: Normalization (Audio Only) ---
+import IPython.display as ipd
+
+# We use the 'y_resampled' variable from Step 1.
+
+# 1. Apply Min-Max Normalization
+# This scales the entire array so the maximum absolute value is 1.0.
+y_normalized = librosa.util.normalize(y_resampled)
+
+# 2. Print Technical Details
+print("\n--- Normalization Stats ---")
+print(f"Original Range:   [{np.min(y_resampled):.4f}, {np.max(y_resampled):.4f}]")
+print(f"Normalized Range: [{np.min(y_normalized):.4f}, {np.max(y_normalized):.4f}]")
+
+# 3. Audio Playback (Listen to the Volume Boost)
+print("\n" + "="*40)
+print("🎧 LISTEN TO THE VOLUME DIFFERENCE")
+print("="*40)
+
+print("\n1. Before Normalization (Quiet/Original Volume):")
+ipd.display(ipd.Audio(y_resampled, rate=SAMPLE_RATE))
+
+print("\n2. After Normalization (Standardized/Loud Volume):")
+ipd.display(ipd.Audio(y_normalized, rate=SAMPLE_RATE))
+
+
+--- Normalization Stats ---
+Original Range:   [-0.8272, 1.0001]
+Normalized Range: [-0.8271, 1.0000]
+
+========================================
+🎧 LISTEN TO THE VOLUME DIFFERENCE
+========================================
+
+1. Before Normalization (Quiet/Original Volume):
+
+2. After Normalization (Standardized/Loud Volume):
+
+# --- STEP 3: Noise Removal (Pre-emphasis) ---
+
+# We use the 'y_normalized' variable from Step 2.
+
+# 1. Apply Pre-emphasis Filter
+# This boosts the high frequencies (cough details) and attenuates low-frequency noise.
+# y_filtered[n] = x[n] - 0.97 * x[n-1]
+y_filtered = librosa.effects.preemphasis(y_normalized, coef=0.97)
+
+# 2. Visualization (Comparison)
+plt.figure(figsize=(12, 6))
+
+# Plot 1: Before Filtering (Normalized)
+plt.subplot(2, 1, 1)
+librosa.display.waveshow(y_normalized, sr=SAMPLE_RATE, alpha=0.6)
+plt.title(f"Original Normalized Signal")
+plt.ylabel("Amplitude")
+plt.ylim(-1.1, 1.1)
+
+# Plot 2: After Filtering (Pre-emphasis)
+plt.subplot(2, 1, 2)
+librosa.display.waveshow(y_filtered, sr=SAMPLE_RATE, color='red', alpha=0.6)
+plt.title(f"After Pre-emphasis Filtering (High-Pass)")
+plt.ylabel("Amplitude")
+plt.ylim(-1.1, 1.1)
+
+plt.tight_layout()
+plt.show()
+
+# 3. Frequency Spectrum Analysis (Optional but good for Supervisor)
+# Comparing the power spectrum to show the effect
+original_spec = np.abs(librosa.stft(y_normalized))
+filtered_spec = np.abs(librosa.stft(y_filtered))
+
+plt.figure(figsize=(10, 4))
+plt.semilogy(np.mean(original_spec, axis=1), label='Original Normalized')
+plt.semilogy(np.mean(filtered_spec, axis=1), label='Filtered (Pre-emphasis)', color='red')
+plt.title("Frequency Spectrum Comparison")
+plt.xlabel("Frequency Bin")
+plt.ylabel("Log Magnitude")
+plt.legend()
+plt.grid(True, which="both", ls="-", alpha=0.5)
+plt.show()
+
+print("\n--- Filtering Stats ---")
+print("Notice how the filtered signal (Red) has sharper peaks and less 'rumble'.")
+
+
+
+--- Filtering Stats ---
+Notice how the filtered signal (Red) has sharper peaks and less 'rumble'.
+
+# --- STEP 3: Noise Removal (Visual & Audio) ---
+import numpy as np
+import librosa.display
+import matplotlib.pyplot as plt
+import IPython.display as ipd
+
+# We use 'y_normalized' from Step 2
+
+# 1. Apply Pre-emphasis Filter
+# coef=0.97 is the standard value to boost high frequencies
+y_filtered = librosa.effects.preemphasis(y_normalized, coef=0.97)
+
+# --- VISUALIZATION ---
+plt.figure(figsize=(10, 6))
+
+# Plot 1: Before (Normalized)
+plt.subplot(2, 1, 1)
+librosa.display.waveshow(y_normalized, sr=SAMPLE_RATE, alpha=0.6)
+plt.title("Before: Normalized Signal (Contains Low Freq Noise)")
+plt.ylabel("Amplitude")
+
+# Plot 2: After (Filtered)
+plt.subplot(2, 1, 2)
+librosa.display.waveshow(y_filtered, sr=SAMPLE_RATE, color='red', alpha=0.6)
+plt.title("After: Pre-emphasis Filter (High Freq Boosted)")
+plt.ylabel("Amplitude")
+
+plt.tight_layout()
+plt.show()
+
+# --- AUDIO PLAYBACK ---
+print("\n" + "="*40)
+print("🎧 LISTEN TO THE SHARPNESS")
+print("="*40)
+
+print("\n1. Before Filtering (Standard):")
+ipd.display(ipd.Audio(y_normalized, rate=SAMPLE_RATE))
+
+print("\n2. After Filtering (Sharper/Crisper):")
+ipd.display(ipd.Audio(y_filtered, rate=SAMPLE_RATE))
+
+
+========================================
+🎧 LISTEN TO THE SHARPNESS
+========================================
+
+1. Before Filtering (Standard):
+
+2. After Filtering (Sharper/Crisper):
+
+# --- STEP 4: Trimming (Silence Removal) ---
+
+# We use the 'y_filtered' variable from Step 3.
+
+# 1. Trim the silence
+# top_db=20: Anything below 20dB from the peak is considered silence.
+# This returns the trimmed audio and the index range (trim_index)
+y_trimmed, trim_index = librosa.effects.trim(y_filtered, top_db=20)
+
+# 2. Visualization (Before vs After)
+plt.figure(figsize=(12, 6))
+
+# Plot 1: Before Trimming (The Filtered Signal)
+plt.subplot(2, 1, 1)
+librosa.display.waveshow(y_filtered, sr=SAMPLE_RATE, alpha=0.6)
+plt.title(f"Before Trimming (Duration: {len(y_filtered)/SAMPLE_RATE:.2f}s)")
+plt.axvline(x=trim_index[0]/SAMPLE_RATE, color='red', linestyle='--', label='Start Cut')
+plt.axvline(x=trim_index[1]/SAMPLE_RATE, color='red', linestyle='--', label='End Cut')
+plt.legend()
+plt.ylabel("Amplitude")
+
+# Plot 2: After Trimming
+plt.subplot(2, 1, 2)
+librosa.display.waveshow(y_trimmed, sr=SAMPLE_RATE, color='purple', alpha=0.8)
+plt.title(f"After Trimming (Duration: {len(y_trimmed)/SAMPLE_RATE:.2f}s)")
+plt.ylabel("Amplitude")
+
+plt.tight_layout()
+plt.show()
+
+# 3. Print Technical Details
+original_duration = len(y_filtered) / SAMPLE_RATE
+trimmed_duration = len(y_trimmed) / SAMPLE_RATE
+
+print("\n--- Trimming Stats ---")
+print(f"Original Duration: {original_duration:.2f} seconds")
+print(f"Trimmed Duration:  {trimmed_duration:.2f} seconds")
+print(f"Removed Silence:   {original_duration - trimmed_duration:.2f} seconds")
+print(f"Trim Indices:      {trim_index}")
+
+
+--- Trimming Stats ---
+Original Duration: 0.35 seconds
+Trimmed Duration:  0.30 seconds
+Removed Silence:   0.05 seconds
+Trim Indices:      [   0 6656]
+
+# --- STEP 4: Trimming (Visual & Audio) ---
+import IPython.display as ipd
+
+# We use 'y_filtered' from Step 3.
+
+# 1. Trim the silence
+# top_db=20: Anything below 20dB relative to peak is considered silence
+y_trimmed, trim_index = librosa.effects.trim(y_filtered, top_db=20)
+
+# --- VISUALIZATION ---
+plt.figure(figsize=(10, 6))
+
+# Plot 1: Before Trimming
+plt.subplot(2, 1, 1)
+librosa.display.waveshow(y_filtered, sr=SAMPLE_RATE, alpha=0.6)
+plt.title(f"Before: Full Signal (Duration: {len(y_filtered)/SAMPLE_RATE:.2f}s)")
+# Show where the cut happens
+plt.axvline(x=trim_index[0]/SAMPLE_RATE, color='red', linestyle='--', label='Start Cut')
+plt.axvline(x=trim_index[1]/SAMPLE_RATE, color='red', linestyle='--', label='End Cut')
+plt.legend()
+plt.ylabel("Amplitude")
+
+# Plot 2: After Trimming
+plt.subplot(2, 1, 2)
+librosa.display.waveshow(y_trimmed, sr=SAMPLE_RATE, color='purple', alpha=0.8)
+plt.title(f"After: Trimmed Signal (Duration: {len(y_trimmed)/SAMPLE_RATE:.2f}s)")
+plt.ylabel("Amplitude")
+
+plt.tight_layout()
+plt.show()
+
+# --- AUDIO PLAYBACK ---
+print("\n" + "="*40)
+print("🎧 LISTEN TO THE TIMING (Silence Removal)")
+print("="*40)
+
+print(f"\n1. Before Trimming ({len(y_filtered)/SAMPLE_RATE:.2f}s):")
+print("(Might have silence at start/end)")
+ipd.display(ipd.Audio(y_filtered, rate=SAMPLE_RATE))
+
+print(f"\n2. After Trimming ({len(y_trimmed)/SAMPLE_RATE:.2f}s):")
+print("(Starts immediately!)")
+ipd.display(ipd.Audio(y_trimmed, rate=SAMPLE_RATE))
+
+# Stats
+print(f"\nRemoved Silence: {(len(y_filtered) - len(y_trimmed))/SAMPLE_RATE:.3f} seconds")
+
+
+========================================
+🎧 LISTEN TO THE TIMING (Silence Removal)
+========================================
+
+1. Before Trimming (0.35s):
+(Might have silence at start/end)
+
+2. After Trimming (0.30s):
+(Starts immediately!)
+
+Removed Silence: 0.048 seconds
+
+# --- STEP 5: Padding (Fixing Duration) ---
+
+# We use 'y_trimmed' from Step 4.
+
+target_length = SAMPLES_PER_TRACK  # 22050 * 5 = 110,250 samples
+
+# 1. Check length and Pad or Truncate
+current_length = len(y_trimmed)
+
+if current_length < target_length:
+    # Too Short: Add zeros (Padding)
+    pad_needed = target_length - current_length
+    pad_left = pad_needed // 2
+    pad_right = pad_needed - pad_left
+
+    # Pad with constant 0 (Silence)
+    y_padded = np.pad(y_trimmed, (pad_left, pad_right), mode='constant')
+    action = "Padded (Added Zeros)"
+
+else:
+    # Too Long: Crop from the center (Truncate)
+    excess = current_length - target_length
+    start = excess // 2
+    y_padded = y_trimmed[start : start + target_length]
+    action = "Truncated (Cropped)"
+
+# 2. Visualization
+plt.figure(figsize=(12, 6))
+
+# Plot 1: Before Padding (Trimmed)
+plt.subplot(2, 1, 1)
+librosa.display.waveshow(y_trimmed, sr=SAMPLE_RATE, color='purple', alpha=0.6)
+plt.title(f"Before Padding: {current_length} samples ({current_length/SAMPLE_RATE:.2f}s)")
+plt.xlim(0, 5) # Fixed x-axis to compare
+plt.ylabel("Amplitude")
+
+# Plot 2: After Padding (Final Input)
+plt.subplot(2, 1, 2)
+librosa.display.waveshow(y_padded, sr=SAMPLE_RATE, color='black', alpha=0.8)
+plt.title(f"After {action}: {len(y_padded)} samples (Exactly 5.00s)")
+plt.xlim(0, 5) # Fixed x-axis to compare
+plt.ylabel("Amplitude")
+
+plt.tight_layout()
+plt.show()
+
+# 3. Print Technical Details
+print("\n--- Padding Stats ---")
+print(f"Target Length: {target_length} samples")
+print(f"Original Length: {current_length} samples")
+print(f"Action Taken: {action}")
+print(f"Final Length: {len(y_padded)} samples")
+
+
+--- Padding Stats ---
+Target Length: 110250 samples
+Original Length: 6656 samples
+Action Taken: Padded (Added Zeros)
+Final Length: 110250 samples
+
+# --- STEP 5: Padding (Visual & Audio) ---
+import IPython.display as ipd
+import numpy as np
+
+# We use 'y_trimmed' from Step 4.
+
+# Target: 5 seconds * 22050 Hz = 110,250 samples
+target_length = SAMPLES_PER_TRACK
+
+# 1. Check length and Pad or Truncate
+current_length = len(y_trimmed)
+
+if current_length < target_length:
+    # Too Short: Add zeros (Silence) to reach 5s
+    pad_needed = target_length - current_length
+    pad_left = pad_needed // 2
+    pad_right = pad_needed - pad_left
+
+    # Pad with constant 0
+    y_padded = np.pad(y_trimmed, (pad_left, pad_right), mode='constant')
+    action = "Padded (Added Silence)"
+
+else:
+    # Too Long: Crop from the center
+    excess = current_length - target_length
+    start = excess // 2
+    y_padded = y_trimmed[start : start + target_length]
+    action = "Truncated (Cropped)"
+
+# --- VISUALIZATION ---
+plt.figure(figsize=(10, 6))
+
+# Plot 1: Before Padding
+plt.subplot(2, 1, 1)
+librosa.display.waveshow(y_trimmed, sr=SAMPLE_RATE, color='purple', alpha=0.6)
+plt.title(f"Before: Variable Length ({current_length/SAMPLE_RATE:.2f}s)")
+plt.xlim(0, 5) # Fixed x-axis to compare
+plt.ylabel("Amplitude")
+
+# Plot 2: After Padding (Final Input)
+plt.subplot(2, 1, 2)
+librosa.display.waveshow(y_padded, sr=SAMPLE_RATE, color='black', alpha=0.8)
+plt.title(f"After: {action} to exactly 5.0s")
+plt.xlim(0, 5) # Fixed x-axis
+plt.ylabel("Amplitude")
+
+plt.tight_layout()
+plt.show()
+
+# --- AUDIO PLAYBACK ---
+print("\n" + "="*40)
+print("🎧 LISTEN TO THE DURATION")
+print("="*40)
+
+print(f"\n1. Before Padding ({current_length/SAMPLE_RATE:.2f}s):")
+ipd.display(ipd.Audio(y_trimmed, rate=SAMPLE_RATE))
+
+print(f"\n2. After Padding (Exactly 5.0s):")
+print("(You might hear silence at the end if original was short)")
+ipd.display(ipd.Audio(y_padded, rate=SAMPLE_RATE))
+
+
+========================================
+🎧 LISTEN TO THE DURATION
+========================================
+
+1. Before Padding (0.30s):
+
+2. After Padding (Exactly 5.0s):
+(You might hear silence at the end if original was short)
+
+# --- STEP 6: Feature Extraction (Mel-Spectrogram) ---
+
+# We use 'y_padded' from Step 5.
+
+# 1. Generate Mel-Spectrogram
+# n_mels=128: Height of the image (Frequency resolution)
+# hop_length=512: Width of the image (Time resolution)
+mel_spect = librosa.feature.melspectrogram(
+    y=y_padded,
+    sr=SAMPLE_RATE,
+    n_mels=128,
+    fmax=8000,       # Max frequency 8kHz (Enough for human cough)
+    hop_length=512
+)
+
+# 2. Convert to Decibels (Log Scale)
+# Spectrograms show power, but humans hear in Decibels (Log scale).
+# This makes quiet sounds visible and loud sounds not overpowering.
+mel_spect_db = librosa.power_to_db(mel_spect, ref=np.max)
+
+# 3. Visualization
+plt.figure(figsize=(12, 6))
+librosa.display.specshow(
+    mel_spect_db,
+    sr=SAMPLE_RATE,
+    hop_length=512,
+    x_axis='time',
+    y_axis='mel',
+    fmax=8000,
+    cmap='magma'  # Use 'magma' or 'viridis' for better contrast
+)
+plt.colorbar(format='%+2.0f dB')
+plt.title('Step 6: Log-Mel Spectrogram (CNN Input)')
+plt.tight_layout()
+plt.show()
+
+# 4. Print Technical Details
+print("\n--- Spectrogram Stats ---")
+print(f"Shape: {mel_spect_db.shape}")  # This should be (128, 216)
+print(f"Min Value (dB): {np.min(mel_spect_db):.2f}")
+print(f"Max Value (dB): {np.max(mel_spect_db):.2f}")
+
+
+--- Spectrogram Stats ---
+Shape: (128, 216)
+Min Value (dB): -80.00
+Max Value (dB): 0.00
+
+# --- TASK 3 (CORRECTED): Process Entire Dataset ---
+
+import os
+import numpy as np
+import librosa
+from sklearn.model_selection import train_test_split
+
+# *** IMPORTANT CHANGE HERE ***
+# Folder names must match EXACTLY what is in your Drive
+classes = ["non-copd", "copd"]
+
+data = []
+labels = []
+DATASET_PATH = '/content/drive/MyDrive/Highflyers_COPD_Colab/cough_dataset'
+
+print(f"Starting processing for classes: {classes}...")
+
+for i, label in enumerate(classes):
+    path = os.path.join(DATASET_PATH, label)
+    print(f"Processing folder: {label}...")
+
+    # Check if folder exists before entering loop
+    if not os.path.exists(path):
+        print(f"ERROR: Folder not found: {path}")
+        continue
+
+    for file in os.listdir(path):
+        if file.endswith(".wav"):
+            file_path = os.path.join(path, file)
+            try:
+                # 1. Load & Resample
+                y, sr = librosa.load(file_path, sr=SAMPLE_RATE)
+
+                # 2. Preprocess (Normalize -> Filter -> Trim -> Pad)
+                y = librosa.util.normalize(y)
+                y = librosa.effects.preemphasis(y, coef=0.97)
+                y_trimmed, _ = librosa.effects.trim(y, top_db=20)
+
+                if len(y_trimmed) < SAMPLES_PER_TRACK:
+                    padding = SAMPLES_PER_TRACK - len(y_trimmed)
+                    offset = padding // 2
+                    y_fixed = np.pad(y_trimmed, (offset, SAMPLES_PER_TRACK - len(y_trimmed) - offset), 'constant')
+                else:
+                    y_fixed = y_trimmed[:SAMPLES_PER_TRACK]
+
+                # 3. Mel-Spectrogram
+                mel_spec = librosa.feature.melspectrogram(
+                    y=y_fixed, sr=sr, n_mels=128, fmax=8000, hop_length=512
+                )
+                mel_spec_db = librosa.power_to_db(mel_spec, ref=np.max)
+
+                # 4. Add Channel Dimension for CNN
+                mel_spec_db = mel_spec_db[..., np.newaxis]
+
+                data.append(mel_spec_db)
+                labels.append(i) # 0 = non-copd, 1 = copd
+
+            except Exception as e:
+                print(f"Error processing {file}: {e}")
+
+# Convert to Numpy Arrays
+X = np.array(data)
+y = np.array(labels)
+
+# Check if data was loaded
+if len(X) == 0:
+    print("CRITICAL ERROR: No files were loaded. Please check paths again.")
+else:
+    # SMART SPLIT: 70% Train, 20% Validation, 10% Test (Stratified)
+
+    # First, take 70% for Training and 30% as Temporary
+    X_train, X_temp, y_train, y_temp = train_test_split(X, y, test_size=0.30, random_state=42, stratify=y)
+
+    # Now, split that 30% Temporary into Validation (20%) and Test (10%)
+    # To get 10% out of 30%, we use a test_size of 0.33 (which is 1/3)
+    X_val, X_test, y_val, y_test = train_test_split(X_temp, y_temp, test_size=0.33, random_state=42, stratify=y_temp)
+    print("\n--- TASK 3 COMPLETED SUCCESSFULLY ---")
+    print(f"Total Samples: {len(X)}")
+    print(f"Training Set: {X_train.shape}")
+    print(f"Validation Set: {X_val.shape}")
+    print(f"Test Set: {X_test.shape}")
+
+Starting processing for classes: ['non-copd', 'copd']...
+Processing folder: non-copd...
+Processing folder: copd...
+
+--- TASK 3 COMPLETED SUCCESSFULLY ---
+Total Samples: 456
+Training Set: (319, 128, 216, 1)
+Validation Set: (68, 128, 216, 1)
+Test Set: (69, 128, 216, 1)
+
+# --- TASK 4 & 5: FINAL GRID SEARCH V2 (Batch Size 16 + Larger Validation) ---
+
+import numpy as np
+import matplotlib.pyplot as plt
+from sklearn.utils.class_weight import compute_class_weight
+from tensorflow.keras.models import Sequential
+from tensorflow.keras.layers import Conv2D, Flatten, Dense, Dropout, BatchNormalization
+from tensorflow.keras.optimizers import Adam
+from tensorflow.keras.callbacks import EarlyStopping
+
+input_shape = (128, 216, 1)
+
+# Calculate Class Weights
+classes_unique = np.unique(y_train)
+class_weights_array = compute_class_weight(class_weight='balanced', classes=classes_unique, y=y_train)
+class_weight_dict = dict(enumerate(class_weights_array))
+
+# 5 Versions for Grid Search (Testing the Supervisor's Hypothesis!)
+combinations = [
+    # Version 1: NO DROPOUT (Supervisor's Idea) - Let's see if it overfits or learns better!
+    {'version': 1, 'filters': 32,  'dropout': 0.0, 'dense': 64,  'lr': 0.001},
+
+    # Versions 2-5: With varying degrees of Dropout (Your safety net)
+    {'version': 2, 'filters': 64,  'dropout': 0.2, 'dense': 64,  'lr': 0.001},
+    {'version': 3, 'filters': 32,  'dropout': 0.3, 'dense': 32,  'lr': 0.0005},
+    {'version': 4, 'filters': 64,  'dropout': 0.4, 'dense': 128, 'lr': 0.0001},
+    {'version': 5, 'filters': 128, 'dropout': 0.5, 'dense': 64,  'lr': 0.0005}
+]
+
+best_val_acc = 0
+best_version = 0
+
+print("🚀 Starting Advanced Grid Search (Batch Size = 16)...\n")
+
+for params in combinations:
+    print("="*60)
+    print(f"🌟 --- TRAINING VERSION {params['version']} --- 🌟")
+    print(f"Filters: {params['filters']}, Dropout: {params['dropout']}, Dense: {params['dense']}, LR: {params['lr']}")
+    print("="*60)
+
+    model = Sequential([
+        Conv2D(32, (3, 3), strides=(2, 2), padding='same', activation='relu', input_shape=input_shape),
+        BatchNormalization(),
+
+        Conv2D(params['filters'], (3, 3), strides=(2, 2), padding='same', activation='relu'),
+        BatchNormalization(),
+        Dropout(0.2),
+
+        Conv2D(params['filters'] * 2, (3, 3), strides=(2, 2), padding='same', activation='relu'),
+        BatchNormalization(),
+        Dropout(params['dropout']),
+
+        Flatten(),
+
+        Dense(params['dense'], activation='relu'),
+        Dropout(params['dropout'] + 0.1),
+
+        Dense(1, activation='sigmoid')
+    ])
+
+    model.compile(optimizer=Adam(learning_rate=params['lr']),
+                  loss='binary_crossentropy',
+                  metrics=['accuracy'])
+
+    # Patience increased slightly because batch_size 16 learns slower
+    early_stop = EarlyStopping(monitor='val_loss', patience=8, restore_best_weights=True, verbose=1)
+
+    history = model.fit(
+        X_train, y_train,
+        epochs=40,
+        batch_size=16,  # 🛑 CHANGED: Smarter, smoother learning
+        class_weight=class_weight_dict,
+        validation_data=(X_val, y_val),
+        callbacks=[early_stop],
+        verbose=1
+    )
+
+    val_loss, val_acc = model.evaluate(X_val, y_val, verbose=0)
+    print(f"\n✅ Version {params['version']} Final Validation Accuracy: {val_acc*100:.2f}%")
+
+    plt.figure(figsize=(12, 4))
+
+    plt.subplot(1, 2, 1)
+    plt.plot(history.history['accuracy'], label='Train Accuracy', color='blue')
+    plt.plot(history.history['val_accuracy'], label='Validation Accuracy', color='orange')
+    plt.title(f'Version {params['version']} - Accuracy')
+    plt.xlabel('Epochs')
+    plt.ylabel('Accuracy')
+    plt.legend()
+    plt.grid(True, linestyle='--', alpha=0.6)
+
+    plt.subplot(1, 2, 2)
+    plt.plot(history.history['loss'], label='Train Loss', color='blue')
+    plt.plot(history.history['val_loss'], label='Validation Loss', color='red')
+    plt.title(f'Version {params['version']} - Loss')
+    plt.xlabel('Epochs')
+    plt.ylabel('Loss')
+    plt.legend()
+    plt.grid(True, linestyle='--', alpha=0.6)
+
+    plt.tight_layout()
+    plt.show()
+
+    if val_acc > best_val_acc:
+        best_val_acc = val_acc
+        best_version = params['version']
+        model.save("best_copd_model_v2.keras")
+
+print("="*60)
+print(f"🏆 NEW BEST MODEL FOUND: VERSION {best_version} with Accuracy: {best_val_acc*100:.2f}%")
+print("Saved as 'best_copd_model_v2.keras'")
+print("="*60)
+
+🚀 Starting Advanced Grid Search (Batch Size = 16)...
+
+============================================================
+🌟 --- TRAINING VERSION 1 --- 🌟
+Filters: 32, Dropout: 0.0, Dense: 64, LR: 0.001
+============================================================
+Epoch 1/40
+/usr/local/lib/python3.12/dist-packages/keras/src/layers/convolutional/base_conv.py:113: UserWarning: Do not pass an `input_shape`/`input_dim` argument to a layer. When using Sequential models, prefer using an `Input(shape)` object as the first layer in the model instead.
+  super().__init__(activity_regularizer=activity_regularizer, **kwargs)
+20/20 ━━━━━━━━━━━━━━━━━━━━ 10s 282ms/step - accuracy: 0.4625 - loss: 3.8767 - val_accuracy: 0.5000 - val_loss: 147.5632
+Epoch 2/40
+20/20 ━━━━━━━━━━━━━━━━━━━━ 4s 214ms/step - accuracy: 0.5129 - loss: 0.6933 - val_accuracy: 0.5000 - val_loss: 68.7559
+Epoch 3/40
+20/20 ━━━━━━━━━━━━━━━━━━━━ 6s 275ms/step - accuracy: 0.4853 - loss: 0.6930 - val_accuracy: 0.5000 - val_loss: 52.0731
+Epoch 4/40
+20/20 ━━━━━━━━━━━━━━━━━━━━ 9s 209ms/step - accuracy: 0.4660 - loss: 0.6928 - val_accuracy: 0.5000 - val_loss: 42.2593
+Epoch 5/40
+20/20 ━━━━━━━━━━━━━━━━━━━━ 6s 287ms/step - accuracy: 0.5259 - loss: 0.6935 - val_accuracy: 0.5000 - val_loss: 34.8015
+Epoch 6/40
+20/20 ━━━━━━━━━━━━━━━━━━━━ 5s 226ms/step - accuracy: 0.4905 - loss: 0.6931 - val_accuracy: 0.5000 - val_loss: 28.4838
+Epoch 7/40
+20/20 ━━━━━━━━━━━━━━━━━━━━ 4s 208ms/step - accuracy: 0.5227 - loss: 0.6935 - val_accuracy: 0.5000 - val_loss: 22.8040
+Epoch 8/40
+20/20 ━━━━━━━━━━━━━━━━━━━━ 5s 268ms/step - accuracy: 0.4256 - loss: 0.6926 - val_accuracy: 0.5000 - val_loss: 17.7389
+Epoch 9/40
+20/20 ━━━━━━━━━━━━━━━━━━━━ 5s 248ms/step - accuracy: 0.4986 - loss: 0.6932 - val_accuracy: 0.5000 - val_loss: 13.2362
+Epoch 10/40
+20/20 ━━━━━━━━━━━━━━━━━━━━ 4s 215ms/step - accuracy: 0.4639 - loss: 0.6928 - val_accuracy: 0.5000 - val_loss: 9.1800
+Epoch 11/40
+20/20 ━━━━━━━━━━━━━━━━━━━━ 5s 246ms/step - accuracy: 0.4600 - loss: 0.6927 - val_accuracy: 0.5000 - val_loss: 5.6959
+Epoch 12/40
+20/20 ━━━━━━━━━━━━━━━━━━━━ 6s 273ms/step - accuracy: 0.4707 - loss: 0.6929 - val_accuracy: 0.4853 - val_loss: 3.6620
+Epoch 13/40
+20/20 ━━━━━━━━━━━━━━━━━━━━ 9s 241ms/step - accuracy: 0.5115 - loss: 0.6933 - val_accuracy: 0.5441 - val_loss: 2.0884
+Epoch 14/40
+20/20 ━━━━━━━━━━━━━━━━━━━━ 5s 269ms/step - accuracy: 0.5406 - loss: 0.6936 - val_accuracy: 0.5000 - val_loss: 1.9713
+Epoch 15/40
+20/20 ━━━━━━━━━━━━━━━━━━━━ 10s 248ms/step - accuracy: 0.4874 - loss: 0.6931 - val_accuracy: 0.5000 - val_loss: 1.0626
+Epoch 16/40
+20/20 ━━━━━━━━━━━━━━━━━━━━ 6s 278ms/step - accuracy: 0.5156 - loss: 0.6934 - val_accuracy: 0.5000 - val_loss: 0.7142
+Epoch 17/40
+20/20 ━━━━━━━━━━━━━━━━━━━━ 9s 229ms/step - accuracy: 0.4814 - loss: 0.6930 - val_accuracy: 0.4559 - val_loss: 0.6944
+Epoch 18/40
+20/20 ━━━━━━━━━━━━━━━━━━━━ 6s 266ms/step - accuracy: 0.5515 - loss: 0.6938 - val_accuracy: 0.5000 - val_loss: 0.6931
+Epoch 19/40
+20/20 ━━━━━━━━━━━━━━━━━━━━ 10s 241ms/step - accuracy: 0.5046 - loss: 0.6932 - val_accuracy: 0.5000 - val_loss: 0.6931
+Epoch 20/40
+20/20 ━━━━━━━━━━━━━━━━━━━━ 6s 264ms/step - accuracy: 0.5126 - loss: 0.6934 - val_accuracy: 0.5000 - val_loss: 0.6931
+Epoch 21/40
+20/20 ━━━━━━━━━━━━━━━━━━━━ 4s 203ms/step - accuracy: 0.5050 - loss: 0.6933 - val_accuracy: 0.5000 - val_loss: 0.6931
+Epoch 22/40
+20/20 ━━━━━━━━━━━━━━━━━━━━ 6s 241ms/step - accuracy: 0.5117 - loss: 0.6933 - val_accuracy: 0.5000 - val_loss: 0.6931
+Epoch 23/40
+20/20 ━━━━━━━━━━━━━━━━━━━━ 5s 262ms/step - accuracy: 0.5070 - loss: 0.6933 - val_accuracy: 0.5000 - val_loss: 0.6931
+Epoch 24/40
+20/20 ━━━━━━━━━━━━━━━━━━━━ 4s 201ms/step - accuracy: 0.5077 - loss: 0.6933 - val_accuracy: 0.5000 - val_loss: 0.6931
+Epoch 25/40
+20/20 ━━━━━━━━━━━━━━━━━━━━ 6s 252ms/step - accuracy: 0.5191 - loss: 0.6934 - val_accuracy: 0.5000 - val_loss: 0.6931
+Epoch 26/40
+20/20 ━━━━━━━━━━━━━━━━━━━━ 5s 252ms/step - accuracy: 0.4947 - loss: 0.6932 - val_accuracy: 0.5000 - val_loss: 0.6931
+Epoch 27/40
+20/20 ━━━━━━━━━━━━━━━━━━━━ 4s 202ms/step - accuracy: 0.5169 - loss: 0.6934 - val_accuracy: 0.5000 - val_loss: 0.6931
+Epoch 28/40
+20/20 ━━━━━━━━━━━━━━━━━━━━ 5s 238ms/step - accuracy: 0.5076 - loss: 0.6933 - val_accuracy: 0.5000 - val_loss: 0.6931
+Epoch 29/40
+20/20 ━━━━━━━━━━━━━━━━━━━━ 6s 266ms/step - accuracy: 0.4667 - loss: 0.6928 - val_accuracy: 0.5000 - val_loss: 0.6931
+Epoch 30/40
+20/20 ━━━━━━━━━━━━━━━━━━━━ 10s 238ms/step - accuracy: 0.5014 - loss: 0.6933 - val_accuracy: 0.5000 - val_loss: 0.6931
+Epoch 31/40
+20/20 ━━━━━━━━━━━━━━━━━━━━ 6s 261ms/step - accuracy: 0.4396 - loss: 0.6933 - val_accuracy: 0.5000 - val_loss: 0.6931
+Epoch 32/40
+20/20 ━━━━━━━━━━━━━━━━━━━━ 4s 209ms/step - accuracy: 0.5404 - loss: 0.6937 - val_accuracy: 0.5000 - val_loss: 0.6931
+Epoch 33/40
+20/20 ━━━━━━━━━━━━━━━━━━━━ 6s 241ms/step - accuracy: 0.4966 - loss: 0.6932 - val_accuracy: 0.5000 - val_loss: 0.6931
+Epoch 34/40
+20/20 ━━━━━━━━━━━━━━━━━━━━ 5s 262ms/step - accuracy: 0.4465 - loss: 0.6931 - val_accuracy: 0.5000 - val_loss: 0.6931
+Epoch 35/40
+20/20 ━━━━━━━━━━━━━━━━━━━━ 4s 210ms/step - accuracy: 0.4942 - loss: 0.6931 - val_accuracy: 0.5000 - val_loss: 0.6931
+Epoch 36/40
+20/20 ━━━━━━━━━━━━━━━━━━━━ 6s 240ms/step - accuracy: 0.5051 - loss: 0.6933 - val_accuracy: 0.5000 - val_loss: 0.6931
+Epoch 37/40
+20/20 ━━━━━━━━━━━━━━━━━━━━ 6s 275ms/step - accuracy: 0.4890 - loss: 0.6931 - val_accuracy: 0.5000 - val_loss: 0.6931
+Epoch 37: early stopping
+Restoring model weights from the end of the best epoch: 29.
+
+✅ Version 1 Final Validation Accuracy: 50.00%
+
+============================================================
+🌟 --- TRAINING VERSION 2 --- 🌟
+Filters: 64, Dropout: 0.2, Dense: 64, LR: 0.001
+============================================================
+Epoch 1/40
+20/20 ━━━━━━━━━━━━━━━━━━━━ 12s 445ms/step - accuracy: 0.5691 - loss: 3.5298 - val_accuracy: 0.5000 - val_loss: 71.7067
+Epoch 2/40
+20/20 ━━━━━━━━━━━━━━━━━━━━ 7s 338ms/step - accuracy: 0.8577 - loss: 0.3884 - val_accuracy: 0.5000 - val_loss: 65.4413
+Epoch 3/40
+20/20 ━━━━━━━━━━━━━━━━━━━━ 9s 434ms/step - accuracy: 0.9136 - loss: 0.2639 - val_accuracy: 0.5000 - val_loss: 46.9310
+Epoch 4/40
+20/20 ━━━━━━━━━━━━━━━━━━━━ 7s 334ms/step - accuracy: 0.9590 - loss: 0.0967 - val_accuracy: 0.5000 - val_loss: 29.1104
+Epoch 5/40
+20/20 ━━━━━━━━━━━━━━━━━━━━ 8s 422ms/step - accuracy: 0.9658 - loss: 0.0858 - val_accuracy: 0.5000 - val_loss: 18.2565
+Epoch 6/40
+20/20 ━━━━━━━━━━━━━━━━━━━━ 7s 331ms/step - accuracy: 0.9900 - loss: 0.0623 - val_accuracy: 0.5000 - val_loss: 14.5686
+Epoch 7/40
+20/20 ━━━━━━━━━━━━━━━━━━━━ 13s 468ms/step - accuracy: 0.9828 - loss: 0.0512 - val_accuracy: 0.5000 - val_loss: 9.1873
+Epoch 8/40
+20/20 ━━━━━━━━━━━━━━━━━━━━ 7s 336ms/step - accuracy: 0.9997 - loss: 0.0232 - val_accuracy: 0.5000 - val_loss: 4.8109
+Epoch 9/40
+20/20 ━━━━━━━━━━━━━━━━━━━━ 10s 330ms/step - accuracy: 0.9979 - loss: 0.0127 - val_accuracy: 0.5882 - val_loss: 0.9429
+Epoch 10/40
+20/20 ━━━━━━━━━━━━━━━━━━━━ 12s 413ms/step - accuracy: 0.9959 - loss: 0.0183 - val_accuracy: 0.8971 - val_loss: 0.2958
+Epoch 11/40
+20/20 ━━━━━━━━━━━━━━━━━━━━ 7s 347ms/step - accuracy: 0.9876 - loss: 0.0249 - val_accuracy: 0.9118 - val_loss: 0.3918
+Epoch 12/40
+20/20 ━━━━━━━━━━━━━━━━━━━━ 10s 330ms/step - accuracy: 0.9981 - loss: 0.0114 - val_accuracy: 0.9265 - val_loss: 0.3434
+Epoch 13/40
+20/20 ━━━━━━━━━━━━━━━━━━━━ 12s 400ms/step - accuracy: 0.9867 - loss: 0.0206 - val_accuracy: 0.7941 - val_loss: 0.3901
+Epoch 14/40
+20/20 ━━━━━━━━━━━━━━━━━━━━ 7s 369ms/step - accuracy: 1.0000 - loss: 0.0101 - val_accuracy: 0.9559 - val_loss: 0.1983
+Epoch 15/40
+20/20 ━━━━━━━━━━━━━━━━━━━━ 8s 388ms/step - accuracy: 0.9953 - loss: 0.0110 - val_accuracy: 0.9412 - val_loss: 0.1445
+Epoch 16/40
+20/20 ━━━━━━━━━━━━━━━━━━━━ 7s 360ms/step - accuracy: 0.9969 - loss: 0.0100 - val_accuracy: 0.9559 - val_loss: 0.1482
+Epoch 17/40
+20/20 ━━━━━━━━━━━━━━━━━━━━ 8s 390ms/step - accuracy: 1.0000 - loss: 0.0068 - val_accuracy: 0.9412 - val_loss: 0.1652
+Epoch 18/40
+20/20 ━━━━━━━━━━━━━━━━━━━━ 7s 345ms/step - accuracy: 1.0000 - loss: 0.0104 - val_accuracy: 0.8971 - val_loss: 0.2361
+Epoch 19/40
+20/20 ━━━━━━━━━━━━━━━━━━━━ 10s 328ms/step - accuracy: 1.0000 - loss: 0.0045 - val_accuracy: 0.7353 - val_loss: 0.6669
+Epoch 20/40
+20/20 ━━━━━━━━━━━━━━━━━━━━ 9s 434ms/step - accuracy: 1.0000 - loss: 0.0033 - val_accuracy: 0.7794 - val_loss: 0.5877
+Epoch 21/40
+20/20 ━━━━━━━━━━━━━━━━━━━━ 7s 329ms/step - accuracy: 1.0000 - loss: 0.0065 - val_accuracy: 0.5588 - val_loss: 1.9731
+Epoch 22/40
+20/20 ━━━━━━━━━━━━━━━━━━━━ 9s 438ms/step - accuracy: 1.0000 - loss: 0.0053 - val_accuracy: 0.7500 - val_loss: 0.8152
+Epoch 23/40
+20/20 ━━━━━━━━━━━━━━━━━━━━ 7s 327ms/step - accuracy: 0.9969 - loss: 0.0080 - val_accuracy: 0.9118 - val_loss: 0.2123
+Epoch 23: early stopping
+Restoring model weights from the end of the best epoch: 15.
+
+✅ Version 2 Final Validation Accuracy: 94.12%
+
+============================================================
+🌟 --- TRAINING VERSION 3 --- 🌟
+Filters: 32, Dropout: 0.3, Dense: 32, LR: 0.0005
+============================================================
+Epoch 1/40
+20/20 ━━━━━━━━━━━━━━━━━━━━ 8s 211ms/step - accuracy: 0.4840 - loss: 1.1502 - val_accuracy: 0.5000 - val_loss: 6.9819
+Epoch 2/40
+20/20 ━━━━━━━━━━━━━━━━━━━━ 4s 199ms/step - accuracy: 0.5995 - loss: 0.6538 - val_accuracy: 0.5000 - val_loss: 6.4319
+Epoch 3/40
+20/20 ━━━━━━━━━━━━━━━━━━━━ 6s 306ms/step - accuracy: 0.6513 - loss: 0.5916 - val_accuracy: 0.5000 - val_loss: 4.3779
+Epoch 4/40
+20/20 ━━━━━━━━━━━━━━━━━━━━ 8s 206ms/step - accuracy: 0.6907 - loss: 0.5361 - val_accuracy: 0.5000 - val_loss: 3.3579
+Epoch 5/40
+20/20 ━━━━━━━━━━━━━━━━━━━━ 7s 312ms/step - accuracy: 0.7776 - loss: 0.4350 - val_accuracy: 0.5000 - val_loss: 2.9804
+Epoch 6/40
+20/20 ━━━━━━━━━━━━━━━━━━━━ 4s 198ms/step - accuracy: 0.8808 - loss: 0.2913 - val_accuracy: 0.5000 - val_loss: 1.7060
+Epoch 7/40
+20/20 ━━━━━━━━━━━━━━━━━━━━ 4s 206ms/step - accuracy: 0.8935 - loss: 0.2571 - val_accuracy: 0.5000 - val_loss: 1.9243
+Epoch 8/40
+20/20 ━━━━━━━━━━━━━━━━━━━━ 7s 308ms/step - accuracy: 0.9120 - loss: 0.2452 - val_accuracy: 0.5000 - val_loss: 2.3884
+Epoch 9/40
+20/20 ━━━━━━━━━━━━━━━━━━━━ 8s 199ms/step - accuracy: 0.9253 - loss: 0.1992 - val_accuracy: 0.5588 - val_loss: 1.4324
+Epoch 10/40
+20/20 ━━━━━━━━━━━━━━━━━━━━ 7s 298ms/step - accuracy: 0.9210 - loss: 0.1840 - val_accuracy: 0.6618 - val_loss: 0.8396
+Epoch 11/40
+20/20 ━━━━━━━━━━━━━━━━━━━━ 4s 196ms/step - accuracy: 0.9479 - loss: 0.1395 - val_accuracy: 0.7206 - val_loss: 0.6311
+Epoch 12/40
+20/20 ━━━━━━━━━━━━━━━━━━━━ 5s 201ms/step - accuracy: 0.9640 - loss: 0.0909 - val_accuracy: 0.9265 - val_loss: 0.2876
+Epoch 13/40
+20/20 ━━━━━━━━━━━━━━━━━━━━ 6s 287ms/step - accuracy: 0.9650 - loss: 0.0897 - val_accuracy: 0.5441 - val_loss: 2.0697
+Epoch 14/40
+20/20 ━━━━━━━━━━━━━━━━━━━━ 4s 213ms/step - accuracy: 0.9725 - loss: 0.0819 - val_accuracy: 0.9265 - val_loss: 0.1808
+Epoch 15/40
+20/20 ━━━━━━━━━━━━━━━━━━━━ 4s 198ms/step - accuracy: 0.9663 - loss: 0.1062 - val_accuracy: 0.5588 - val_loss: 1.9867
+Epoch 16/40
+20/20 ━━━━━━━━━━━━━━━━━━━━ 5s 263ms/step - accuracy: 0.9699 - loss: 0.0936 - val_accuracy: 1.0000 - val_loss: 0.1244
+Epoch 17/40
+20/20 ━━━━━━━━━━━━━━━━━━━━ 5s 239ms/step - accuracy: 0.9738 - loss: 0.0566 - val_accuracy: 0.9265 - val_loss: 0.1755
+Epoch 18/40
+20/20 ━━━━━━━━━━━━━━━━━━━━ 4s 199ms/step - accuracy: 0.9882 - loss: 0.0501 - val_accuracy: 0.9706 - val_loss: 0.1206
+Epoch 19/40
+20/20 ━━━━━━━━━━━━━━━━━━━━ 4s 222ms/step - accuracy: 0.9763 - loss: 0.0502 - val_accuracy: 0.6176 - val_loss: 1.4291
+Epoch 20/40
+20/20 ━━━━━━━━━━━━━━━━━━━━ 6s 268ms/step - accuracy: 0.9820 - loss: 0.0447 - val_accuracy: 0.9706 - val_loss: 0.0887
+Epoch 21/40
+20/20 ━━━━━━━━━━━━━━━━━━━━ 4s 201ms/step - accuracy: 0.9735 - loss: 0.0787 - val_accuracy: 0.9559 - val_loss: 0.1148
+Epoch 22/40
+20/20 ━━━━━━━━━━━━━━━━━━━━ 4s 217ms/step - accuracy: 0.9654 - loss: 0.0685 - val_accuracy: 0.9853 - val_loss: 0.0974
+Epoch 23/40
+20/20 ━━━━━━━━━━━━━━━━━━━━ 6s 293ms/step - accuracy: 0.9647 - loss: 0.0730 - val_accuracy: 0.9559 - val_loss: 0.1329
+Epoch 24/40
+20/20 ━━━━━━━━━━━━━━━━━━━━ 8s 204ms/step - accuracy: 0.9863 - loss: 0.0364 - val_accuracy: 0.9559 - val_loss: 0.1081
+Epoch 25/40
+20/20 ━━━━━━━━━━━━━━━━━━━━ 6s 308ms/step - accuracy: 0.9927 - loss: 0.0284 - val_accuracy: 0.9706 - val_loss: 0.0835
+Epoch 26/40
+20/20 ━━━━━━━━━━━━━━━━━━━━ 4s 201ms/step - accuracy: 0.9888 - loss: 0.0367 - val_accuracy: 0.9853 - val_loss: 0.0465
+Epoch 27/40
+20/20 ━━━━━━━━━━━━━━━━━━━━ 4s 199ms/step - accuracy: 0.9855 - loss: 0.0329 - val_accuracy: 0.9853 - val_loss: 0.0602
+Epoch 28/40
+20/20 ━━━━━━━━━━━━━━━━━━━━ 5s 267ms/step - accuracy: 0.9776 - loss: 0.0306 - val_accuracy: 0.9559 - val_loss: 0.1181
+Epoch 29/40
+20/20 ━━━━━━━━━━━━━━━━━━━━ 9s 199ms/step - accuracy: 0.9935 - loss: 0.0265 - val_accuracy: 0.9559 - val_loss: 0.0844
+Epoch 30/40
+20/20 ━━━━━━━━━━━━━━━━━━━━ 5s 255ms/step - accuracy: 0.9921 - loss: 0.0285 - val_accuracy: 0.9706 - val_loss: 0.0447
+Epoch 31/40
+20/20 ━━━━━━━━━━━━━━━━━━━━ 5s 247ms/step - accuracy: 0.9911 - loss: 0.0132 - val_accuracy: 0.9559 - val_loss: 0.0924
+Epoch 32/40
+20/20 ━━━━━━━━━━━━━━━━━━━━ 4s 212ms/step - accuracy: 0.9735 - loss: 0.0285 - val_accuracy: 0.8971 - val_loss: 0.3510
+Epoch 33/40
+20/20 ━━━━━━━━━━━━━━━━━━━━ 5s 235ms/step - accuracy: 0.9879 - loss: 0.0259 - val_accuracy: 0.8676 - val_loss: 0.4153
+Epoch 34/40
+20/20 ━━━━━━━━━━━━━━━━━━━━ 6s 255ms/step - accuracy: 0.9931 - loss: 0.0333 - val_accuracy: 0.9265 - val_loss: 0.1147
+Epoch 35/40
+20/20 ━━━━━━━━━━━━━━━━━━━━ 10s 226ms/step - accuracy: 0.9908 - loss: 0.0477 - val_accuracy: 0.9559 - val_loss: 0.0884
+Epoch 36/40
+20/20 ━━━━━━━━━━━━━━━━━━━━ 6s 246ms/step - accuracy: 0.9961 - loss: 0.0206 - val_accuracy: 0.9706 - val_loss: 0.1324
+Epoch 37/40
+20/20 ━━━━━━━━━━━━━━━━━━━━ 4s 195ms/step - accuracy: 0.9888 - loss: 0.0332 - val_accuracy: 0.8676 - val_loss: 0.4505
+Epoch 38/40
+20/20 ━━━━━━━━━━━━━━━━━━━━ 6s 244ms/step - accuracy: 0.9875 - loss: 0.0413 - val_accuracy: 0.9706 - val_loss: 0.0404
+Epoch 39/40
+20/20 ━━━━━━━━━━━━━━━━━━━━ 5s 256ms/step - accuracy: 0.9928 - loss: 0.0158 - val_accuracy: 0.8971 - val_loss: 0.3035
+Epoch 40/40
+20/20 ━━━━━━━━━━━━━━━━━━━━ 4s 203ms/step - accuracy: 0.9969 - loss: 0.0149 - val_accuracy: 0.9559 - val_loss: 0.0860
+Restoring model weights from the end of the best epoch: 38.
+
+✅ Version 3 Final Validation Accuracy: 97.06%
+
+============================================================
+🌟 --- TRAINING VERSION 4 --- 🌟
+Filters: 64, Dropout: 0.4, Dense: 128, LR: 0.0001
+============================================================
+Epoch 1/40
+20/20 ━━━━━━━━━━━━━━━━━━━━ 14s 460ms/step - accuracy: 0.5123 - loss: 1.1023 - val_accuracy: 0.5000 - val_loss: 12.0633
+Epoch 2/40
+20/20 ━━━━━━━━━━━━━━━━━━━━ 10s 484ms/step - accuracy: 0.6458 - loss: 0.6918 - val_accuracy: 0.5000 - val_loss: 11.4289
+Epoch 3/40
+20/20 ━━━━━━━━━━━━━━━━━━━━ 8s 378ms/step - accuracy: 0.7791 - loss: 0.4876 - val_accuracy: 0.5000 - val_loss: 8.1950
+Epoch 4/40
+20/20 ━━━━━━━━━━━━━━━━━━━━ 10s 490ms/step - accuracy: 0.7780 - loss: 0.5131 - val_accuracy: 0.5000 - val_loss: 6.1639
+Epoch 5/40
+20/20 ━━━━━━━━━━━━━━━━━━━━ 8s 384ms/step - accuracy: 0.8418 - loss: 0.3957 - val_accuracy: 0.5000 - val_loss: 5.0706
+Epoch 6/40
+20/20 ━━━━━━━━━━━━━━━━━━━━ 10s 490ms/step - accuracy: 0.8409 - loss: 0.3574 - val_accuracy: 0.5000 - val_loss: 3.5323
+Epoch 7/40
+20/20 ━━━━━━━━━━━━━━━━━━━━ 9s 447ms/step - accuracy: 0.8590 - loss: 0.3233 - val_accuracy: 0.5000 - val_loss: 2.3748
+Epoch 8/40
+20/20 ━━━━━━━━━━━━━━━━━━━━ 9s 425ms/step - accuracy: 0.9041 - loss: 0.2765 - val_accuracy: 0.5000 - val_loss: 1.7303
+Epoch 9/40
+20/20 ━━━━━━━━━━━━━━━━━━━━ 10s 481ms/step - accuracy: 0.8869 - loss: 0.2450 - val_accuracy: 0.5000 - val_loss: 1.2601
+Epoch 10/40
+20/20 ━━━━━━━━━━━━━━━━━━━━ 8s 398ms/step - accuracy: 0.8875 - loss: 0.2619 - val_accuracy: 0.5441 - val_loss: 0.8927
+Epoch 11/40
+20/20 ━━━━━━━━━━━━━━━━━━━━ 12s 453ms/step - accuracy: 0.9526 - loss: 0.1650 - val_accuracy: 0.6912 - val_loss: 0.5287
+Epoch 12/40
+20/20 ━━━━━━━━━━━━━━━━━━━━ 11s 499ms/step - accuracy: 0.9337 - loss: 0.1719 - val_accuracy: 0.6471 - val_loss: 0.5909
+Epoch 13/40
+20/20 ━━━━━━━━━━━━━━━━━━━━ 8s 367ms/step - accuracy: 0.9318 - loss: 0.1912 - val_accuracy: 0.7206 - val_loss: 0.4674
+Epoch 14/40
+20/20 ━━━━━━━━━━━━━━━━━━━━ 9s 466ms/step - accuracy: 0.9522 - loss: 0.1459 - val_accuracy: 0.7206 - val_loss: 0.4683
+Epoch 15/40
+20/20 ━━━━━━━━━━━━━━━━━━━━ 8s 359ms/step - accuracy: 0.9572 - loss: 0.1124 - val_accuracy: 0.7647 - val_loss: 0.4001
+Epoch 16/40
+20/20 ━━━━━━━━━━━━━━━━━━━━ 10s 486ms/step - accuracy: 0.9649 - loss: 0.1116 - val_accuracy: 0.8529 - val_loss: 0.3634
+Epoch 17/40
+20/20 ━━━━━━━━━━━━━━━━━━━━ 8s 382ms/step - accuracy: 0.9655 - loss: 0.0927 - val_accuracy: 0.7794 - val_loss: 0.4341
+Epoch 18/40
+20/20 ━━━━━━━━━━━━━━━━━━━━ 10s 374ms/step - accuracy: 0.9506 - loss: 0.0918 - val_accuracy: 0.8971 - val_loss: 0.2255
+Epoch 19/40
+20/20 ━━━━━━━━━━━━━━━━━━━━ 10s 490ms/step - accuracy: 0.9839 - loss: 0.0688 - val_accuracy: 0.9265 - val_loss: 0.1529
+Epoch 20/40
+20/20 ━━━━━━━━━━━━━━━━━━━━ 9s 399ms/step - accuracy: 0.9822 - loss: 0.0730 - val_accuracy: 0.8971 - val_loss: 0.1458
+Epoch 21/40
+20/20 ━━━━━━━━━━━━━━━━━━━━ 10s 373ms/step - accuracy: 0.9859 - loss: 0.0644 - val_accuracy: 0.8088 - val_loss: 0.4236
+Epoch 22/40
+20/20 ━━━━━━━━━━━━━━━━━━━━ 12s 474ms/step - accuracy: 0.9716 - loss: 0.0809 - val_accuracy: 0.9118 - val_loss: 0.2762
+Epoch 23/40
+20/20 ━━━━━━━━━━━━━━━━━━━━ 8s 388ms/step - accuracy: 0.9899 - loss: 0.0449 - val_accuracy: 0.8824 - val_loss: 0.3586
+Epoch 24/40
+20/20 ━━━━━━━━━━━━━━━━━━━━ 8s 416ms/step - accuracy: 0.9929 - loss: 0.0333 - val_accuracy: 0.8971 - val_loss: 0.2712
+Epoch 25/40
+20/20 ━━━━━━━━━━━━━━━━━━━━ 11s 460ms/step - accuracy: 0.9898 - loss: 0.0572 - val_accuracy: 0.9118 - val_loss: 0.1117
+Epoch 26/40
+20/20 ━━━━━━━━━━━━━━━━━━━━ 7s 359ms/step - accuracy: 0.9867 - loss: 0.0322 - val_accuracy: 0.9412 - val_loss: 0.0964
+Epoch 27/40
+20/20 ━━━━━━━━━━━━━━━━━━━━ 12s 431ms/step - accuracy: 0.9754 - loss: 0.0527 - val_accuracy: 0.9118 - val_loss: 0.1199
+Epoch 28/40
+20/20 ━━━━━━━━━━━━━━━━━━━━ 10s 443ms/step - accuracy: 0.9932 - loss: 0.0369 - val_accuracy: 0.9118 - val_loss: 0.2886
+Epoch 29/40
+20/20 ━━━━━━━━━━━━━━━━━━━━ 8s 366ms/step - accuracy: 0.9711 - loss: 0.0706 - val_accuracy: 0.9118 - val_loss: 0.2132
+Epoch 30/40
+20/20 ━━━━━━━━━━━━━━━━━━━━ 12s 463ms/step - accuracy: 0.9730 - loss: 0.0721 - val_accuracy: 0.9559 - val_loss: 0.0888
+Epoch 31/40
+20/20 ━━━━━━━━━━━━━━━━━━━━ 8s 382ms/step - accuracy: 1.0000 - loss: 0.0238 - val_accuracy: 0.9559 - val_loss: 0.0677
+Epoch 32/40
+20/20 ━━━━━━━━━━━━━━━━━━━━ 9s 458ms/step - accuracy: 0.9889 - loss: 0.0394 - val_accuracy: 0.9559 - val_loss: 0.0666
+Epoch 33/40
+20/20 ━━━━━━━━━━━━━━━━━━━━ 9s 444ms/step - accuracy: 0.9848 - loss: 0.0468 - val_accuracy: 0.9118 - val_loss: 0.1517
+Epoch 34/40
+20/20 ━━━━━━━━━━━━━━━━━━━━ 9s 384ms/step - accuracy: 0.9723 - loss: 0.0596 - val_accuracy: 0.9412 - val_loss: 0.1057
+Epoch 35/40
+20/20 ━━━━━━━━━━━━━━━━━━━━ 10s 480ms/step - accuracy: 0.9995 - loss: 0.0260 - val_accuracy: 0.9706 - val_loss: 0.0804
+Epoch 36/40
+20/20 ━━━━━━━━━━━━━━━━━━━━ 9s 401ms/step - accuracy: 0.9962 - loss: 0.0154 - val_accuracy: 0.9559 - val_loss: 0.0892
+Epoch 37/40
+20/20 ━━━━━━━━━━━━━━━━━━━━ 9s 452ms/step - accuracy: 0.9967 - loss: 0.0275 - val_accuracy: 0.9412 - val_loss: 0.1832
+Epoch 38/40
+20/20 ━━━━━━━━━━━━━━━━━━━━ 11s 482ms/step - accuracy: 0.9881 - loss: 0.0474 - val_accuracy: 0.9118 - val_loss: 0.2315
+Epoch 39/40
+20/20 ━━━━━━━━━━━━━━━━━━━━ 7s 369ms/step - accuracy: 1.0000 - loss: 0.0156 - val_accuracy: 0.9706 - val_loss: 0.0857
+Epoch 40/40
+20/20 ━━━━━━━━━━━━━━━━━━━━ 12s 457ms/step - accuracy: 0.9976 - loss: 0.0229 - val_accuracy: 0.9412 - val_loss: 0.1516
+Epoch 40: early stopping
+Restoring model weights from the end of the best epoch: 32.
+
+✅ Version 4 Final Validation Accuracy: 95.59%
+
+============================================================
+🌟 --- TRAINING VERSION 5 --- 🌟
+Filters: 128, Dropout: 0.5, Dense: 64, LR: 0.0005
+============================================================
+Epoch 1/40
+20/20 ━━━━━━━━━━━━━━━━━━━━ 25s 997ms/step - accuracy: 0.4746 - loss: 5.1400 - val_accuracy: 0.5000 - val_loss: 88.4699
+Epoch 2/40
+20/20 ━━━━━━━━━━━━━━━━━━━━ 36s 789ms/step - accuracy: 0.5611 - loss: 0.8028 - val_accuracy: 0.5000 - val_loss: 92.1394
+Epoch 3/40
+20/20 ━━━━━━━━━━━━━━━━━━━━ 16s 784ms/step - accuracy: 0.5042 - loss: 0.6921 - val_accuracy: 0.5000 - val_loss: 70.3004
+Epoch 4/40
+20/20 ━━━━━━━━━━━━━━━━━━━━ 15s 780ms/step - accuracy: 0.5599 - loss: 0.6769 - val_accuracy: 0.5000 - val_loss: 45.4580
+Epoch 5/40
+20/20 ━━━━━━━━━━━━━━━━━━━━ 16s 783ms/step - accuracy: 0.5096 - loss: 0.6891 - val_accuracy: 0.5000 - val_loss: 24.2983
+Epoch 6/40
+20/20 ━━━━━━━━━━━━━━━━━━━━ 15s 772ms/step - accuracy: 0.5355 - loss: 0.7032 - val_accuracy: 0.5000 - val_loss: 6.9586
+Epoch 7/40
+20/20 ━━━━━━━━━━━━━━━━━━━━ 16s 784ms/step - accuracy: 0.4808 - loss: 0.7184 - val_accuracy: 0.6618 - val_loss: 1.0865
+Epoch 8/40
+20/20 ━━━━━━━━━━━━━━━━━━━━ 16s 795ms/step - accuracy: 0.5044 - loss: 0.6779 - val_accuracy: 0.7647 - val_loss: 0.8945
+Epoch 9/40
+20/20 ━━━━━━━━━━━━━━━━━━━━ 16s 792ms/step - accuracy: 0.6654 - loss: 0.6396 - val_accuracy: 0.5441 - val_loss: 1.4462
+Epoch 10/40
+20/20 ━━━━━━━━━━━━━━━━━━━━ 16s 781ms/step - accuracy: 0.6816 - loss: 0.5871 - val_accuracy: 0.5000 - val_loss: 2.0104
+Epoch 11/40
+20/20 ━━━━━━━━━━━━━━━━━━━━ 21s 786ms/step - accuracy: 0.7318 - loss: 0.6032 - val_accuracy: 0.5000 - val_loss: 2.0829
+Epoch 12/40
+20/20 ━━━━━━━━━━━━━━━━━━━━ 21s 813ms/step - accuracy: 0.7157 - loss: 0.6214 - val_accuracy: 0.5000 - val_loss: 1.7465
+Epoch 13/40
+20/20 ━━━━━━━━━━━━━━━━━━━━ 16s 791ms/step - accuracy: 0.7368 - loss: 0.5658 - val_accuracy: 0.5441 - val_loss: 1.5098
+Epoch 14/40
+20/20 ━━━━━━━━━━━━━━━━━━━━ 16s 785ms/step - accuracy: 0.7721 - loss: 0.5241 - val_accuracy: 0.5147 - val_loss: 1.4165
+Epoch 15/40
+20/20 ━━━━━━━━━━━━━━━━━━━━ 15s 778ms/step - accuracy: 0.7473 - loss: 0.5294 - val_accuracy: 0.5882 - val_loss: 3.0805
+Epoch 16/40
+20/20 ━━━━━━━━━━━━━━━━━━━━ 21s 784ms/step - accuracy: 0.7352 - loss: 0.5181 - val_accuracy: 0.8382 - val_loss: 1.1909
+Epoch 16: early stopping
+Restoring model weights from the end of the best epoch: 8.
+
+✅ Version 5 Final Validation Accuracy: 76.47%
+
+============================================================
+🏆 NEW BEST MODEL FOUND: VERSION 3 with Accuracy: 97.06%
+Saved as 'best_copd_model_v2.keras'
+============================================================
+
+
+
+
+
+
+
+
